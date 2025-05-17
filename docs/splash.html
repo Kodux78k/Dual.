@@ -35,13 +35,17 @@
     }
     .logo-container {
       width:180px; cursor:pointer;
-      animation:glow 2.5s ease-in-out infinite alternate;
+      animation:glow 3s ease-in-out infinite alternate;
       transition:transform .8s;
     }
     .logo-container object { width:100%; display:block; }
     @keyframes glow {
-      from { filter:drop-shadow(0 0 6px #0ff); }
-      to   { filter:drop-shadow(0 0 12px #0ff); }
+      from {
+        filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 20px #ff00ff);
+      }
+      to {
+        filter: drop-shadow(0 0 25px #00ffff) drop-shadow(0 0 35px #ff00ff);
+      }
     }
     .infodose {
       font-size:1.6em; font-weight:300;
