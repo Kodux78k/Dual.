@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Splash Cinematográfico - Dual Infodose</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="icon192.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    /* Reset e body */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(to bottom, #000000, #1a1a1a);
+      height: 100vh; overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: white;
+      opacity: 0; animation: fadeInBody 2s ease forwards;
+      position: relative;
+    }
+    @keyframes fadeInBody { to { opacity: 1; } }
+    @keyframes fadeOutBody { to { opacity: 0; } }
+
+    /* Partículas */
+    #particles-js {
+      position: absolute; inset: 0; z-index: 0;
+    }
+
+    /* Logo */
+    .logo-container {
+      position: relative; z-index: 1;
+      width: 300px; max-width: 60vw;
+      animation: glow 3s ease-in-out infinite alternate;
+      padding: 20px; border-radius: 50%;
+      cursor: pointer; transition: transform 1.2s ease, opacity 1.2s ease;
+      margin-bottom: 1rem;
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 20px #ff00ff);}
+      to   { filter: drop-shadow(0 0 25px #00ffff) drop-shadow(0 0 35px #ff00ff);}
+    }
+
+    /* Textos do Splash */
+    .infodose {
+      font-size: 2em; color: #ccc;
+      opacity: 0; animation: fadeIn 2s forwards 2s, pulse 4s infinite ease-in-out 4s;
+      z-index: 1; position: relative;
+    }
+    .infodose strong { font-weight: 700; color: #fff; }
+    .frase {
+      position: relative; margin-top: .5rem; font-size: 1.2em; color: #999;
+      opacity: 0; animation: fadeIn 2s forwards 3s;
+      z-index: 1; padding: 0 1rem;
+    }
+    .frase strong { font-weight: 700; color: #fff; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Explosão */
+    .explosion {
+      position: absolute; top:50%; left:50%;
+      width:0; height:0; border-radius:50%;
+      background:radial-gradient(circle, white, transparent);
+      transform: translate(-50%,-50%); z-index:9; opacity:.8;
+      animation: explode 1s forwards ease-out;
+    }
+    @keyframes explode {
+      0%   { width:0; height:0; opacity:.8; }
+      70%  { width:600vw; height:600vw; opacity:1; }
+      100% { opacity:0; }
+    }
+    .logo-container.distort { filter: url(#distort); }
+
+    /* Login Glassmorphism */
+    .login-container {
+      position: absolute; top:50%; left:50%;
+      transform: translate(-50%, -50%);
+      width: 320px; max-width: 90vw;
+      padding: 2rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      z-index: 2;
+      opacity: 0; /* aparecerá via GSAP */
+    }
+    .login-container h2 {
+      margin-bottom: 1.5rem; font-size: 1.6em;
+      color: #00ffff; letter-spacing: .5px;
+    }
+    .login-container input {
+      width: 100%; background: transparent;
+      border: none; border-bottom: 1px solid rgba(255,255,255,0.4);
+      padding: .75rem 0; margin-bottom: 1.2rem;
+      font-size: 1em; color: #fff;
+      outline: none;
+    }
+    .login-container input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    .login-container button {
+      width: 100%; padding: .75rem;
+      background: transparent;
+      border: 1px solid #00ffff;
+      border-radius: 8px;
+      font-size: 1em; color: #00ffff;
+      cursor: pointer;
+      transition: background .3s, color .3s;
+    }
+    .login-container button:hover {
+      background: #00ffff;
+      color: #000;
+    }
+
+    /* Responsivo */
+    @media (max-width: 480px) {
+      .login-container { padding: 1.5rem; }
+      .login-container h2 { font-size: 1.4em; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Distortion Filter -->
+  <svg style="display:none"><filter id="distort">
+    <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"/>
+    <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"/>
+  </filter></svg>
+
+  <!-- Som & Partículas -->
+  <audio id="transitionSound" src="suave_portal.mp3" preload="auto"></audio>
+  <div id="particles-js"></div>
+
+  <!-- Conteúdo -->
+  <div style="z-index:1; text-align:center;">
+    <div class="logo-container" id="logo" onclick="goToIndex()">
+      <object data="3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+    </div>
+    <div class="infodose">dual.<strong>Infodose</strong></div>
+    <div class="frase"><strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong></div>
+  </div>
+
+  <!-- Login Glass -->
+  <div class="login-container" id="loginBox">
+    <h2>Faça seu Login</h2>
+    <form id="loginForm">
+      <input type="text" id="user" placeholder="Usuário" required />
+      <input type="password" id="pass" placeholder="Senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // Partículas
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 50, density: { enable: true, value_area: 700 } },
+        color: { value: ['#00ffff','#ff00ff'] },
+        shape: { type: 'circle' },
+        opacity: { value: .5, random: true },
+        size: { value: 3, random: true },
+        move: {
+          enable: true, speed: 1.5, random: true,
+          out_mode: 'out',
+          attract: { enable: true, rotateX:500, rotateY:1000 }
+        }
+      },
+      retina_detect: true
+    });
+
+    // Mostrar login após splash
+    window.addEventListener('load', () => {
+      gsap.to('#loginBox', { opacity: 1, duration: 1, delay: 2.2, ease: 'power2.out' });
+    });
+
+    // Validação e transição
+    document.getElementById('loginForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const u = document.getElementById('user').value.trim();
+      const p = document.getElementById('pass').value.trim();
+      if (!u||!p) return alert('Preencha usuário e senha.');
+      gsap.to('#loginBox', { y: -40, opacity: 0, duration: .8, ease: 'power3.in' });
+      setTimeout(goToIndex, 900);
+    });
+
+    // Transição para index
+    function goToIndex(){
+      const logo = document.getElementById('logo');
+      const snd  = document.getElementById('transitionSound');
+      logo.classList.add('distort'); snd.volume=0; snd.play();
+      gsap.to(logo, { scale:0, duration:1.2, ease:'power3.out' });
+      gsap.to('.infodose, .frase', { opacity:0, duration:.8, delay:.3 });
+      setTimeout(()=> document.body.style.animation='fadeOutBody 1.2s forwards', 800);
+      setTimeout(()=> window.location.href='index.html', 1600);
+    }
+  </script>
+
+</body>
+</html>
