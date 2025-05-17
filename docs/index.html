@@ -190,17 +190,17 @@
   <div class="theme-toggle" onclick="toggleTheme()"></div>
 
   <div class="content">
-    <iframe id="frame" src="pages/chat/Dual_Chat_e17c11re7e18n3ne2r699-55-R-77.html" class="active"></iframe>
+    <iframe id="frame" src="/pages/chat/Dual_Chat_e17c11re7e18n3ne2r699-55-R-77.html" class="active"></iframe>
   </div>
 
   <div class="symbol-bar">
-    <button class="symbol-button" onclick="loadPage('pages/chat/Dual_Chat_e17c11re7e18n3ne2r699-55-R-77.html')">◉</button>
-    <button class="symbol-button" onclick="loadPage('pages/Meta-pulso-cosmico.html')">◉</button>
-    <button class="symbol-button" onclick="loadPage('pages/MetaLux_Particulas_JSONLocal.html')">◉</button>
+    <button class="symbol-button" onclick="loadPage('/pages/chat/Dual_Chat_e17c11re7e18n3ne2r699-55-R-77.html')">◉</button>
+    <button class="symbol-button" onclick="loadPage('/pages/Meta-pulso-cosmico.html')">◉</button>
+    <button class="symbol-button" onclick="loadPage('/pages/MetaLux_Particulas_JSONLocal.html')">◉</button>
     
   </div>
 
-  <button class="lock-button" onclick="loadPage('pages/splash/splash.html')"></button>
+  <button class="lock-button" onclick="loadPage('/pages/splash/splash.html')"></button>
 
   <script>
     const frame = document.getElementById('frame');
@@ -218,7 +218,7 @@
     }
     // em index.html ou num script global
 async function carregarAtivacoes() {
-  const res = await fetch('/Data/assistentes_index.json');
+  const res = await fetch('/data/assistentes_index.json');
   if (!res.ok) throw new Error('Falha ao carregar JSON');
   const lista = await res.json();
   return lista;
