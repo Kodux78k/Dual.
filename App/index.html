@@ -7,8 +7,8 @@
   <!-- Manifesto e ícones -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#000000" id="theme-color-meta" />
-  <link rel="icon" href="icon192.png" type="image/png" />
-  <link rel="apple-touch-icon" href="icon512.png" />
+  <link rel="icon" href="Assets/Icons/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="Assets/Icons/icon-512.png" />
   <style>
     body {
       margin: 0;
@@ -190,11 +190,11 @@
   <div class="theme-toggle" onclick="toggleTheme()"></div>
 
   <div class="content">
-    <iframe id="frame" src="Dual_Chat_e17c11re7e18n3ne2r699-55-R-67-ON.html" class="active"></iframe>
+    <iframe id="frame" src="Dual_Chat_e17c11re7e18n3ne2r699-55-R-68-ON.html" class="active"></iframe>
   </div>
 
   <div class="symbol-bar">
-    <button class="symbol-button" onclick="loadPage('Dual_Chat_e17c11re7e18n3ne2r699-55-R-67-ON.html')">◉</button>
+    <button class="symbol-button" onclick="loadPage('Dual_Chat_e17c11re7e18n3ne2r699-55-R-68-ON.html')">◉</button>
     <button class="symbol-button" onclick="loadPage('Meta-pulso-cosmico.html')">◉</button>
     <button class="symbol-button" onclick="loadPage('Interface-Rotativa.html')">◉</button>
     
@@ -218,7 +218,7 @@
     }
     // em index.html ou num script global
 async function carregarAtivacoes() {
-  const res = await fetch('/json/assistentes.json');
+  const res = await fetch('/Data/assistentes_index.json');
   if (!res.ok) throw new Error('Falha ao carregar JSON');
   const lista = await res.json();
   return lista;
