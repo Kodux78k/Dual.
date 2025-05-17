@@ -7,7 +7,7 @@
   <link rel="manifest" href="/manifest.json" />
 <meta name="theme-color" content="#000000" />
 <link rel="icon" href="assets/icons/icon-192.png" type="image/png" />
-    <link rel="logo" href="/docs/assets/icons/circle_icon_fade_rente.png" type="image/png" />
+    <link rel="logo-container" href="/assets/icons/circle_icon_fade_rente.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <style>
@@ -185,14 +185,14 @@
   </svg>
 
   <!-- Áudio Suave -->
-  <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
+  <audio id="transitionSound" src="/assets/sounds/suave_portal.mp3" preload="auto"></audio>
 
   <!-- Partículas -->
   <div id="particles-js"></div>
 
   <!-- Logo com Transição -->
   <div class="logo-container" id="logo" onclick="goToIndex()">
-    <object data="assets/icons/circle_icon_fade_rente.png" type="image/png"></object>
+    <object src="/assets/icons/circle_icon_fade_rente.png" type="image/png"></object>
   </div>
 
   <!-- Título e Frase -->
@@ -257,7 +257,7 @@
 
       // Redireciona ao final
       setTimeout(() => {
-        window.location.href = "index.html";
+        window.location.href = "/index.html";
       }, 1600);
     }
   </script>
