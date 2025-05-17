@@ -133,7 +133,7 @@
       position:relative;
       cursor:pointer;
       overflow:hidden;
-      animation:pulse 6s infinite ease-in-out;
+      animation:pulse 12s infinite ease-in-out;
     }
     .response-block:hover { box-shadow:0 0 15px rgba(0,255,255,0.4); }
     .response-block.clicked { animation:clickPulse var(--med) ease-out; }
@@ -197,7 +197,7 @@
     .login-container button:hover { background:#0ff; color:#000; }
 
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
     @keyframes clickPulse{0%,100%{opacity:1}50%{opacity:0.8}}
   </style>
 </head>
