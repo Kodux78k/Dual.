@@ -45,7 +45,7 @@
     /* Nome do Assistente */
     #assistantName {
       margin-top:59%;
-      font-size:0.8em;
+      font-size:0.9em;
       font-weight:600;
       z-index:1;
       opacity:0.6;
@@ -421,7 +421,7 @@
       async function callAI(){
         const body={model:MODEL_NAME,messages:conversation,temperature:TEMPERATURE};
         try {
-          const resp=await fetch(API_ENDPOINT,{method:'POST',headers:{'Authorization':'Bearer sk-or-xxxxx','Content-Type':'application/json'},body:JSON.stringify(body)});
+          const resp=await fetch(API_ENDPOINT,{method:'POST',headers:{'Authorization':'Bearer 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','Content-Type':'application/json'},body:JSON.stringify(body)});
           const data=await resp.json();
           const answer=data.choices[0].message.content.trim();
           conversation.push({role:'assistant',content:answer});
