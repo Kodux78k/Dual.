@@ -36,15 +36,15 @@
     /* Partículas e SVG central */
     #particles-js { position:absolute; inset:0; z-index:0; }
     .svg-container {
-      position:absolute; top:260px; left:50%;
+      position:absolute; top:220px; left:50%;
       transform:translateX(-50%);
-      width:180px; height:180px;
+      width:160px; height:160px;
       
       border-radius:50%;
       backdrop-filter:blur(8px);
       z-index:1;
     }
-    .svg-container object { width:100%; height:100%; animation:pulse 2s infinite ease-in-out, glow 3s infinite ease-in-out;}
+    .svg-container object { width:100%; height:100%; animation:pulse 2s infinite ease-in-out, glow 9s infinite ease-in-out;}
  @keyframes glow {
       from {
         filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 20px #ff00ff);
@@ -110,7 +110,7 @@
       padding:6px;
       border-radius:6px;
       cursor:pointer;
-      transition:filter var(--mid), opacity var(--fast);
+      transition:filter var(--fast), opacity var(--fast);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -234,8 +234,8 @@
           <object
             data="assets/icons/Gold_Dual_Infodose.svg"
             type="image/svg+xml"
-            width="18"
-            height="18">
+            width="30"
+            height="30">
           </object>
         </button>
 
@@ -244,16 +244,16 @@
           <object
             data="assets/icons/BW_Dual_Infodose.svg"
             type="image/svg+xml"
-            width="18"
-            height="18">
+            width="30"
+            height="30">
           </object>
         </button>
 
         <!-- BOTÃO TOGGLE / LOGIN -->
         <button id="toggleBtn" class="toggle-button" title="Login para Infodose">
           <object
-            data="assets/icons/vectorized_image_4.svg"
-            type="image/svg+xml"
+            data="assets/icons/circle_vector.svg"
+            type="image/svg"
             width="30"
             height="30">
           </object>
