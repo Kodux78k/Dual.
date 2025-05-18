@@ -302,8 +302,8 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       // Logo switcher
-      const logoContainer = document.getElementById('svg-container');
-      const logoObject    = document.getElementById('svg-container object');
+      const logoContainer = document.getElementById('logoContainer');
+      const logoObject    = document.getElementById('logoObject');
       logoContainer.addEventListener('click', () => {
         logoIndex = (logoIndex + 1) % logoFiles.length;
         logoObject.data = `assets/icons/${logoFiles[logoIndex]}`;
