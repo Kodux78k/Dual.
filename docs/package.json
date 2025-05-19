@@ -13,8 +13,8 @@
     "eleventy-plugin-rss": "^1.1.0",        // RSS feed
     "@11ty/eleventy-navigation": "^1.4.0"   // sidebar dinâmica
   },
-  "scripts": { 
-  "build": "eleventy && node scripts/generate-sw.js",
-"start": "eleventy --serve"
+"scripts": {
+    "build": "eleventy && node scripts/generate-sw.js",
+    "start": "eleventy --serve"
   }
 }
