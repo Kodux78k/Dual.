@@ -123,8 +123,13 @@
 
     .pagination { display:flex; align-items:center; gap:10px; }
     .pagination button {
-      background:none; border:none; font-size:1.2em;
-      color:#6fe4fb; cursor:pointer; transition:transform var(--mid);
+      border:none; font-size:1.2em;
+      color:#6fe4fb; cursor:pointer; transition:transform var(--mid); 
+      background: linear-gradient(45deg, #0ff, #f0f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background var(--fast), transform var(--fast);
     }
     .pagination button:hover { transform:scale(1.2); }
 
