@@ -1,0 +1,7 @@
+:root { --bg: #fff; --fg: #000; }
+[data-theme="dark"] { --bg: #111; --fg: #eee; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
