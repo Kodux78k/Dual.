@@ -265,7 +265,7 @@
   <script>
     const TRAINING_FILE = 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt';
     const API_ENDPOINT   = 'https://openrouter.ai/api/v1/chat/completions';
-    const MODEL_NAME     = 'meta-llama/llama-4-maverick:free';
+    const MODEL_NAME     = 'deepseek/deepseek-chat-v3-0324:free';
     const TEMPERATURE    = 0.2;
     const CHUNK_SIZE     = 78000;
 
@@ -433,7 +433,7 @@ A partir de agora, o assistente chamará-se ${assistantBase} dual.infodose e ref
         const resp = await fetch(API_ENDPOINT, {
           method:'POST',
           headers:{
-            'Authorization':'Bearer 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',
+            'Authorization':'Bearer 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',
             'Content-Type':'application/json'
           },
           body: JSON.stringify(body)
