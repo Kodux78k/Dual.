@@ -7,8 +7,8 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="assets/icons/icon-192.png" type="image/png" />
-  <!-- Fonte Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Fonte montserrat -->
+   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <style>
     /* reset básico */
@@ -123,9 +123,19 @@
     const logo = document.getElementById('logo');
 
     // inicializa partículas
-    particlesJS('particles-js', {/* ... mesmo config ... */});
+    particlesJS('particles-js', {
+      particles: {
+        number:{ value:40, density:{ enable:true, value_area:600 } },
+        color:{ value:['#0ff','#f0f'] },
+        shape:{ type:'circle' },
+        opacity:{ value:0.4, random:true },
+        size:{ value:2.5, random:true },
+        move:{ enable:true, speed:1.2, random:true, out_mode:'out' }
+      },
+      retina_detect:true
+    });
 
-    // exibe login ao clicar no logo
+       // exibe login ao clicar no logo
     logo.addEventListener('click', () => {
       if (!localStorage.getItem('infodose_user')) {
         loginBox.classList.add('active');
