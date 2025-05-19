@@ -192,7 +192,17 @@
         gsap.fromTo(loginBox, { y: -20 }, { y: 0, duration: 0.6, ease: 'power2.out' });
       }
     });
-
+function goToIndex(){
+      const snd = document.getElementById('transitionSound');
+      snd.volume = 0; snd.play();
+      gsap.to('.logo-container', {
+        scale:0, duration:1, ease:'power3.out',
+        filter:'url(#distort)'
+      });
+      gsap.to('.infodose', { opacity:0, duration:0.6 });
+      setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
+      setTimeout(() => window.location.href = 'index.html', 1400);
+    }
     // mostra botão Sair se já estiver logado
     function showLogout() {
       loginBox.innerHTML = `<button id="logoutBtn">Sair</button>`;
