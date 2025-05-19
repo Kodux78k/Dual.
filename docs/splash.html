@@ -11,15 +11,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <style>
-    /* reset básico */
+    /* reset */
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background: linear-gradient(to bottom, #000, #1a1a1a);
-      height:100vh; overflow:hidden;
       font-family:'Montserrat',sans-serif;
+      background: linear-gradient(to bottom, #000, #1a1a1a);
+      color:#fff; height:100vh; overflow:hidden;
       display:flex; align-items:center; justify-content:center;
-      color:#fff; position:relative;
-      opacity:0; animation:fadeInBody 1.8s ease forwards;
+      position:relative; opacity:0;
+      animation:fadeInBody 1.8s ease forwards;
     }
     @keyframes fadeInBody { to { opacity:1; } }
     @keyframes fadeOutBody { to { opacity:0; } }
@@ -27,15 +27,12 @@
     /* partículas atrás */
     #particles-js { position:absolute; inset:0; z-index:0; }
 
-    /* grupo central: logo + texto */
+    /* bloco central clicável */
     .center-group {
       z-index:1;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:0.6rem;
-      cursor:pointer;
-      padding:20px;
+      display:flex; flex-direction:column;
+      align-items:center; gap:0.6rem;
+      cursor:pointer; padding:20px;
     }
     .logo-container {
       width:180px;
@@ -56,30 +53,25 @@
     .infodose strong { font-weight:600; }
     @keyframes fadeIn { to { opacity:1; } }
 
-    /* container de login / logout */
+    /* container de login/logout central */
     .login-container {
-      position:absolute; top:1rem; right:1rem;
-      width:260px; padding:1rem;
-      background:rgba(0,0,0,0.6);
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:300px; padding:1.5rem;
+      background:rgba(0,0,0,0.7);
       border:1px solid rgba(255,255,255,0.2);
-      border-radius:8px; backdrop-filter:blur(6px);
+      border-radius:10px; backdrop-filter:blur(8px);
       z-index:2; opacity:0; pointer-events:none;
       text-align:center;
+      display:flex; flex-direction:column; gap:1rem;
     }
     .login-container.active {
       opacity:1; pointer-events:auto;
     }
-    .login-container form,
-    .login-container .logout-area {
-      display:flex;
-      flex-direction:column;
-      gap:0.8rem;
-      align-items:center;      /* centraliza tudo */
-    }
     .login-container input {
       width:100%; background:transparent;
       border:none; border-bottom:1px solid rgba(255,255,255,0.5);
-      padding:0.4rem 0; font-size:0.95em; font-weight:300;
+      padding:0.5rem 0; font-size:1em; font-weight:300;
       color:#fff; outline:none; text-align:center;
     }
     .login-container input::placeholder {
@@ -88,18 +80,28 @@
     .login-container button {
       width:100%;
       background:transparent; border:1px solid #0ff;
-      border-radius:6px; padding:0.5rem 0;
-      font-size:0.95em; font-weight:600; color:#0ff;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#0ff;
       cursor:pointer; transition:all .25s;
     }
     .login-container button:hover {
       background:#0ff; color:#000; border-color:#0ff;
     }
+    .logout-area button {
+      width:100%;
+      background:transparent; border:1px solid #f55;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#f55;
+      cursor:pointer; transition:all .25s;
+    }
+    .logout-area button:hover {
+      background:#f55; color:#000; border-color:#f55;
+    }
 
     @media(max-width:360px) {
       .logo-container { width:140px; }
       .infodose { font-size:1.3em; }
-      .login-container { width:90vw; right:5vw; }
+      .login-container { width:90vw; }
     }
   </style>
 </head>
@@ -115,7 +117,7 @@
   <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
   <div id="particles-js"></div>
 
-  <!-- logo + texto (área de desbloqueio) -->
+  <!-- área de “desbloqueio” -->
   <div class="center-group" id="unlockArea">
     <div class="logo-container">
       <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
@@ -131,23 +133,23 @@
       <button type="submit">Entrar</button>
     </form>
     <div class="logout-area" style="display:none;">
-      <button id="logoutBtn" style="width:auto; padding:0.5rem 1rem;">Sair</button>
+      <button id="logoutBtn">Sair</button>
     </div>
   </div>
 
   <!-- scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    const loginBox   = document.getElementById('loginBox');
     const unlockArea = document.getElementById('unlockArea');
+    const loginBox   = document.getElementById('loginBox');
+    const loginForm  = document.getElementById('loginForm');
     const userInput  = document.getElementById('user');
     const passInput  = document.getElementById('pass');
-    const loginForm  = document.getElementById('loginForm');
-    const logoutArea = loginBox.querySelector('.logout-area');
     const logoutBtn  = document.getElementById('logoutBtn');
+    const logoutArea = loginBox.querySelector('.logout-area');
     const storedKey  = 'infodose_user';
 
-    // inicializa partículas
+    // partículas
     particlesJS('particles-js', {
       particles: {
         number:{ value:40, density:{ enable:true, value_area:600 } },
@@ -160,19 +162,18 @@
       retina_detect:true
     });
 
-    // mostra login ou logout
     function showLogin() {
-      loginForm.style.display = 'flex';
       logoutArea.style.display = 'none';
+      loginForm.style.display  = 'flex';
       loginBox.classList.add('active');
     }
     function showLogout() {
-      loginForm.style.display = 'none';
+      loginForm.style.display  = 'none';
       logoutArea.style.display = 'flex';
       loginBox.classList.add('active');
     }
 
-    // ao clicar no logo ou texto
+    // clique para desbloquear / redirecionar
     unlockArea.addEventListener('click', () => {
       if (localStorage.getItem(storedKey)) {
         goToIndex();
@@ -182,36 +183,34 @@
       }
     });
 
-    // logout
-    logoutBtn.addEventListener('click', () => {
-      localStorage.removeItem(storedKey);
-      showLogin();
-    });
-
-    // submit do form
+    // submit de login
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
-      const u = userInput.value.trim();
-      const p = passInput.value.trim();
+      const u = userInput.value.trim(), p = passInput.value.trim();
       if (!u||!p) return alert('Preencha os dados');
       localStorage.setItem(storedKey, u);
       gsap.to(loginBox, { y:-30, opacity:0, duration:0.6, ease:'power3.in' });
       setTimeout(goToIndex, 700);
     });
 
-    // animação e redirecionamento
+    // logout
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem(storedKey);
+      showLogin();
+    });
+
+    // animação e carga inicial
     function goToIndex() {
       const snd = document.getElementById('transitionSound');
-      snd.volume = 0; snd.play();
+      snd.volume=0; snd.play();
       gsap.to('.logo-container', {
         scale:0, duration:1, ease:'power3.out', filter:'url(#distort)'
       });
       gsap.to('.infodose', { opacity:0, duration:0.6 });
-      setTimeout(() => document.body.style.animation='fadeOutBody 1s forwards', 600);
-      setTimeout(() => window.location.href='index.html', 1400);
+      setTimeout(()=>document.body.style.animation='fadeOutBody 1s forwards', 600);
+      setTimeout(()=>window.location.href='index.html', 1400);
     }
 
-    // ao carregar
     window.addEventListener('load', () => {
       if (localStorage.getItem(storedKey)) {
         showLogout();
