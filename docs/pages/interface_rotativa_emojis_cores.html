@@ -296,7 +296,7 @@
     }
 
     async function ativarAssistente() {
-      const res = await fetch("/data/metapulso_70_combinacoes.json");
+      const res = await fetch("metapulso_70_combinacoes.json");
       const data = await res.json();
       const chave = gerarTriadeAleatoria();
       const entrada = data[chave];
