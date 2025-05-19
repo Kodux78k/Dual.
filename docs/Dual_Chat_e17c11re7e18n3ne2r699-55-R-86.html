@@ -443,6 +443,8 @@
         callAI();
       }
 
+      document.addEventListener('DOMContentLoaded',async()=>{
+      try{ training=await fetch(TRAINING_FILE).then(r=>r.text()); }catch{}
       loadCfg();
       particlesJS('particles-js',{particles:{number:{value:40},color:{value:['#0ff','#f0f']},shape:{type:'circle'},opacity:{value:0.4},size:{value:2.4},move:{enable:true,speed:1.5}},retina_detect:true});
 
@@ -450,13 +452,9 @@
       document.getElementById('userInput').addEventListener('keypress',e=>{ if(e.key==='Enter') sendMessage(); });
       document.querySelector('[data-action="prev"]').addEventListener('click',()=>changePage(-1));
       document.querySelector('[data-action="next"]').addEventListener('click',()=>changePage(1));
-      document.querySelector('.copy-button').addEventListener('click',()=>{
-        const all=Array.from(document.querySelectorAll('.response-container .page')).map(p=>p.innerText.trim()).join('\n\n');
-        navigator.clipboard.writeText(all);
-      });
-      document.querySelector('.paste-button').addEventListener('click',async()=>{
-        document.getElementById('userInput').value=await navigator.clipboard.readText();
-      });
+      document.querySelector('.copy-button').addEventListener('click',()=>{ const all=Array.from(document.querySelectorAll('.response-container .page')).map(p=>p.innerText.trim()).join('\n\n'); navigator.clipboard.writeText(all); });
+      document.querySelector('.paste-button').addEventListener('click',async()=>{ document.getElementById('userInput').value=await navigator.clipboard.readText(); });
+
       toggleBtn.addEventListener('click',()=>{
         if(assistantEnabled){
           assistantEnabled=false;
@@ -470,17 +468,23 @@
           loginBox.classList.add('active');
         }
       });
+
       document.getElementById('loginForm').addEventListener('submit',e=>{
         e.preventDefault();
         const u=document.getElementById('userName').value.trim();
         const a=document.getElementById('assistantInput').value.trim();
         if(!u||!a) return alert('Preencha os dados');
-        assistantEnabled=true; userName=u; assistantBase=a;
+        assistantEnabled=true;
+        userName=u;
+        assistantBase=a;
         localStorage.setItem('infodoseEnabled','1');
         localStorage.setItem('userName',u);
         localStorage.setItem('assistantBase',a);
         assistantNameEl.textContent=a+' dual.infodose';
-        conversation.unshift({role:'system',content:`Usuário: ${u}. Assistente: ${a} dual.infodose.`});
+        conversation.unshift({
+          role:'system',
+          content:`Usuário: ${u}. Assistente: ${a} dual.infodose. A partir de agora, o assistente chamará-se ${a} dual.infodose e referenciará sempre o nome do usuário ${u}.`
+        });
         updateToggleUI();
         loginBox.classList.remove('active');
       });
