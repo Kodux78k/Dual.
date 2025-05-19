@@ -6,7 +6,20 @@
     "build": "eleventy",
     "start": "eleventy --serve"
   },
+  {
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.0"
+    "@11ty/eleventy": "^2.0.0",
+    "@11ty/eleventy-img": "^1.7.0",         // WebP + responsive
+    "workbox-build": "^6.5.0",              // gera service-worker
+    "eleventy-plugin-seo": "^1.0.0",        // SEO + OG tags
+    "html-minifier-terser": "^6.1.0",       // minify HTML
+    "eleventy-plugin-critical-css": "^2.0.0",// Critical CSS inline
+    "eleventy-plugin-sitemap": "^2.0.0",    // sitemap.xml
+    "eleventy-plugin-rss": "^1.1.0",        // RSS feed
+    "@11ty/eleventy-navigation": "^1.4.0"   // sidebar dinâmica
+  },
+  "scripts": {
+    "build": "eleventy && node scripts/generate-sw.js",
+    "start": "eleventy --serve"
   }
 }
