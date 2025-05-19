@@ -7,8 +7,8 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="assets/icons/icon-192.png" type="image/png" />
-  <!-- Fonte Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Fonte Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <style>
     /* reset básico */
@@ -16,7 +16,7 @@
     body {
       background: linear-gradient(to bottom, #000, #1a1a1a);
       height:100vh; overflow:hidden;
-      font-family:'Poppins',sans-serif;
+      font-family:'Montserrat',sans-serif;
       display:flex; align-items:center; justify-content:center;
       color:#fff; position:relative;
       opacity:0; animation:fadeInBody 1.8s ease forwards;
@@ -29,13 +29,19 @@
 
     /* grupo central: logo + texto */
     .center-group {
-      z-index:1; display:flex; flex-direction:column;
-      align-items:center; gap:0.6rem;
+      z-index:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:0.6rem;
+      cursor:pointer;
+      padding:20px;
     }
     .logo-container {
-      width:180px; cursor:pointer;
+      width:180px;
       animation:glow 3s ease-in-out infinite alternate;
       transition:transform .8s;
+      pointer-events:none;
     }
     .logo-container object { width:100%; display:block; }
     @keyframes glow {
@@ -45,6 +51,7 @@
     .infodose {
       font-size:1.6em; font-weight:300;
       opacity:0; animation:fadeIn 1.5s forwards 1s;
+      pointer-events:none;
     }
     .infodose strong { font-weight:600; }
     @keyframes fadeIn { to { opacity:1; } }
@@ -64,7 +71,10 @@
     }
     .login-container form,
     .login-container .logout-area {
-      display:flex; flex-direction:column; gap:0.8rem;
+      display:flex;
+      flex-direction:column;
+      gap:0.8rem;
+      align-items:center;      /* centraliza tudo */
     }
     .login-container input {
       width:100%; background:transparent;
@@ -76,6 +86,7 @@
       color:rgba(255,255,255,0.6); font-weight:300;
     }
     .login-container button {
+      width:100%;
       background:transparent; border:1px solid #0ff;
       border-radius:6px; padding:0.5rem 0;
       font-size:0.95em; font-weight:600; color:#0ff;
@@ -104,9 +115,9 @@
   <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
   <div id="particles-js"></div>
 
-  <!-- logo + texto -->
-  <div class="center-group">
-    <div class="logo-container" id="logo">
+  <!-- logo + texto (área de desbloqueio) -->
+  <div class="center-group" id="unlockArea">
+    <div class="logo-container">
       <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
     </div>
     <div class="infodose">dual.<strong>Infodose</strong></div>
@@ -120,24 +131,23 @@
       <button type="submit">Entrar</button>
     </form>
     <div class="logout-area" style="display:none;">
-      <button id="logoutBtn">Sair</button>
+      <button id="logoutBtn" style="width:auto; padding:0.5rem 1rem;">Sair</button>
     </div>
   </div>
 
   <!-- scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // referências
-    const loginBox = document.getElementById('loginBox');
-    const logo = document.getElementById('logo');
-    const userInput = document.getElementById('user');
-    const passInput = document.getElementById('pass');
-    const loginForm = document.getElementById('loginForm');
+    const loginBox   = document.getElementById('loginBox');
+    const unlockArea = document.getElementById('unlockArea');
+    const userInput  = document.getElementById('user');
+    const passInput  = document.getElementById('pass');
+    const loginForm  = document.getElementById('loginForm');
     const logoutArea = loginBox.querySelector('.logout-area');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const storedKey = 'infodose_user'; // mesmo nome do seu código original
+    const logoutBtn  = document.getElementById('logoutBtn');
+    const storedKey  = 'infodose_user';
 
-    // init partículas
+    // inicializa partículas
     particlesJS('particles-js', {
       particles: {
         number:{ value:40, density:{ enable:true, value_area:600 } },
@@ -150,7 +160,7 @@
       retina_detect:true
     });
 
-    // exibe login ou logout
+    // mostra login ou logout
     function showLogin() {
       loginForm.style.display = 'flex';
       logoutArea.style.display = 'none';
@@ -162,8 +172,8 @@
       loginBox.classList.add('active');
     }
 
-    // quando clicar no logo
-    logo.addEventListener('click', () => {
+    // ao clicar no logo ou texto
+    unlockArea.addEventListener('click', () => {
       if (localStorage.getItem(storedKey)) {
         goToIndex();
       } else {
@@ -178,7 +188,7 @@
       showLogin();
     });
 
-    // form submit
+    // submit do form
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
       const u = userInput.value.trim();
@@ -189,7 +199,7 @@
       setTimeout(goToIndex, 700);
     });
 
-    // transição para index
+    // animação e redirecionamento
     function goToIndex() {
       const snd = document.getElementById('transitionSound');
       snd.volume = 0; snd.play();
@@ -201,7 +211,7 @@
       setTimeout(() => window.location.href='index.html', 1400);
     }
 
-    // ao carregar, só exibe logout se já estiver logado
+    // ao carregar
     window.addEventListener('load', () => {
       if (localStorage.getItem(storedKey)) {
         showLogout();
