@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Livro Infodose – Glassmorphism</title>
+
+  <!-- particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- jQuery + turn.js -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+
+  <style>
+    /* Reset */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+
+    /* Fundo de partículas */
+    #particles-js {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: -1;
+      background: linear-gradient(135deg, #1c1c32, #0a0a1e);
+    }
+
+    /* Container geral do livro (vidro fosco) */
+    #book-container {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba( 0, 0, 0, 0.37 );
+      overflow: hidden;
+    }
+
+    /* Elemento turn.js */
+    #book { width: 100%; height: 100%; }
+
+    /* Cada página também vidro fosco */
+    #book .page {
+      position: relative;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.12);
+      border-left: 1px solid rgba(255,255,255,0.2);
+      border-right: 1px solid rgba(255,255,255,0.2);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Imagens se ajustando */
+    #book .page img {
+      max-width: 100%; max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    /* Página de texto */
+    #book .text-page {
+      font-size: 42px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <div id="book-container">
+    <div id="book">
+      <!-- Página 1: texto -->
+      <div class="page text-page">Livro dos Espelhos</div>
+      <!-- Páginas de imagem -->
+      <div class="page"><img src="images/page2.png" alt="Página 2"></div>
+      <div class="page"><img src="images/page3.png" alt="Página 3"></div>
+      <div class="page"><img src="images/page4.png" alt="Página 4"></div>
+      <div class="page"><img src="images/page5.png" alt="Página 5"></div>
+    </div>
+  </div>
+
+  <script>
+    // Partículas
+    particlesJS('particles-js', {
+      "particles": {
+        "number": { "value": 60 },
+        "size":   { "value": 2 },
+        "move":   { "speed": 0.5 },
+        "line_linked": { "enable": true, "distance": 120, "opacity": 0.15 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" }
+        }
+      }
+    });
+
+    // Turn.js
+    $('#book').turn({
+      width: 800,
+      height: 600,
+      autoCenter: true,
+      elevation: 60,
+      gradients: true
+    });
+  </script>
+</body>
+</html>
