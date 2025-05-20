@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Livro</title>
+  <style>
+    /* — Variáveis globais — */
+    :root {
+      --gradient-start: #0ff;
+      --gradient-end:   #f0f;
+      --transition-speed: 0.4s;
+      --font-base: "Inter", sans-serif;
+    }
+
+    /* — Reset & Base — */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-size: 100%;
+    }
+    body {
+      font-family: var(--font-base);
+      line-height: 1.6;
+      min-height: 100vh;
+      background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+      color: #fff;
+      overflow-x: hidden;
+      animation: fadeIn 1s ease-out both;
+    }
+
+    /* — Tipografia Responsiva — */
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    p  { font-size: 1rem; margin-bottom: 1rem; }
+    @media (min-width: 600px) {
+      html { font-size: 112.5%; }
+      h1 { font-size: 3rem; }
+      p  { font-size: 1.125rem; }
+    }
+
+    /* — Layout — */
+    .site-header,
+    .site-footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(8px);
+    }
+    .site-main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* — Animações — */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition:
+        opacity   var(--transition-speed) ease-out,
+        transform var(--transition-speed) ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* — Botões — */
+    .button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
+      border: 2px solid #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition:
+        background var(--transition-speed),
+        color      var(--transition-speed);
+    }
+    .button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* — Imagens fluidas — */
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header reveal">
+    <h1>Meu Livro</h1>
+    <p>Subtítulo opcional para despertar curiosidade.</p>
+  </header>
+
+  <main class="site-main">
+    <section class="reveal">
+      <h2>Capítulo 1: Introdução</h2>
+      <p>Bem-vindo ao primeiro capítulo do livro. Aqui você vai explorar os conceitos iniciais e entender o panorama geral.</p>
+    </section>
+
+    <section class="reveal">
+      <blockquote>
+        “Uma frase de destaque pode prender a atenção do leitor logo de cara.”
+        <br>— Autor Famoso
+      </blockquote>
+    </section>
+
+    <section class="reveal">
+      <h2>Capítulo 2: Exemplo Visual</h2>
+      <p>Esta imagem é apenas ilustrativa. Substitua pelo seu conteúdo.</p>
+      <img src="/assets/images/cena.jpg" alt="Cenário descritivo" />
+    </section>
+
+    <a href="#" class="button reveal">Próximo Capítulo →</a>
+  </main>
+
+  <footer class="site-footer reveal">
+    <p>© <span id="year"></span> Seu Nome</p>
+  </footer>
+
+  <script>
+    // Atualiza o ano no rodapé
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll-reveal simples
+    const elems = document.querySelectorAll('.reveal');
+    const reveal = () => {
+      const viewport = window.innerHeight;
+      elems.forEach(el => {
+        if (el.getBoundingClientRect().top < viewport * 0.85) {
+          el.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', reveal);
+    window.addEventListener('load', reveal);
+  </script>
+</body>
+</html>
