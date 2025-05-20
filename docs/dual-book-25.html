@@ -228,6 +228,11 @@
         <div class="controls">
           <button id="prev" title="Anterior" disabled>‹</button>
           <button id="saveBtn" title="Salvar" disabled>✎ registrar ✎</button>
+          <div class="dropdown" id="optionsMenu">
+              <button id="optCopy">Copiar</button>
+              <button id="optTxt">Exportar .TXT</button>
+              <button id="optPdf">Exportar .PDF</button>
+            </div>
           <button id="next" title="Próximo" disabled>›</button>
         </div>
         <div class="feedback" id="fb">Salvo!</div>
@@ -277,6 +282,9 @@
         addBkBtn=document.getElementById('addBook'),
         menuBtn=document.getElementById('menuToggle'),
         saveBtn=document.getElementById('saveBtn'),
+        optCopy= document.getElementById('optCopy'),
+        optTxt = document.getElementById('optTxt'),
+        optPdf = document.getElementById('optPdf'),
         fbEl=document.getElementById('fb'),
         overlay=document.querySelector('.overlay'),
         themeBtn=document.getElementById('themeBtn'),
@@ -313,6 +321,44 @@
     prevBtn.disabled=idx===0;nextBtn.disabled=idx===pagesArr.length-1;
     addPgBtn.disabled=saveBtn.disabled=!cur;
   }
+  optCopy.onclick=async()=>{
+    try{
+      const pg=document.querySelector('.page.active');
+      await navigator.clipboard.writeText(
+        pg.querySelector('.page-title').innerText + '\n' +
+        pg.querySelector('.page-sub').innerText + '\n\n' +
+        pg.querySelector('.page-body').innerText
+      );
+      showFeedback('Copiado!');
+    }catch{ showFeedback('Erro ao copiar'); }
+  };
+  optTxt.onclick=_=>{
+    const pg=document.querySelector('.page.active');
+    const text = pg.querySelector('.page-title').innerText + '\n' +
+                 pg.querySelector('.page-sub').innerText + '\n\n' +
+                 pg.querySelector('.page-body').innerText;
+    const blob=new Blob([text],{type:'text/plain'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=`${cur}_pg${idx+1}.txt`;
+    a.click();
+  };
+  optPdf.onclick=_=>{
+    const pg=document.querySelector('.page.active');
+    const lines = (
+      pg.querySelector('.page-title').innerText + '\n' +
+      pg.querySelector('.page-sub').innerText + '\n\n' +
+      pg.querySelector('.page-body').innerText
+    ).split('\n');
+    const { jsPDF } = window.jspdf;
+    const doc=new jsPDF();
+    let y=20; doc.setFontSize(12);
+    lines.forEach(l=>{
+      if(y>280){doc.addPage(); y=20;}
+      doc.text(l,10,y); y+=7;
+    });
+    doc.save(`${cur}_pg${idx+1}.pdf`);
+  };
   function changePage(to){const ps=document.querySelectorAll('.page'),
       old=ps[idx];old.classList.remove('enter');old.classList.add('exit');
     old.addEventListener('animationend',()=>old.classList.remove('exit','active'),{once:true});
