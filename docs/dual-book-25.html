@@ -166,7 +166,7 @@
     backdrop-filter:blur(8px);border-radius:50%;z-index:6;
   }
   #addPage:hover{transform:scale(1.2)}
-  #addPage:disabled{opacity:.4;cursor:default}
+  #addPage:disabled{opacity:.7;cursor:default}
 
   .controls{
     position:absolute;bottom:60px;left:0;width:100%;
@@ -175,22 +175,22 @@
     animation:btnAppear 1s 1.1s forwards;
   }
   #prev,#next{
-    background:var(--ui-grad);border:none;color:#000;
+    background:none;border:none;color:#000;
     font-size:1.5rem;width:40px;height:40px;cursor:pointer;
     transition:transform var(--transition);backdrop-filter:blur(8px);
-    border-radius:50%;z-index:6;
+    border-radius:30%;z-index:6;
   }
   #prev:hover,#next:hover{transform:scale(1.2)}
   #prev:disabled,#next:disabled{opacity:.4;cursor:default}
 
   #saveBtn{
     background:none;color:#000;border:none;
-    padding:.75rem 2rem;border-radius:50%;cursor:pointer;
+    padding:.75rem 2rem;border-radius:30%;cursor:pointer;
     transition:opacity var(--transition),transform var(--transition);
     backdrop-filter:blur(8px);z-index:6;
   }
   #saveBtn:hover:not(:disabled){opacity:.8;transform:scale(1.05)}
-  #saveBtn:disabled{opacity:.4;cursor:default}
+  #saveBtn:disabled{opacity:.7;cursor:default}
 
   .feedback{
     position:absolute;top:12px;right:110px;
@@ -227,7 +227,7 @@
         <button id="addPage" title="+ Página">＋</button>
         <div class="controls">
           <button id="prev" title="Anterior" disabled>‹</button>
-          <button id="saveBtn" title="Salvar" disabled>✎</button>
+          <button id="saveBtn" title="Salvar" disabled>✎ registrar ✎</button>
           <button id="next" title="Próximo" disabled>›</button>
         </div>
         <div class="feedback" id="fb">Salvo!</div>
