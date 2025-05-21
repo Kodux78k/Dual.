@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>dual-Infodose Chat Cinematográfico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-dark: linear-gradient(to bottom, #000, #1a1a1a);
+      --text: #fff;
+      --primary: #111;
+      --secondary: #5e5c5e;
+      --fast: .4s;
+      --med: .8s;
+      --slow: 1.8s;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Montserrat', sans-serif; }
+    body {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 20px; background: var(--bg-dark); color: var(--text);
+    }
+    #particles-js { position: absolute; inset: 0; z-index: 0; }
+    .svg-container {
+      position: absolute; top: 260px; left: 50%;
+      width: 180px; height: 180px; transform: translateX(-50%);
+      border-radius: 50%; backdrop-filter: blur(8px);
+      z-index: 1; transition: opacity var(--slow);
+    }
+    .svg-container.fading { opacity: 0; }
+    .svg-container object { width: 100%; height: 100%; animation: pulse 2s infinite ease-in-out; }
+    #assistantName {
+      margin-top: 59%; font-size: .8em; font-weight: 600;
+      z-index: 1; opacity: .8;
+    }
+    .response-container {
+      position: fixed; left: 20px; right: 20px; bottom: 160px;
+      padding: 12px; background: rgba(0,0,0,.3); backdrop-filter: blur(8px);
+      border-radius: 20px; max-height: calc(100vh - 200px); overflow-y: auto;
+      z-index: 1;
+    }
+    .page { display: none; opacity: 0; transition: opacity var(--med) ease-in-out; }
+    .page.active { display: block; opacity: 1; }
+    .page.initial { text-align: center; font-size: 1.1em; }
+    .response-controls {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.2);
+    }
+    .control-buttons, .pagination { display: flex; align-items: center; gap: 10px; }
+    .copy-button, .paste-button, .toggle-button, .kitty-button {
+      background: rgba(255,255,255,.06); padding: 6px; border: none; border-radius: 50%;
+      cursor: pointer; transition: background var(--fast), filter var(--slow), opacity var(--slow);
+      width: 36px; height: 36px; opacity: .4; display: flex; justify-content: center; align-items: center;
+    }
+    .copy-button, .paste-button { border-radius: 9px; }
+    .copy-button:hover, .paste-button:hover,
+    .toggle-button:hover, .kitty-button:hover { background: rgba(255,255,255,.15); }
+    .toggle-button.active, .kitty-button.active { opacity: 1; filter: drop-shadow(0 0 8px #000); }
+    .pagination button {
+      border: none; background: linear-gradient(45deg,#0ff,#f0f);
+      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 1.2em; cursor: pointer; transition: transform var(--fast);
+    }
+    .pagination button:hover { transform: scale(1.2); }
+    .response-block {
+      margin: 1rem 0; padding: 1.2rem; border-radius: 12px;
+      line-height: 1.5; cursor: pointer; overflow: hidden;
+      animation: fadeIn var(--slow) ease forwards, pulse 12s infinite ease-in-out;
+      transition: box-shadow var(--fast), transform var(--fast);
+    }
+    .response-block:hover { box-shadow: 0 0 15px rgba(0,255,255,.4); }
+    .response-block.clicked { animation: clickPulse var(--med) ease-out; }
+    .response-block.expanded {
+      transform: scale(1.03); background: rgba(0,0,0,.6); z-index: 2;
+    }
+    .intro   { background: linear-gradient(135deg,rgba(0,255,255,.2),rgba(0,100,100,.1)); border-left: 4px solid #0ff; }
+    .middle  { background: linear-gradient(135deg,rgba(255,255,255,.05),rgba(50,50,50,.1)); border-left: 4px solid rgba(255,255,255,.4); }
+    .ending  { background: linear-gradient(135deg,rgba(255,0,255,.2),rgba(100,0,100,.1)); border-left: 4px solid #f0f; }
+    .footer-text { margin-top: 12px; font-size: .8em; text-align: center; font-style: italic; }
+    .code-box {
+      background: #2d2d2d; padding: 1rem; border-radius: 8px;
+      overflow-x: auto; font-family: 'Courier New', monospace; margin: 1rem 0; color: #f8f8f2;
+    }
+    .code-box pre { margin: 0; }
+    .input-container {
+      position: fixed; left: 20px; right: 20px; bottom: 90px;
+      display: flex; gap: 10px; z-index: 2; max-width: calc(100% - 40px);
+    }
+    .input-container input {
+      flex: 1; padding: 10px; border: none; border-radius: 20px;
+      background: rgba(255,255,255,.1); font-size: 16px; color: inherit;
+      transition: background var(--fast);
+    }
+    .input-container input:focus { background: rgba(255,255,255,.2); }
+    .input-container button {
+      width: 60px; height: 60px; border: none; border-radius: 50%;
+      background: linear-gradient(45deg,var(--primary),var(--secondary));
+      font-size: 1.5em; cursor: pointer; animation: pulse 2s infinite ease-in-out;
+      display: flex; justify-content: center; align-items: center;
+      transition: transform var(--med);
+    }
+    .input-container button:hover { transform: scale(1.1); }
+    @keyframes pulse {0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes clickPulse{0%,100%{opacity:1}50%{opacity:0.8}}
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="svg-container" id="logoContainer">
+    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_9.svg" type="image/svg+xml"></object>
+  </div>
+  <div id="assistantName"></div>
+  <div class="response-container" id="response">
+    <div class="page initial active">
+      <strong>Clique no ◉ e diga “Oi, Dual”.</strong><br /><em>Sempre único. Sempre seu.</em>
+    </div>
+    <div class="response-controls">
+      <div class="control-buttons">
+        <button class="copy-button" title="Copiar"><object data="assets/icons/BW_quad_Dual_Infodose.svg" type="image/svg+xml" width="27" height="27"></object></button>
+        <button class="paste-button" title="Colar"><object data="assets/icons/BW_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
+        <button id="toggleBtn" class="toggle-button" title="Login Infodose"><object data="assets/icons/circle_icon_fade_rente.png" type="image/png" width="33" height="33"></object></button>
+        <button id="kittyBtn" class="kitty-button" title="Ativar Assistente de Estudos"><object data="assets/icons/DualKittyKard-icon-3.png" type="image/png" width="33" height="33"></object></button>
+      </div>
+      <div class="pagination">
+        <button data-action="prev">⟵</button>
+        <span id="pageIndicator">1 / 1</span>
+        <button data-action="next">⟶</button>
+      </div>
+    </div>
+  </div>
+  <div class="input-container">
+    <input id="userInput" type="text" placeholder="Diga: 'oi, Dual'..." />
+    <button id="sendBtn" title="Enviar">➤</button>
+    <button id="voiceBtn" title="Falar"><object data="assets/icons/Reset_buttom_Dual-Infodose.svg" type="image/svg+xml" width="36" height="36"></object></button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+  (function(){
+    const STORAGE_KEY = 'infodose_user';
+    const userId = localStorage.getItem(STORAGE_KEY);
+    if (!userId) return location.replace('splash.html');
+
+    // checa saldo/login antes de iniciar
+    fetch(`/api/usage?userId=${encodeURIComponent(userId)}`)
+      .then(r=>r.json())
+      .then(({ authenticated, isAdmin, saldo })=>{
+        if (!authenticated || (!isAdmin && saldo.IFT<=0)) {
+          return location.replace('splash.html');
+        }
+        init(); // libera inicialização do chat
+      });
+
+    // ========== SEU SCRIPT ORIGINAL REFATORADO ==========
+    let originalLogoSrc = '', kittyLogoSrc = 'assets/icons/DualKittyKard-icon-3.png';
+    let training = '', chunks = [], chunkIndex = 0;
+    let isEnabled = false, isStudying = false;
+    let userName = '', assistantBase = '';
+    let conversation = [], pages = [], currentPage = 0, autoAdvance = true;
+
+    const CONFIG = {
+      TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
+      API_URL: 'https://openrouter.ai/api/v1/chat/completions',
+      MODEL: 'deepseek/deepseek-chat-v3-0324:free',
+      TEMP: 0.2, CHUNK_SIZE: 78000,
+      AUTH_TOKEN: 'Bearer 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'
+    };
+
+    const $ = s=>document.querySelector(s);
+    const create=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h)e.innerHTML=h; return e;};
+
+    async function init(){
+      originalLogoSrc = $('#logoObj').data;
+      try {
+        training = await fetch(CONFIG.TRAINING_FILE).then(r=>r.text());
+        for(let i=0;i<training.length;i+=CONFIG.CHUNK_SIZE)
+          chunks.push(training.slice(i,i+CONFIG.CHUNK_SIZE));
+      } catch(e){ console.warn('Erro treino:',e); }
+      loadConfig();
+      particlesJS('particles-js',{ particles:{ number:{value:40}, color:{value:['#0ff','#f0f']}, shape:{type:'circle'}, opacity:{value:0.4}, size:{value:2.4}, move:{enable:true,speed:1.5}}, retina_detect:true });
+      bindUI();
+    }
+
+    function loadConfig(){
+      if(localStorage.getItem(STORAGE_KEY)==='1'){
+        isEnabled = true;
+        userName = localStorage.userName||'';
+        assistantBase = localStorage.assistantBase||'';
+        conversation = [{role:'system',content:`${chunks[0]||training}\n\nUsuário: ${userName}.\nAssistente: ${assistantBase} dual.infodose.`}];
+        chunkIndex = 1;
+      }
+      updateUI();
+    }
+
+    function updateUI(){
+      $('#toggleBtn').classList.toggle('active',isEnabled);
+      $('#kittyBtn').classList.toggle('active',isStudying);
+      changeLogo(isStudying?kittyLogoSrc:originalLogoSrc);
+      if(isEnabled) $('#assistantName').textContent=`${assistantBase} dual.infodose`;
+      else if(isStudying) $('#assistantName').textContent='Estudos dual.infodose';
+      else $('#assistantName').textContent='';
+    }
+
+    function changeLogo(src){
+      const c=$('#logoContainer');
+      c.classList.add('fading');
+      c.addEventListener('transitionend',function once(){
+        c.removeEventListener('transitionend',once);
+        $('#logoObj').data=src;
+        c.classList.remove('fading');
+      });
+    }
+
+    function splitText(text){
+      let parts=text.split(/\n\s*\n/).filter(p=>p.trim());
+      if(parts.length%3!==0) parts=text.match(/[^\.!\?]+[\.!\?]+/g).map(s=>s.trim());
+      const g=[]; for(let i=0;i<parts.length;i+=3) g.push(parts.slice(i,i+3));
+      return g;
+    }
+
+    function speak(txt,onend){
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='pt-BR';u.rate=.99;u.pitch=1.1;
+      speechSynthesis.speak(u);
+      if(onend) u.onend=onend;
+    }
+
+    function showLoading(msg){
+      const resp=$('#response'), ctrl=$('.response-controls');
+      resp.querySelectorAll('.page:not(.initial)').forEach(p=>p.remove());
+      const pg=create('div','page active');
+      pg.appendChild(create('p','footer-text',msg));
+      resp.insertBefore(pg,ctrl);
+      pages=[pg]; currentPage=0;
+      $('#pageIndicator').textContent='…';
+    }
+
+    function renderResponse(text){
+      speechSynthesis.cancel(); autoAdvance=true;
+      const resp=$('#response'), ctrl=$('.response-controls');
+      resp.querySelectorAll('.page:not(.initial)').forEach(p=>p.remove());
+      pages=[];
+      const groups=splitText(text);
+      const titles=['🎁 Recompensa Inicial','👁️ Exploração e Curiosidade','⚡️ Antecipação Vibracional'];
+      groups.forEach((grp,gi)=>{
+        const pg=create('div','page'+(gi===0?' active':'')); 
+        grp.forEach((para,j)=>{
+          if(para.startsWith('```')&&para.endsWith('```')){
+            const codeText=para.slice(3,-3).trim(), box=create('div','code-box'), pre=create('pre'), code=create('code');
+            code.textContent=codeText; pre.appendChild(code); box.appendChild(pre); pg.appendChild(box);
+            return;
+          }
+          const cls=j===0?'intro':j===1?'middle':'ending';
+          const block=create('div',`response-block ${cls}`,`<h3>${titles[j]}</h3><p>${para}</p>`);
+          block.addEventListener('click',()=>{
+            autoAdvance=false;
+            if(!block.dataset.spoken){
+              speechSynthesis.cancel(); speak(para);
+              block.dataset.spoken='1'; block.classList.add('clicked');
+            } else {
+              block.classList.add('expanded');
+              if(!isEnabled){
+                isEnabled=true; localStorage.setItem(STORAGE_KEY,'1'); updateUI();
+              }
+              showLoading('Pulso em Expansão...');
+              conversation.push({role:'user',content:`${titles[j]}\n\n${para}`});
+              callAI();
+            }
+          });
+          block.addEventListener('animationend',e=>{ if(e.animationName==='clickPulse') block.classList.remove('clicked'); });
+          pg.appendChild(block);
+        });
+        pg.appendChild(create('p','footer-text',`<em>Do seu jeito. <strong>Sempre</strong> único. <strong>Sempre</strong> seu.</em>`));
+        $('#response').insertBefore(pg,$('.response-controls'));
+        pages.push(pg);
+      });
+      currentPage=0; $('#pageIndicator').textContent=`1 / ${pages.length}`;
+      autoSpeakPage(0);
+    }
+
+    function autoSpeakPage(i){
+      const txt=pages[i].querySelectorAll('.response-block p');
+      const joined=Array.from(txt).map(p=>p.innerText).join(' ');
+      speak(joined,()=>{
+        if(!autoAdvance) return;
+        if(i<pages.length-1){ changePage(1); autoSpeakPage(i+1); }
+        else speak('Do seu jeito, sempre único, sempre seu.');
+      });
+    }
+
+    function changePage(d){
+      const np=currentPage+d; if(np<0||np>=pages.length)return;
+      pages[currentPage].classList.remove('active');
+      pages[np].classList.add('active');
+      currentPage=np; $('#pageIndicator').textContent=`${np+1} / ${pages.length}`;
+    }
+
+    async function callAI(){
+      showLoading('⚡️Pulso enviado...Recebendo Intenção…');
+      const body={ userId, tokenType:'IFT', cost:1, messages:conversation };
+      const res=await fetch('/api/consume',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      if(res.status===402){ alert('Saldo insuficiente. Compre mais IFT.'); return location.replace('splash.html'); }
+      const { answer } = await res.json();
+      conversation.push({role:'assistant',content:answer});
+      renderResponse(answer);
+    }
+
+    function deepTrain(){
+      if(chunkIndex<chunks.length){
+        conversation.unshift({role:'system',content:`🔍 Treinamento Profundo (${chunkIndex+1}/${chunks.length}):\n\n${chunks[chunkIndex]}`});
+        chunkIndex++;
+        showLoading('🔍 Carregando Treinamento Profundo…');
+        setTimeout(()=>renderResponse(`Treinamento Profundo nível ${chunkIndex} carregado.`),800);
+      } else renderResponse('Você já carregou todo o treinamento disponível.');
+    }
+
+    function bindUI(){
+      $('#sendBtn').addEventListener('click',onSend);
+      $('#userInput').addEventListener('keypress',e=>e.key==='Enter'&&onSend());
+      $('#voiceBtn').addEventListener('click',()=>{
+        const rec=new (window.SpeechRecognition||window.webkitSpeechRecognition)();
+        rec.lang='pt-BR'; rec.start();
+        rec.onresult=evt=>{ $('#userInput').value=evt.results[0][0].transcript; onSend(); };
+      });
+      document.querySelector('.control-buttons').addEventListener('click',e=>{
+        if(e.target.closest('.copy-button')){
+          const lines=[]; pages.forEach(pg=>pg.querySelectorAll('.response-block p').forEach(p=>lines.push(p.innerText.trim())));
+          lines.push('Do seu jeito, sempre único, sempre seu.');
+          navigator.clipboard.writeText(lines.join('\n\n'));
+        }
+        if(e.target.closest('.paste-button')) navigator.clipboard.readText().then(t=>$('#userInput').value=t);
+        if(e.target.closest('#toggleBtn')){
+          if(!isEnabled) $('.login-container').classList.add('active');
+          else { isEnabled=false; localStorage.removeItem(STORAGE_KEY); conversation=[]; updateUI(); }
+        }
+        if(e.target.closest('#kittyBtn')){
+          isStudying=!isStudying;
+          if(isStudying){
+            isEnabled=false; chunkIndex=1;
+            conversation=[{role:'system',content:`${chunks[0]||training}\n\nA seguir, você é o Assistente de Estudos dual.infodose.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`}];
+          }
+          updateUI();
+        }
+      });
+      document.querySelector('.pagination').addEventListener('click',e=>{
+        if(e.target.dataset.action==='prev') changePage(-1);
+        if(e.target.dataset.action==='next') changePage(1);
+      });
+    }
+
+    function onSend(){
+      const raw=$('#userInput').value.trim();
+      if(!raw) return;
+      $('#userInput').value='';
+      if(raw.toLowerCase()==='estado 78k') return deepTrain();
+      conversation.push({role:'user',content:isEnabled?`Usuário ${userName}: ${raw}`:raw});
+      callAI();
+    }
+
+    document.addEventListener('DOMContentLoaded',init);
+    // =====================================================
+  })();
+  </script>
+</body>
+</html>
