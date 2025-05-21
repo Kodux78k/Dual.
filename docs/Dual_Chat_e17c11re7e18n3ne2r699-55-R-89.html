@@ -240,7 +240,7 @@
           <object data="assets/icons/circle_icon_fade_rente.png" type="image/png" width="33" height="33"></object>
         </button>
         <button id="kittyBtn" class="kitty-button" title="Login KittyKard Infodose">
-          <object data="assets/icons/DualKittyKard-icon.png" type="image/png" width="33" height="33"></object>
+          <object data="assets/icons/3D_logo_Dual_Infodose_9.svg" type="image/svg+xml" width="33" height="33"></object>
         </button>
       </div>
       <div class="pagination">
@@ -314,13 +314,7 @@
         ? `${assistantBase} dual.infodose`
         : '';
     };
-    const updateToggleUI = () => {
-      kittyBtn.classList.toggle('active', assistantEnabled);
-      toggleBtn.title = assistantEnabled ? 'Desativar Infodose' : 'Login para Infodose';
-      assistantNameEl.textContent = assistantEnabled
-        ? `${assistantBase} dual.Kitty `
-        : '';
-    };
+  
     function loadCfg() {
       if (localStorage.getItem('infodoseEnabled') === '1') {
         assistantEnabled = true;
@@ -338,6 +332,13 @@ A partir de agora, o assistente chamará-se ${assistantBase} dual.infodose e ref
       }
       updateToggleUI();
     }
+    // Função para trocar o logo via KitButton
+    function changeLogo() {
+      const svgObj = document.querySelector('.svg-container object');
+      svgObj.data = 'assets/icons/DualKittyKard-icon 3.png';
+    }
+
+   
 
     const createEl = (tag, cls, html) => {
       const e = document.createElement(tag);
@@ -561,13 +562,9 @@ A partir de agora, o assistente chamará-se ${assistantBase} dual.infodose e ref
           sendMessage();
         };
       });
+      kittyBtn.addEventListener('click', changeLogo);
     });
-    loadCfg();
-      particlesJS('particles-js', {
-        particles:{ number:{value:40}, color:{value:['#0ff','#f0f']}, shape:{type:'circle'},
-                    opacity:{value:0.4}, size:{value:2.4}, move:{enable:true,speed:1.5} },
-        retina_detect:true
-      });
+    
   </script>
 </body>
 </html>
