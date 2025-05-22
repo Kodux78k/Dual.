@@ -11,10 +11,10 @@
     html,body{width:100%;height:100%;overflow:hidden}
     body{display:flex;flex-direction:column;align-items:center;padding:20px;background:var(--bg-dark);color:var(--text);font-family:'Montserrat',sans-serif}
     #particles-js{position:absolute;inset:0;z-index:0}
-    .svg-container{position:absolute;top:260px;left:50%;width:198px;height:198px;opacity:1;border:none; outline:none;transform:translateX(-50%);z-index:1;border-radius:50%; backdrop-filter:blur(7px);transition:opacity var(--slow)}
+    .svg-container{position:absolute;top:260px;left:50%;width:180px;height:180px;opacity:1;border:none; outline:none;transform:translateX(-50%);z-index:1;transition:opacity var(--slow)}
     .svg-container.fading{opacity:0}
     .svg-container object{width:100%;height:100%;object-fit:contain;display:block;animation:pulse 2s infinite ease-in-out}
-    #assistantName{margin-top:189px;font-size:.8em;font-weight:600;z-index:1;opacity:.78}
+    #assistantName{margin-top:199px;font-size:.8em;font-weight:600;z-index:1;opacity:.78}
     .response-container{position:fixed;left:20px;right:20px;bottom:160px;padding:12px;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);border-radius:20px;max-height:calc(100vh - 200px);overflow-y:auto;z-index:1}
     .page{display:none;opacity:0;transition:opacity var(--med) ease-in-out}
     .page.active{display:block;opacity:1}
