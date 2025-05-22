@@ -98,7 +98,7 @@
       background: linear-gradient(45deg,var(--primary),var(--secondary));
       font-size: 1.5em; cursor: pointer; animation: pulse 2s infinite ease-in-out;
       display: flex; justify-content: center; align-items: center;
-      transition: transform var(--med);
+      transition: transform var(--med); color: #5e5c5e;
     }
     .input-container button:hover { transform: scale(1.1); }
     @keyframes pulse {0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
@@ -227,7 +227,7 @@
     function updateUI(){
       $('#toggleBtn').classList.toggle('active',isEnabled);
       $('#kittyBtn').classList.toggle('active',isStudying);
-      changeLogo(isStudying?kittyLogoSrc:originalLogoSrc);
+      changeLogo(isStudying? originalLogoSrc:kittyLogoSrc);
       if(isEnabled) $('#assistantName').textContent=`${assistantBase} dual.infodose`;
       else if(isStudying) $('#assistantName').textContent='Estudos dual.infodose';
       else $('#assistantName').textContent='';
