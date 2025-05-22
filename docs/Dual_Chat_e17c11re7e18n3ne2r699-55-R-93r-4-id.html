@@ -104,6 +104,31 @@
     @keyframes pulse {0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes clickPulse{0%,100%{opacity:1}50%{opacity:0.8}}
+    .login-container {
+      position:fixed; top:50%; left:50%;
+      transform:translate(-50%,-50%); width:300px;
+      padding:1.5rem 1rem; background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+      backdrop-filter:blur(8px); z-index:10; display:none;
+    }
+    .login-container.active { display:block; }
+    .login-container input {
+      width:100%; background:transparent;
+      border:none; border-bottom:1px solid rgba(255,255,255,0.3);
+      margin:0.8rem 0; padding:0.4rem 0;
+      font-size:0.95em; color:#fff; outline:none;
+    }
+    .login-container input::placeholder { color:rgba(255,255,255,0.5); }
+    .login-container button {
+      width:100%; margin-top:1rem; background:transparent;
+      border:1px solid #0ff; border-radius:8px; padding:0.5rem 0;
+      font-size:0.95em; color:#0ff; cursor:pointer;
+      transition:background .25s, color .25s;
+    }
+    .login-container button:hover { background:#0ff; color:#000; }
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.012)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes clickPulse{0%,100%{opacity:1}50%{opacity:0.8}}
   </style>
 </head>
 <body>
@@ -135,7 +160,12 @@
     <button id="sendBtn" title="Enviar">➤</button>
     <button id="voiceBtn" title="Falar"><object data="assets/icons/Reset_buttom_Dual-Infodose.svg" type="image/svg+xml" width="36" height="36"></object></button>
   </div>
-
+ <div class="login-container" id="loginBox">
+    <form id="loginForm">
+      <input type="text" id="userName" placeholder="Nome do usuário" required>
+      <input type="text" id="assistantInput" placeholder="Nome dual.infodose" required>
+      <button type="submit">Ativar</button>
+    </form>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
   (function(){
