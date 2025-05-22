@@ -242,7 +242,7 @@
     function updateUI(){
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
-      changeLogo(isStudying ? originalLogo : kittyLogo );
+      changeLogo(isStudying ? kittyLogo:originalLogo );
       $('#assistantName').textContent = isEnabled
         ? `${assistantBase} dual.infodose`
         : isStudying
