@@ -226,7 +226,7 @@
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
       // logo toggle corrigido aqui
-      changeLogo(isStudying ? originalLogoSrc : kittyLogoSrc);
+      changeLogo(isStudying ? kittyLogoSrc:originalLogoSrc);
       if(isEnabled)      $('#assistantName').textContent = `${assistantBase} dual.infodose`;
       else if(isStudying)$('#assistantName').textContent = 'Estudos dual.infodose';
       else               $('#assistantName').textContent = '';
