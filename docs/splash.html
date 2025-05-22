@@ -200,36 +200,49 @@
   }
 
   async function checkAccess(user) {
-    if (user.toLowerCase() === 'kodux') {
-      goToIndex();
-      return;
+  if (user.toLowerCase() === 'kodux') {
+    return goToIndex();
+  }
+
+  // Verifica se usuário existe
+  let res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
+    credentials: 'include'
+  });
+
+  let data = await res.json();
+
+  if (!data.exists) {
+    console.log('[+] Usuário não encontrado. Criando novo usuário...');
+    // Cria novo usuário
+    const createRes = await fetch(`/api/create-user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ userId: user })
+    });
+
+    if (!createRes.ok) {
+      return alert('Erro ao criar usuário.');
     }
 
-    const res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
+    // Tenta revalidar após criação
+    res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
       credentials: 'include'
     });
 
-    const data = await res.json();
-
-    if (!data.exists) {
-      // Cria usuário novo se não existe
-      await fetch(`/api/create-user`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ userId: user })
-      });
-      return showBuy();
-    }
-
-    if (!data.authenticated) return showLogin();
-
-    if (data.isAdmin || data.saldo.IFT > 0) {
-      goToIndex();
-    } else {
-      showBuy();
-    }
+    data = await res.json();
   }
+
+  if (!data.authenticated) {
+    return showLogin();
+  }
+
+  if (data.isAdmin || data.saldo?.IFT > 0) {
+    return goToIndex();
+  } else {
+    return showBuy();
+  }
+}
 
   unlockArea.addEventListener('click', () => {
     const user = localStorage.getItem(storedKey);
