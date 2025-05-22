@@ -181,7 +181,7 @@
   <script>
   (function(){
     const STORAGE_KEY    = 'infodoseEnabled';
-    const kittyLogoSrc   = 'assets/icons/DualKittyKard-icon-3.png', type='image/png';
+    const kittyLogoSrc   = 'assets/icons/DualKittyKard-icon-dark.svg',
     let originalLogoSrc  = '';
     let training = '', chunks = [], chunkIndex = 0;
     let isEnabled = false, isStudying = false;
@@ -226,7 +226,7 @@
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
       // logo toggle corrigido aqui
-      changeLogo(isStudying ? originalLogoSrc : kittyLogoSrc);
+      changeLogo(isStudying ? kittyLogoSrc : originalLogoSrc);
       if(isEnabled)      $('#assistantName').textContent = `${assistantBase} dual.infodose`;
       else if(isStudying)$('#assistantName').textContent = 'Estudos dual.infodose';
       else               $('#assistantName').textContent = '';
