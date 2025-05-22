@@ -83,8 +83,8 @@
   <script>
     (function(){
       const STORAGE_KEY='infodoseEnabled',
-            KIT_PRIMARY='assets/icons/dual_Dual_Infodose.svg',
-            KIT_FALLBACK='assets/icons/DualKittyKard-icon.png',
+            KIT_PRIMARY='assets/icons/DuaKittyKard-icon-sketch.svg',
+            KIT_FALLBACK='assets/icons/dual_Dual_Infodose.svg',
             CONFIG={TRAINING_FILE:'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',API_URL:'https://openrouter.ai/api/v1/chat/completions',MODEL:'deepseek/deepseek-chat-v3-0324:free',TEMP:0.2,CHUNK_SIZE:78000,AUTH_TOKEN:'Bearer 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'};
       let training='',chunks=[],chunkIndex=0,isEnabled=false,isStudying=false,userName='',assistantBase='',conversation=[],pages=[],currentPage=0,autoAdvance=true,originalLogo='';
       const $=s=>document.querySelector(s),create=(t,c,h)=>{let e=document.createElement(t);c&&(e.className=c);h&&(e.innerHTML=h);return e;};
