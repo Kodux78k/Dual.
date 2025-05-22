@@ -25,18 +25,9 @@
     .copy-button,.paste-button{border-radius:9px}
     .copy-button:hover,.paste-button:hover,.toggle-button:hover,.kitty-button:hover{background:rgba(255,255,255,.15)}
     .toggle-button.active,.kitty-button.active{opacity:1;filter:drop-shadow(0 0 8px #000)}
-    .pagination button {
-      border: none; background: linear-gradient(45deg,#0ff,#f0f);
-      background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      font-size: 1.2em; cursor: pointer; transition: transform var(--fast);
-    }
-    .pagination button:hover { transform: scale(1.2); }
-    .response-block {
-      margin: 1rem 0; padding: 1.2rem; border-radius: 12px;
-      line-height: 1.5; position: relative; cursor: pointer; overflow: hidden;
-      animation: fadeIn var(--slow) ease forwards, pulse 12s infinite ease-in-out;
-      transition: box-shadow var(--fast), transform var(--fast);
-   .response-block{margin:1rem 0;padding:1.2rem;border-radius:12px;line-height:1.5;position:relative;cursor:pointer;overflow:hidden;animation:fadeIn var(--slow) ease forwards,pulse 12s infinite ease-in-out;transition:box-shadow var(--fast),transform var(--fast)}
+    .pagination button{border:none;background:linear-gradient(45deg,#0ff,#f0f);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.2em;cursor:pointer;transition:transform var(--fast)}
+    .pagination button:hover{transform:scale(1.2)}
+    .response-block{margin:1rem 0;padding:1.2rem;border-radius:12px;line-height:1.5;position:relative;cursor:pointer;overflow:hidden;animation:fadeIn var(--slow) ease forwards,pulse 12s infinite ease-in-out;transition:box-shadow var(--fast),transform var(--fast)}
     .response-block:hover{box-shadow:0 0 15px rgba(0,255,255,.4)}
     .response-block.clicked{animation:clickPulse var(--med) ease-out}
     .response-block.expanded{transform:scale(1.03);background:rgba(0,0,0,.6);z-index:2}
@@ -47,7 +38,7 @@
     .input-container{position:fixed;left:20px;right:20px;bottom:90px;display:flex;gap:10px;z-index:2;max-width:calc(100% - 40px)}
     .input-container input{flex:1;padding:10px;border:none;border-radius:20px;background:rgba(255,255,255,.1);color:inherit;font-size:16px;transition:background var(--fast)}
     .input-container input:focus{background:rgba(255,255,255,.2)}
-    .input-container button{width:60px;height:60px;border:none;border-radius:50%;background:linear-gradient(45deg,var(--primary),var(--secondary));font-size:1.5em;cursor:pointer;animation:pulse 2s infinite ease-in-out;display:flex;align-items:center;justify-content:center;transition:transform var(--med);color: rgba(153,153,153,0.8)}
+    .input-container button{width:60px;height:60px;border:none;border-radius:50%;background:linear-gradient(45deg,var(--primary),var(--secondary));font-size:1.5em;cursor:pointer;animation:pulse 2s infinite ease-in-out;display:flex;align-items:center;justify-content:center;transition:transform var(--med);color:rgba(153,153,153.1)}
     .input-container button:hover{transform:scale(1.1)}
     .login-container{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;padding:1.5rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);border-radius:10px;backdrop-filter:blur(8px);z-index:10;display:none}
     .login-container.active{display:block}
@@ -61,7 +52,7 @@
 <body>
   <div id="particles-js"></div>
   <div class="svg-container" id="logoContainer">
-    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_9.svg" type="image/svg+xml/png"></object>
+    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_9.svg" type="image/svg+xml"></object>
   </div>
   <div id="assistantName"></div>
   <div class="response-container" id="response">
