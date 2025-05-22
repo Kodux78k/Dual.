@@ -17,16 +17,16 @@
       --slow: 1.8s;
     }
     body.light {
-      --bg: linear-gradient(to bottom, #1a1a1a, #333);
-      --text: #111;
+      --bg: linear-gradient(to bottom, #5e5c5e, #1a1a1a);
+      --text: #fff;
     }
     body.medium {
       --bg: linear-gradient(to bottom, #555, #333);
       --text: #eee;
     }
     body.vibe {
-      --bg: linear-gradient(to bottom, #0ff, #f0f);
-      --text: #fff;
+      --bg: linear-gradient(to bottom, #f0f, #0ff);
+      --text: #111;
     }
 
     * { box-sizing: border-box; margin:0; padding:0 }
@@ -49,15 +49,15 @@
       transform: translateX(-50%);
       width: 30px;
       height: 30px;
-      border: 2px solid var(--text);
+      border: 1px solid var(--text);
       border-radius: 50%;
       background: transparent;
-      opacity: 0.6;
+      opacity: 0.3;
       cursor: pointer;
       transition: opacity var(--fast), border-color var(--fast);
       z-index: 10;
     }
-    #themeToggle:hover { opacity: 1 }
+    #themeToggle:hover { opacity: 0.8 }
     #themeToggle::before {
       content: '';
       position: absolute;
