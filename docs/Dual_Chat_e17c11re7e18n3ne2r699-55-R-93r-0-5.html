@@ -17,16 +17,16 @@
       --slow: 1.8s;
     }
     body.light {
-      --bg: radial-gradient(to bottom, #5e5c5e, #0ff);
-      --text: #fff;
+      --bg: linear-gradient(to bottom, #c9c3c6, #333);
+      --text: #111;
     }
     body.medium {
       --bg: linear-gradient(to bottom, #555, #333);
       --text: #eee;
     }
     body.vibe {
-      --bg: linear-gradient(to bottom, #f0f, #555);
-      --text: #111;
+      --bg: radial-gradient(45deg, rgba(0,255,255,0.8), rgba(255,0,255,0.7));
+      --text: #fff;
     }
 
     * { box-sizing: border-box; margin:0; padding:0 }
@@ -38,7 +38,7 @@
       background: var(--bg);
       color: var(--text);
       font-family:'Montserrat',sans-serif;
-      transition: background var(--fast), color var(--fast);
+      transition: background var(--slow), color var(--med);
     }
 
     /* botão circular menor, centralizado um pouco mais para baixo, com círculo interno */
