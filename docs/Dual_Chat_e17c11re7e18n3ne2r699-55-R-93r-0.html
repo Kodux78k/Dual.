@@ -11,10 +11,10 @@
     html,body{width:100%;height:100%;overflow:hidden}
     body{display:flex;flex-direction:column;align-items:center;padding:20px;background:var(--bg-dark);color:var(--text);font-family:'Montserrat',sans-serif}
     #particles-js{position:absolute;inset:0;z-index:0}
-    .svg-container{position:absolute;top:260px;left:50%;width:199px;height:199px;opacity:0.8;transform:translateX(-50%);border-radius:50%;backdrop-filter:blur(8px);z-index:1;transition:opacity var(--slow)}
+    .svg-container{position:absolute;top:260px;left:50%;width:166px;height:166px;opacity:0.7;transform:translateX(-50%);border-radius:50%;backdrop-filter:blur(8px);z-index:1;transition:opacity var(--slow)}
     .svg-container.fading{opacity:0}
     .svg-container object{width:100%;height:100%;animation:pulse 2s infinite ease-in-out}
-    #assistantName{margin-top:200px;font-size:.8em;font-weight:600;z-index:1;opacity:.8}
+    #assistantName{margin-top:200px;font-size:.9em;font-weight:600;z-index:1;opacity:.8}
     .response-container{position:fixed;left:20px;right:20px;bottom:160px;padding:12px;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);border-radius:20px;max-height:calc(100vh - 200px);overflow-y:auto;z-index:1}
     .page{display:none;opacity:0;transition:opacity var(--med) ease-in-out}
     .page.active{display:block;opacity:1}
@@ -52,7 +52,7 @@
 <body>
   <div id="particles-js"></div>
   <div class="svg-container" id="logoContainer">
-    <object id="logoObj" data="assets/icons/dual-vibe-icon-4.png" type="image/png"></object>
+    <object id="logoObj" data="assets/icons/dualNeonVibe-icon-0.png" type="image/png"></object>
   </div>
   <div id="assistantName"></div>
   <div class="response-container" id="response">
