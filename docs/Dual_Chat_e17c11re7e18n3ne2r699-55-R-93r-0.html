@@ -14,11 +14,11 @@
     .svg-container{position:absolute;top:250px;left:50%;width:180px;height:180px;transform:translateX(-50%);border-radius:50%;backdrop-filter:blur(8px);z-index:1;transition:opacity var(--slow)}
     .svg-container.fading{opacity:0}
     .svg-container object{width:100%;height:100%;animation:pulse 2s infinite ease-in-out}
-    #assistantName{margin-top:450px;font-size:.8em;font-weight:600;z-index:1;opacity:.8}
+    #assistantName{margin-top:330px;font-size:.8em;font-weight:600;z-index:1;opacity:.8}
     .response-container{position:fixed;left:20px;right:20px;bottom:160px;padding:12px;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);border-radius:20px;max-height:calc(100vh - 200px);overflow-y:auto;z-index:1}
     .page{display:none;opacity:0;transition:opacity var(--med) ease-in-out}
     .page.active{display:block;opacity:1}
-    .page.initial{text-align:center;font-size:1.1em}
+    .page.initial{text-align:center;font-size:1em}
     .response-controls{display:flex;justify-content:space-between;align-items:center;margin-top:15px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2)}
     .control-buttons,.pagination{display:flex;align-items:center;gap:10px}
     .copy-button,.paste-button,.toggle-button,.kitty-button{background:rgba(255,255,255,.06);padding:6px;border:none;border-radius:50%;cursor:pointer;transition:background var(--fast),filter var(--slow),opacity var(--slow);display:flex;align-items:center;justify-content:center;width:36px;height:36px;opacity:.4}
@@ -52,7 +52,7 @@
 <body>
   <div id="particles-js"></div>
   <div class="svg-container" id="logoContainer">
-    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_10.png" type="image/png"></object>
+    <object id="logoObj" data="assets/icons/Gold_Dual_Infodose.png" type="image/png"></object>
   </div>
   <div id="assistantName"></div>
   <div class="response-container" id="response">
