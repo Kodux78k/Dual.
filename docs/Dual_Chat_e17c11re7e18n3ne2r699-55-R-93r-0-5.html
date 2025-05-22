@@ -396,13 +396,13 @@
           grp.forEach((para, j) => {
             let cls = j===0?'intro':j===1?'middle':'ending';
             let block = create('div',`response-block ${cls}`,
-              `<h3>${titles[j]}</h3><p>${para}</p>`
+              `<p>${para}</p>`
             );
             block.addEventListener('click',()=>{
               autoAdvance = false;
               if (!block.dataset.spoken){
                 speechSynthesis.cancel();
-                speak(para);
+                
                 block.dataset.spoken='1';
                 block.classList.add('clicked');
               } else {
@@ -533,7 +533,7 @@
               chunkIndex=1;
               conversation=[{
                 role:'system',
-                content: `${chunks[0]||training}\n\nA seguir, você é o Assistente de Estudos dual.infodose.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`
+                content: `${chunks[0]||training}\n\nA  voce é Assistente simbólico de Estudos dual.infodose, giue o usuário pelo universo infinito do conhecimento.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`
               }];
               changeLogo([KIT_PRIMARY, KIT_FALLBACK]);
             } else {
