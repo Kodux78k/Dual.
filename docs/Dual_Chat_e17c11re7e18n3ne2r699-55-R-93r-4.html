@@ -101,7 +101,7 @@
       background: linear-gradient(45deg,var(--primary),var(--secondary));
       font-size: 1.5em; cursor: pointer; animation: pulse 2s infinite ease-in-out;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--med);
+      transition: transform var(--med);color: #1a1a1a;
     }
     .input-container button:hover { transform: scale(1.1); }
     .login-container {
@@ -226,7 +226,7 @@
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
       // logo toggle corrigido aqui
-      changeLogo(isStudying ? kittyLogoSrc : originalLogoSrc);
+      changeLogo(isStudying ? originalLogoSrc : kittyLogoSrc);
       if(isEnabled)      $('#assistantName').textContent = `${assistantBase} dual.infodose`;
       else if(isStudying)$('#assistantName').textContent = 'Estudos dual.infodose';
       else               $('#assistantName').textContent = '';
