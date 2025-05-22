@@ -192,6 +192,13 @@
       try{ training=await fetch('data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt').then(r=>r.text());
         for(let i=0;i<training.length;i+=78000) chunks.push(training.slice(i,i+78000));
       }catch{}
+      loadConfig();
+      particlesJS('particles-js',{
+        particles:{ number:{value:40}, color:{value:['#0ff','#f0f']},
+                    shape:{type:'circle'}, opacity:{value:0.4},
+                    size:{value:2.4}, move:{enable:true,speed:1.5}},
+        retina_detect:true
+      });
       bindUI();
     }
 
@@ -377,6 +384,7 @@
       callAI();
     }
 
+    
     document.addEventListener('DOMContentLoaded',init);
     // =====================================================
   })();
