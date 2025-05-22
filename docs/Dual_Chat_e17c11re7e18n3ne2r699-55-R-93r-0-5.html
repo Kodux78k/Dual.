@@ -17,7 +17,7 @@
       --slow: 1.8s;
     }
     body.light {
-      --bg: linear-gradient(to bottom, #c9c3c6, #333);
+      --bg: linear-gradient(to bottom, #1a1a1a, #333);
       --text: #111;
     }
     body.medium {
@@ -25,7 +25,7 @@
       --text: #eee;
     }
     body.vibe {
-      --bg: radial-gradient(45deg, rgba(0,255,255,0.8), rgba(255,0,255,0.7));
+      --bg: linear-gradient(to bottom, #0ff, #f0f);
       --text: #fff;
     }
 
@@ -272,17 +272,18 @@
       };
 
       function applyTheme(theme) {
-        if (theme === 'light') {
-          document.body.classList.add('light');
-        } else {
-          document.body.classList.remove('light');
-        }
+        document.body.classList.remove('light','medium','vibe');
+        if (theme!=='dark') document.body.classList.add(theme);
       }
       function toggleTheme() {
-        const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
-        applyTheme(newTheme);
-        localStorage.setItem(CURRENT_THEME, newTheme);
+        const order = ['dark','medium','light','vibe'];
+        let cur = localStorage.getItem(CURRENT_THEME) || 'dark';
+        let idx = (order.indexOf(cur) + 1) % order.length;
+        let next = order[idx];
+        applyTheme(next);
+        localStorage.setItem(CURRENT_THEME, next);
       }
+
 
       async function init(){
         originalLogo = $('#logoObj').data;
