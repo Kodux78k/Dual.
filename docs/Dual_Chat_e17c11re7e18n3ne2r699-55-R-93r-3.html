@@ -115,7 +115,7 @@
       background:linear-gradient(45deg,var(--primary),var(--secondary));
       font-size:1.5em; cursor:pointer; animation:pulse 2s infinite ease-in-out;
       display:flex; align-items:center; justify-content:center;
-      transition:transform var(--med);
+      transition:transform var(--med); color:inherit;
     }
     .input-container button:hover { transform:scale(1.1); }
 
@@ -211,7 +211,7 @@
     let isEnabled=false, isStudying=false;
     let userName='', assistantBase='';
     let conversation=[], pages=[], currentPage=0, autoAdvance=true;
-    let originalLogo='', kittyLogo='assets/icons/DualKittyKard-icon-3.png';
+    let originalLogo='', kittyLogo='docs/assets/icons/Gold_calice_Horus_Dual_Infodose.svg';
 
     const $ = s => document.querySelector(s);
     const create = (t, c, h) => { const e=document.createElement(t); if(c)e.className=c; if(h)e.innerHTML=h; return e; };
@@ -242,7 +242,7 @@
     function updateUI(){
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
-      changeLogo(isStudying ? kittyLogo : originalLogo);
+      changeLogo(isStudying ? originalLogo : kittyLogo );
       $('#assistantName').textContent = isEnabled
         ? `${assistantBase} dual.infodose`
         : isStudying
