@@ -147,7 +147,7 @@
         <button id="logoutBtn">Desconectar</button>
       </div>
       <div id="buyTokens" style="display:none;">
-        <button id="buyIFTBtn">Comprar 1 000 IFT (R$10)</button>
+        <button id="buyIFTBtn">Comprar 999 IFT (R$10)</button>
       </div>
     </div>
   </div>
@@ -257,6 +257,11 @@
       setTimeout(()=>document.body.style.animation='fadeOutBody 1s forwards', 600);
       setTimeout(()=>window.location.href='index.html', 1400);
     }
+    window.addEventListener('load', () => {
+      if (localStorage.getItem(storedKey)) {
+        showLogout();
+      }
+    });
   </script>
 </body>
 </html>
