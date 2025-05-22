@@ -148,7 +148,7 @@
 <body>
   <div id="particles-js"></div>
   <div class="svg-container" id="logoContainer">
-    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_9.svg" type="image/svg+xml"></object>
+    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_9.png" type="image/png"></object>
   </div>
   <div id="assistantName"></div>
 
@@ -211,7 +211,7 @@
     let isEnabled=false, isStudying=false;
     let userName='', assistantBase='';
     let conversation=[], pages=[], currentPage=0, autoAdvance=true;
-    let originalLogo='', kittyLogo='assets/icons/dkk-icon-0.svg';
+    let originalLogo='', kittyLogo='assets/icons/DualKittyKard-icon-3.png';
 
     const $ = s => document.querySelector(s);
     const create = (t, c, h) => { const e=document.createElement(t); if(c)e.className=c; if(h)e.innerHTML=h; return e; };
@@ -242,7 +242,7 @@
     function updateUI(){
       $('#toggleBtn').classList.toggle('active', isEnabled);
       $('#kittyBtn').classList.toggle('active', isStudying);
-      changeLogo(isStudying ? kittyLogo:originalLogo );
+      changeLogo(isStudying ? kittyLogoSex : originalLogoSrc );
       $('#assistantName').textContent = isEnabled
         ? `${assistantBase} dual.infodose`
         : isStudying
