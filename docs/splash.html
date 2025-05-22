@@ -81,7 +81,7 @@
       cursor:pointer; transition:all .25s;
     }
     .login-container button:hover {
-      background:transparent; color:#000; border-color:#0ff;
+      background:#0ff; color:#000; border-color:#0ff;
     }
     .logout-area button {
       width:100%;
@@ -101,7 +101,7 @@
       cursor:pointer; transition:all .25s;
     }
     #buyTokens button:hover {
-      background:transparent; color:#000; border-color:#0f0; width: 110%;
+      background:#0f0; color:#000; border-color:#0f0;
     }
 
     @media(max-width:360px) {
@@ -147,7 +147,7 @@
         <button id="logoutBtn">Desconectar</button>
       </div>
       <div id="buyTokens" style="display:none;">
-        <button id="buyIFTBtn">Comprar 10mil IFT (R$10)</button>
+        <button id="buyIFTBtn">Comprar 999 IFT (R$10)</button>
       </div>
     </div>
   </div>
@@ -200,7 +200,7 @@
   }
 
   async function checkAccess(user) {
-  if (user.toLowerCase() === 'kodux', 'bllue', 'barros', 'vivi', 'antonieta') {
+  if (user.toLowerCase() === 'kodux') {
     return goToIndex();
   }
 
@@ -284,7 +284,7 @@
 
   // Botão de teste/hack (temporário)
   const testBtn = document.createElement('button');
-  testBtn.textContent = 'Ativar IFT)';
+  testBtn.textContent = '✅ Testar Compra (Hack Temporário)';
   testBtn.style.marginTop = '10px';
   testBtn.onclick = () => goToIndex();
   buyArea.appendChild(testBtn);
