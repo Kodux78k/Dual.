@@ -122,187 +122,152 @@
   </style>
 </head>
 <body>
+<svg style="display:none"><filter id="distort">
+  <feTurbulence baseFrequency="0.012" numOctaves="2" result="turb"/>
+  <feDisplacementMap in="SourceGraphic" in2="turb" scale="24"/>
+</filter></svg>
 
-  <svg style="display:none"><filter id="distort">
-    <feTurbulence baseFrequency="0.012" numOctaves="2" result="turb"/>
-    <feDisplacementMap in="SourceGraphic" in2="turb" scale="24"/>
-  </filter></svg>
+<audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
+<div id="particles-js"></div>
 
-  <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
-  <div id="particles-js"></div>
+<div class="center-group" id="unlockArea">
+  <div class="logo-container">
+    <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  </div>
+  <div class="infodose">dual.<strong>Infodose</strong></div>
 
-  <div class="center-group" id="unlockArea">
-    <div class="logo-container">
-      <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  <div class="login-container" id="loginBox">
+    <form id="loginForm">
+      <input type="text" id="user" placeholder="Usuário" required>
+      <input type="password" id="pass" placeholder="Senha" required>
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="logout-area" style="display:none;">
+      <button id="logoutBtn">Desconectar</button>
     </div>
-    <div class="infodose">dual.<strong>Infodose</strong></div>
-
-    <div class="login-container" id="loginBox">
-      <form id="loginForm">
-        <input type="text" id="user" placeholder="Usuário" required>
-        <input type="password" id="pass" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
-      </form>
-      <div class="logout-area" style="display:none;">
-        <button id="logoutBtn">Desconectar</button>
-      </div>
-      <div id="buyTokens" style="display:none;">
-        <button id="buyIFTBtn">Comprar 999 IFT (R$10)</button>
-      </div>
+    <div id="buyTokens" style="display:none;">
+      <button id="buyIFTBtn">Comprar 999 IFT (Simulado)</button>
     </div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script type="module">
-  import { loadStripe } from 'https://cdn.jsdelivr.net/npm/@stripe/stripe-js@1.42.0/+esm';
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+const unlockArea = document.getElementById('unlockArea');
+const loginBox   = document.getElementById('loginBox');
+const loginForm  = document.getElementById('loginForm');
+const userInput  = document.getElementById('user');
+const passInput  = document.getElementById('pass');
+const logoutBtn  = document.getElementById('logoutBtn');
+const logoutArea = loginBox.querySelector('.logout-area');
+const buyArea    = document.getElementById('buyTokens');
+const buyIFTBtn  = document.getElementById('buyIFTBtn');
+const storedKey  = 'infodose_user';
 
-  const unlockArea = document.getElementById('unlockArea');
-  const loginBox   = document.getElementById('loginBox');
-  const loginForm  = document.getElementById('loginForm');
-  const userInput  = document.getElementById('user');
-  const passInput  = document.getElementById('pass');
-  const logoutBtn  = document.getElementById('logoutBtn');
-  const logoutArea = loginBox.querySelector('.logout-area');
-  const buyArea    = document.getElementById('buyTokens');
-  const buyIFTBtn  = document.getElementById('buyIFTBtn');
-  const storedKey  = 'infodose_user';
-  const stripePk   = 'pk_live_SEU_PUBLISHABLE_KEY';
+particlesJS('particles-js', {
+  particles: {
+    number: { value: 40, density: { enable: true, value_area: 600 } },
+    color: { value: ['#0ff','#f0f'] },
+    shape: { type: 'circle' },
+    opacity: { value: 0.4, random: true },
+    size: { value: 2.5, random: true },
+    move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
+  },
+  retina_detect: true
+});
 
-  particlesJS('particles-js', {
-    particles: {
-      number: { value: 40, density: { enable: true, value_area: 600 } },
-      color: { value: ['#0ff','#f0f'] },
-      shape: { type: 'circle' },
-      opacity: { value: 0.4, random: true },
-      size: { value: 2.5, random: true },
-      move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
-    },
-    retina_detect: true
-  });
+function showLogin() {
+  logoutArea.style.display = 'none';
+  buyArea.style.display    = 'none';
+  loginForm.style.display  = 'flex';
+  loginBox.classList.add('active');
+}
+function showLogout() {
+  loginForm.style.display  = 'none';
+  logoutArea.style.display = 'flex';
+  buyArea.style.display    = 'none';
+  loginBox.classList.add('active');
+}
+function showBuy() {
+  loginForm.style.display  = 'none';
+  logoutArea.style.display = 'none';
+  buyArea.style.display    = 'block';
+  loginBox.classList.add('active');
+}
 
-  function showLogin() {
-    logoutArea.style.display = 'none';
-    buyArea.style.display    = 'none';
-    loginForm.style.display  = 'flex';
-    loginBox.classList.add('active');
-  }
-  function showLogout() {
-    loginForm.style.display  = 'none';
-    logoutArea.style.display = 'flex';
-    buyArea.style.display    = 'none';
-    loginBox.classList.add('active');
-  }
-  function showBuy() {
-    loginForm.style.display  = 'none';
-    logoutArea.style.display = 'none';
-    buyArea.style.display    = 'block';
-    loginBox.classList.add('active');
-  }
-
-  async function checkAccess(user) {
+// Simulação de verificação local (sem servidor)
+function checkAccess(user) {
   if (user.toLowerCase() === 'kodux') {
     return goToIndex();
   }
 
-  // Verifica se usuário existe
-  let res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
-    credentials: 'include'
-  });
+  const isReturningUser = localStorage.getItem('firstAccess') === 'true';
 
-  let data = await res.json();
-
-  if (!data.exists) {
-    console.log('[+] Usuário não encontrado. Criando novo usuário...');
-    // Cria novo usuário
-    const createRes = await fetch(`/api/create-user`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ userId: user })
-    });
-
-    if (!createRes.ok) {
-      return alert('Erro ao criar usuário.');
-    }
-
-    // Tenta revalidar após criação
-    res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
-      credentials: 'include'
-    });
-
-    data = await res.json();
+  if (!isReturningUser) {
+    console.log('[+] Primeiro acesso detectado. Criando localmente.');
+    localStorage.setItem('firstAccess', 'true');
+    return showBuy();
   }
 
-  if (!data.authenticated) {
-    return showLogin();
-  }
-
-  if (data.isAdmin || data.saldo?.IFT > 0) {
+  const fakeBalance = parseInt(localStorage.getItem('IFT') || '0');
+  if (fakeBalance > 0) {
     return goToIndex();
   } else {
     return showBuy();
   }
 }
 
-  unlockArea.addEventListener('click', () => {
-    const user = localStorage.getItem(storedKey);
-    if (user) {
-      checkAccess(user);
-    } else {
-      showLogin();
-      gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
-    }
-  });
-
-  loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const u = userInput.value.trim(), p = passInput.value.trim();
-    if (!u || !p) return alert('Preencha login e senha');
-    localStorage.setItem(storedKey, u);
-    checkAccess(u);
-  });
-
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem(storedKey);
+unlockArea.addEventListener('click', () => {
+  const user = localStorage.getItem(storedKey);
+  if (user) {
+    checkAccess(user);
+  } else {
     showLogin();
-  });
-
-  buyIFTBtn.addEventListener('click', async () => {
-    const stripe = await loadStripe(stripePk);
-    const res    = await fetch('/api/create-checkout', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        packageId: 'IFT_1000',
-        userId: localStorage.getItem(storedKey)
-      })
-    });
-    const { url } = await res.json();
-    window.location.href = url;
-  });
-
-  // Botão de teste/hack (temporário)
-  const testBtn = document.createElement('button');
-  testBtn.textContent = '✅ Testar Compra (Hack Temporário)';
-  testBtn.style.marginTop = '10px';
-  testBtn.onclick = () => goToIndex();
-  buyArea.appendChild(testBtn);
-
-  function goToIndex() {
-    const snd = document.getElementById('transitionSound');
-    snd.volume = 0; snd.play();
-    gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
-    gsap.to('.infodose', { opacity:0, duration:0.6 });
-    setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
-    setTimeout(() => window.location.href = 'index.html', 1400);
+    gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
   }
+});
 
-  window.addEventListener('load', () => {
-    if (localStorage.getItem(storedKey)) {
-      showLogout();
-    }
-  });
+loginForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const u = userInput.value.trim(), p = passInput.value.trim();
+  if (!u || !p) return alert('Preencha login e senha');
+  localStorage.setItem(storedKey, u);
+  checkAccess(u);
+});
+
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem(storedKey);
+  showLogin();
+});
+
+buyIFTBtn.addEventListener('click', () => {
+  alert('Compra simulada. IFTs adicionados localmente.');
+  localStorage.setItem('IFT', '999');
+  goToIndex();
+});
+
+// Botão de teste/hack (temporário)
+const testBtn = document.createElement('button');
+testBtn.textContent = '✅ Testar Compra (Hack Temporário)';
+testBtn.style.marginTop = '10px';
+testBtn.onclick = () => goToIndex();
+buyArea.appendChild(testBtn);
+
+function goToIndex() {
+  const snd = document.getElementById('transitionSound');
+  snd.volume = 0;
+  snd.play();
+  gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
+  gsap.to('.infodose', { opacity:0, duration:0.6 });
+  setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
+  setTimeout(() => window.location.href = 'index.html', 1400);
+}
+
+window.addEventListener('load', () => {
+  if (localStorage.getItem(storedKey)) {
+    showLogout();
+  }
+});
 </script>
 </body>
 </html>
