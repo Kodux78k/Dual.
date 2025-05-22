@@ -73,7 +73,7 @@
     .svg-container { position:absolute; top:260px; left:50%; width:180px; height:180px; opacity:1; transform:translateX(-50%); z-index:1; transition:opacity var(--slow) }
     .svg-container.fading { opacity:0 }
     .svg-container object { width:100%; height:100%; object-fit:contain; display:block; animation:pulse 2s infinite ease-in-out }
-    #assistantName { margin-top:199px; font-size:.9em; font-weight:600; z-index:1; opacity:.78 }
+    #assistantName { margin-top:199px; font-size:1.1em; font-weight:600; z-index:1; opacity:.78 }
 
     .response-container {
       position:fixed; left:20px; right:20px; bottom:160px; padding:12px;
@@ -87,7 +87,7 @@
 
     .page { display:none; opacity:0; transition:opacity var(--med) ease-in-out }
     .page.active { display:block; opacity:1 }
-    .page.initial { text-align:center; font-size:1em }
+    .page.initial { text-align:center; font-size:1.3em }
 
     .response-controls {
       display:flex; justify-content:space-between; align-items:center;
@@ -155,7 +155,7 @@
     }
     .input-container input:focus { background: rgba(255,255,255,.2); }
     .input-container button {
-      width: 60px; height: 60px; border: 1px; border-radius: 50%;
+      width: 66px; height: 66px; border: none; 
       background: linear-gradient(42deg, #0ff, #f0f);
       background-clip: text;
       -webkit-background-clip: text;
