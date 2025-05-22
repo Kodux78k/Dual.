@@ -17,7 +17,7 @@
       --slow: 1.8s;
     }
     body.light {
-      --bg: linear-gradient(to bottom, #c9c3c6, #333);
+      --bg: linear-gradient(to bottom, #c9c3c6, #5e5c5e);
       --text: #111;
     }
     body.medium {
@@ -25,7 +25,7 @@
       --text: #eee;
     }
     body.vibe {
-      --bg: radial-gradient(45deg, rgba(0,255,255,0.8), rgba(255,0,255,0.7));
+      --bg: linear-gradient(45deg, #0ff, #f0f);
       --text: #fff;
     }
 
@@ -54,7 +54,7 @@
       background: transparent;
       opacity: 0.3;
       cursor: pointer;
-      transition: opacity var(--fast), border-color var(--fast);
+      transition: opacity var(--med), border-color var(--med);
       z-index: 10;
     }
     #themeToggle:hover { opacity: 0.8 }
