@@ -81,7 +81,7 @@
       cursor:pointer; transition:all .25s;
     }
     .login-container button:hover {
-      background:#0ff; color:#000; border-color:#0ff;
+      background:transparent; color:#000; border-color:#0ff;
     }
     .logout-area button {
       width:100%;
@@ -101,7 +101,7 @@
       cursor:pointer; transition:all .25s;
     }
     #buyTokens button:hover {
-      background:#0f0; color:#000; border-color:#0f0;
+      background:transparent; color:#000; border-color:#0f0; width: 110%;
     }
 
     @media(max-width:360px) {
@@ -122,277 +122,187 @@
   </style>
 </head>
 <body>
-<svg style="display:none"><filter id="distort">
-  <feTurbulence baseFrequency="0.012" numOctaves="2" result="turb"/>
-  <feDisplacementMap in="SourceGraphic" in2="turb" scale="24"/>
-</filter></svg>
 
-<audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
-<div id="particles-js"></div>
+  <svg style="display:none"><filter id="distort">
+    <feTurbulence baseFrequency="0.012" numOctaves="2" result="turb"/>
+    <feDisplacementMap in="SourceGraphic" in2="turb" scale="24"/>
+  </filter></svg>
 
-<div class="center-group" id="unlockArea">
-  <div class="logo-container">
-    <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
-  </div>
-  <div class="infodose">dual.<strong>Infodose</strong></div>
+  <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
+  <div id="particles-js"></div>
 
-  <div class="login-container" id="loginBox">
-    <form id="loginForm">
-      <input type="text" id="user" placeholder="Usuário" required>
-      <input type="password" id="pass" placeholder="Senha" required>
-      <button type="submit">Entrar</button>
-    </form>
-    <div class="logout-area" style="display:none;">
-      <button id="logoutBtn">Desconectar</button>
+  <div class="center-group" id="unlockArea">
+    <div class="logo-container">
+      <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
     </div>
-    <!-- Botão de comprar IFT (ajustado com contador e estilo único) -->
-<div id="buyTokens" style="display:none; flex-direction:column; align-items:center; gap:1rem;">
-  <div id="iftBalance" style="color:#0f0; font-weight:600; font-size:1.1em;">IFTs: 0</div>
-  <button id="buyIFTBtn">Adicionar 999 IFTs</button>
-</div>
-<div style="padding: 20px; color: white;">
-  <h2>Comprar Tokens</h2>
-  <p>Você está prestes a adquirir <strong>1 milhão de tokens</strong> por apenas <strong>R$10</strong>.</p>
+    <div class="infodose">dual.<strong>Infodose</strong></div>
 
-  <h3>Faça um PIX de R$10 para:</h3>
-  <p><strong>CHAVE PIX:</strong><br/> <code>pix@infodose.com.br</code></p>
+    <div class="login-container" id="loginBox">
+      <form id="loginForm">
+        <input type="text" id="user" placeholder="Usuário" required>
+        <input type="password" id="pass" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+      </form>
+      <div class="logout-area" style="display:none;">
+        <button id="logoutBtn">Desconectar</button>
+      </div>
+      <div id="buyTokens" style="display:none;">
+        <button id="buyIFTBtn">Comprar 10mil IFT (R$10)</button>
+      </div>
+    </div>
+  </div>
 
-  <button onclick="confirmarPix()">Já fiz o PIX</button>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script type="module">
+  import { loadStripe } from 'https://cdn.jsdelivr.net/npm/@stripe/stripe-js@1.42.0/+esm';
 
-  <div id="resposta-pix" style="margin-top: 15px; color: lightgreen;"></div>
-</div>
+  const unlockArea = document.getElementById('unlockArea');
+  const loginBox   = document.getElementById('loginBox');
+  const loginForm  = document.getElementById('loginForm');
+  const userInput  = document.getElementById('user');
+  const passInput  = document.getElementById('pass');
+  const logoutBtn  = document.getElementById('logoutBtn');
+  const logoutArea = loginBox.querySelector('.logout-area');
+  const buyArea    = document.getElementById('buyTokens');
+  const buyIFTBtn  = document.getElementById('buyIFTBtn');
+  const storedKey  = 'infodose_user';
+  const stripePk   = 'pk_live_SEU_PUBLISHABLE_KEY';
 
+  particlesJS('particles-js', {
+    particles: {
+      number: { value: 40, density: { enable: true, value_area: 600 } },
+      color: { value: ['#0ff','#f0f'] },
+      shape: { type: 'circle' },
+      opacity: { value: 0.4, random: true },
+      size: { value: 2.5, random: true },
+      move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
+    },
+    retina_detect: true
+  });
 
-
-<footer id="footerIFT" style="position:flex; bottom:60px; left:50%; transform:translateX(-50%);
-  font-size:0.9em; color:#0f0; opacity:0.7; display:none;">
-  Restam <span id="iftLeft">0</span> IFTs
-</footer>
-
-<script>
-const unlockArea = document.getElementById('unlockArea');
-const loginBox   = document.getElementById('loginBox');
-const loginForm  = document.getElementById('loginForm');
-const userInput  = document.getElementById('user');
-const passInput  = document.getElementById('pass');
-const logoutBtn  = document.getElementById('logoutBtn');
-const logoutArea = loginBox.querySelector('.logout-area');
-const buyArea    = document.getElementById('buyTokens');
-const buyIFTBtn  = document.getElementById('buyIFTBtn');
-const balanceBox = document.getElementById('iftBalance');
-const footerIFT  = document.getElementById('footerIFT');
-const iftLeftEl  = document.getElementById('iftLeft');
-const storedKey  = 'infodose_user';
-
-let iftTimer = null;
-let lastInteraction = Date.now();
-
-function updateIFTDisplay() {
-  const ift = parseInt(localStorage.getItem('IFT') || '0');
-  balanceBox.textContent = `IFTs: ${ift}`;
-  iftLeftEl.textContent = ift;
-  if (ift > 0) {
-    footerIFT.style.display = 'block';
-  } else {
-    footerIFT.style.display = 'none';
+  function showLogin() {
+    logoutArea.style.display = 'none';
+    buyArea.style.display    = 'none';
+    loginForm.style.display  = 'flex';
+    loginBox.classList.add('active');
   }
-}
-
-function showLogin() {
-  logoutArea.style.display = 'none';
-  buyArea.style.display    = 'none';
-  loginForm.style.display  = 'flex';
-  loginBox.classList.add('active');
-}
-function showLogout() {
-  loginForm.style.display  = 'none';
-  logoutArea.style.display = 'flex';
-  buyArea.style.display    = 'none';
-  loginBox.classList.add('active');
-  updateIFTDisplay();
-}
-function showBuy() {
-  loginForm.style.display  = 'none';
-  logoutArea.style.display = 'none';
-  buyArea.style.display    = 'flex';
-  loginBox.classList.add('active');
-  updateIFTDisplay();
-}
-
-function checkAccess(user) {
-  if (user.toLowerCase() === 'kodux') return goToIndex();
-
-  const isReturningUser = localStorage.getItem('firstAccess') === 'true';
-  if (!isReturningUser) {
-    localStorage.setItem('firstAccess', 'true');
-    return showBuy();
+  function showLogout() {
+    loginForm.style.display  = 'none';
+    logoutArea.style.display = 'flex';
+    buyArea.style.display    = 'none';
+    loginBox.classList.add('active');
+  }
+  function showBuy() {
+    loginForm.style.display  = 'none';
+    logoutArea.style.display = 'none';
+    buyArea.style.display    = 'block';
+    loginBox.classList.add('active');
   }
 
-  const ift = parseInt(localStorage.getItem('IFT') || '0');
-  if (ift > 0) {
-    startIFTCountdown();
+  async function checkAccess(user) {
+  if (user.toLowerCase() === 'kodux', 'bllue', 'barros', 'vivi', 'antonieta') {
+    return goToIndex();
+  }
+
+  // Verifica se usuário existe
+  let res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
+    credentials: 'include'
+  });
+
+  let data = await res.json();
+
+  if (!data.exists) {
+    console.log('[+] Usuário não encontrado. Criando novo usuário...');
+    // Cria novo usuário
+    const createRes = await fetch(`/api/create-user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ userId: user })
+    });
+
+    if (!createRes.ok) {
+      return alert('Erro ao criar usuário.');
+    }
+
+    // Tenta revalidar após criação
+    res = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, {
+      credentials: 'include'
+    });
+
+    data = await res.json();
+  }
+
+  if (!data.authenticated) {
+    return showLogin();
+  }
+
+  if (data.isAdmin || data.saldo?.IFT > 0) {
     return goToIndex();
   } else {
     return showBuy();
   }
 }
 
-function goToIndex() {
-  const snd = document.getElementById('transitionSound');
-  snd.volume = 0;
-  snd.play();
-  gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
-  gsap.to('.infodose', { opacity:0, duration:0.6 });
-  setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
-  setTimeout(() => window.location.href = 'index.html', 1400);
-}
-
-function addIFT(amount) {
-  let current = parseInt(localStorage.getItem('IFT') || '0');
-  current += amount;
-  localStorage.setItem('IFT', current);
-  updateIFTDisplay();
-}
-
-function reduceIFT(amount) {
-  let current = parseInt(localStorage.getItem('IFT') || '0');
-  if (current >= amount) {
-    current -= amount;
-    localStorage.setItem('IFT', current);
-    updateIFTDisplay();
-    if (current < 1) {
-      alert('Seus IFTs acabaram.');
-      window.location.reload();
+  unlockArea.addEventListener('click', () => {
+    const user = localStorage.getItem(storedKey);
+    if (user) {
+      checkAccess(user);
+    } else {
+      showLogin();
+      gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
     }
-  }
-}
-// components/pixButton.js
-export function createPixButton({ valor = 5, onSuccess = () => {}, onError = () => {} }) {
-  const btn = document.createElement('button');
-  btn.className = 'pix-button';
-  btn.textContent = `Ativar IFTs - R$ ${valor},00`;
-  btn.onclick = async () => {
-    try {
-      // Simula chamada de pagamento
-      const confirmacao = confirm(`Simular pagamento de R$${valor},00 com PIX?`);
-      if (confirmacao) {
-        // Aqui você chamaria sua API real futuramente
-        // const res = await fetch('/api/pix', { method: 'POST', body: JSON.stringify({valor}) });
-
-        const transacao = {
-          id: Date.now(),
-          valor,
-          data: new Date().toLocaleString(),
-          status: 'concluído'
-        };
-        salvarTransacao(transacao);
-        onSuccess(transacao);
-      }
-    } catch (err) {
-      console.error(err);
-      onError(err);
-    }
-  };
-  return btn;
-}
-function confirmarPix() {
-  const usuario = localStorage.getItem('usuario') || 'desconhecido';
-
-  if (usuario.toLowerCase() === 'kodux') {
-    alert("Kodux possui tokens infinitos.");
-    window.location.href = 'index.html';
-    return;
-  }
-
-  const tokensAtuais = parseInt(localStorage.getItem('tokens') || '0');
-  const novosTokens = tokensAtuais + 1000000;
-
-  localStorage.setItem('tokens', novosTokens);
-  salvarTransacaoIFT(10);
-
-  document.getElementById('resposta-pix').innerText = "Pagamento confirmado. Tokens adicionados!";
-  
-  setTimeout(() => window.location.href = 'index.html', 1500);
-}
-
-function salvarTransacaoIFT(valor) {
-  const historico = JSON.parse(localStorage.getItem('historicoIFTs') || '[]');
-  historico.push({
-    valor,
-    data: new Date().toLocaleString()
   });
-  localStorage.setItem('historicoIFTs', JSON.stringify(historico));
-}
 
-function salvarTransacao(transacao) {
-  const historico = JSON.parse(localStorage.getItem('historicoIFTs') || '[]');
-  historico.push(transacao);
-  localStorage.setItem('historicoIFTs', JSON.stringify(historico));
-}
-function startIFTCountdown() {
-  if (iftTimer) clearInterval(iftTimer);
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const u = userInput.value.trim(), p = passInput.value.trim();
+    if (!u || !p) return alert('Preencha login e senha');
+    localStorage.setItem(storedKey, u);
+    checkAccess(u);
+  });
 
-  iftTimer = setInterval(() => {
-    const now = Date.now();
-    if (now - lastInteraction >= 144000) {
-      reduceIFT(369);
-      lastInteraction = Date.now();
-    }
-  }, 15000); // verifica a cada 15 segundos
-}
-
-document.addEventListener('mousemove', () => lastInteraction = Date.now());
-document.addEventListener('keydown', () => lastInteraction = Date.now());
-document.addEventListener('click',    () => lastInteraction = Date.now());
-
-unlockArea.addEventListener('click', () => {
-  const user = localStorage.getItem(storedKey);
-  if (user) {
-    checkAccess(user);
-  } else {
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem(storedKey);
     showLogin();
-    gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
-  }
-});
+  });
 
-loginForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const u = userInput.value.trim(), p = passInput.value.trim();
-  if (!u || !p) return alert('Preencha login e senha');
-  localStorage.setItem(storedKey, u);
-  checkAccess(u);
-});
-
-logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem(storedKey);
-  localStorage.removeItem('IFT');
-  clearInterval(iftTimer);
-  footerIFT.style.display = 'none';
-  showLogin();
-});
-
-buyIFTBtn.addEventListener('click', () => {
-  addIFT(999);
-  alert('999 IFTs adicionados!');
-});
-// inicia partículas
-    particlesJS('particles-js', {
-      particles: {
-        number:{ value:40, density:{ enable:true, value_area:600 } },
-        color:{ value:['#0ff','#f0f'] },
-        shape:{ type:'circle' },
-        opacity:{ value:0.4, random:true },
-        size:{ value:2.5, random:true },
-        move:{ enable:true, speed:1.2, random:true, out_mode:'out' }
-      },
-      retina_detect:true
+  buyIFTBtn.addEventListener('click', async () => {
+    const stripe = await loadStripe(stripePk);
+    const res    = await fetch('/api/create-checkout', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        packageId: 'IFT_1000',
+        userId: localStorage.getItem(storedKey)
+      })
     });
-window.addEventListener('load', () => {
-  if (localStorage.getItem(storedKey)) {
-    showLogout();
-    startIFTCountdown();
+    const { url } = await res.json();
+    window.location.href = url;
+  });
+
+  // Botão de teste/hack (temporário)
+  const testBtn = document.createElement('button');
+  testBtn.textContent = 'Ativar IFT)';
+  testBtn.style.marginTop = '10px';
+  testBtn.onclick = () => goToIndex();
+  buyArea.appendChild(testBtn);
+
+  function goToIndex() {
+    const snd = document.getElementById('transitionSound');
+    snd.volume = 0; snd.play();
+    gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
+    gsap.to('.infodose', { opacity:0, duration:0.6 });
+    setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
+    setTimeout(() => window.location.href = 'index.html', 1400);
   }
-});
+
+  window.addEventListener('load', () => {
+    if (localStorage.getItem(storedKey)) {
+      showLogout();
+    }
+  });
 </script>
 </body>
 </html>
