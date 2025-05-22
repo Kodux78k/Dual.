@@ -18,7 +18,7 @@
     }
     body.light {
       --bg: linear-gradient(to bottom, #c9c3c6, #5e5c5e);
-      --text: #333;
+      --text: #111;
     }
     body.medium {
       --bg: linear-gradient(to bottom, #555, #333);
@@ -159,7 +159,7 @@
       background: linear-gradient(45deg, var(--primary), var(--secondary));
       font-size: 1.2em; cursor: pointer; animation: pulse 2s infinite ease-in-out;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--med); color: var(--bg);
+      transition: transform var(--med); color: linear-gradient(45deg, #0ff, #f0f);
     }
     .input-container button:hover { transform: scale(1.1); }
 
