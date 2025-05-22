@@ -150,8 +150,21 @@
   <div id="iftBalance" style="color:#0f0; font-weight:600; font-size:1.1em;">IFTs: 0</div>
   <button id="buyIFTBtn">Adicionar 999 IFTs</button>
 </div>
+<div style="padding: 20px; color: white;">
+  <h2>Comprar Tokens</h2>
+  <p>Você está prestes a adquirir <strong>1 milhão de tokens</strong> por apenas <strong>R$10</strong>.</p>
 
-<footer id="footerIFT" style="position:fixed; bottom:10px; left:50%; transform:translateX(-50%);
+  <h3>Faça um PIX de R$10 para:</h3>
+  <p><strong>CHAVE PIX:</strong><br/> <code>pix@infodose.com.br</code></p>
+
+  <button onclick="confirmarPix()">Já fiz o PIX</button>
+
+  <div id="resposta-pix" style="margin-top: 15px; color: lightgreen;"></div>
+</div>
+
+
+
+<footer id="footerIFT" style="position:flex; bottom:60px; left:50%; transform:translateX(-50%);
   font-size:0.9em; color:#0f0; opacity:0.7; display:none;">
   Restam <span id="iftLeft">0</span> IFTs
 </footer>
@@ -282,6 +295,34 @@ export function createPixButton({ valor = 5, onSuccess = () => {}, onError = () 
   };
   return btn;
 }
+function confirmarPix() {
+  const usuario = localStorage.getItem('usuario') || 'desconhecido';
+
+  if (usuario.toLowerCase() === 'kodux') {
+    alert("Kodux possui tokens infinitos.");
+    window.location.href = 'index.html';
+    return;
+  }
+
+  const tokensAtuais = parseInt(localStorage.getItem('tokens') || '0');
+  const novosTokens = tokensAtuais + 1000000;
+
+  localStorage.setItem('tokens', novosTokens);
+  salvarTransacaoIFT(10);
+
+  document.getElementById('resposta-pix').innerText = "Pagamento confirmado. Tokens adicionados!";
+  
+  setTimeout(() => window.location.href = 'index.html', 1500);
+}
+
+function salvarTransacaoIFT(valor) {
+  const historico = JSON.parse(localStorage.getItem('historicoIFTs') || '[]');
+  historico.push({
+    valor,
+    data: new Date().toLocaleString()
+  });
+  localStorage.setItem('historicoIFTs', JSON.stringify(historico));
+}
 
 function salvarTransacao(transacao) {
   const historico = JSON.parse(localStorage.getItem('historicoIFTs') || '[]');
@@ -334,7 +375,18 @@ buyIFTBtn.addEventListener('click', () => {
   addIFT(999);
   alert('999 IFTs adicionados!');
 });
-
+// inicia partículas
+    particlesJS('particles-js', {
+      particles: {
+        number:{ value:40, density:{ enable:true, value_area:600 } },
+        color:{ value:['#0ff','#f0f'] },
+        shape:{ type:'circle' },
+        opacity:{ value:0.4, random:true },
+        size:{ value:2.5, random:true },
+        move:{ enable:true, speed:1.2, random:true, out_mode:'out' }
+      },
+      retina_detect:true
+    });
 window.addEventListener('load', () => {
   if (localStorage.getItem(storedKey)) {
     showLogout();
