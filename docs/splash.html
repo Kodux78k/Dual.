@@ -145,13 +145,17 @@
     <div class="logout-area" style="display:none;">
       <button id="logoutBtn">Desconectar</button>
     </div>
-    <div id="buyTokens" style="display:none;">
-      <button id="buyIFTBtn">Comprar 999 IFT (Simulado)</button>
-    </div>
-  </div>
+    <!-- Botão de comprar IFT (ajustado com contador e estilo único) -->
+<div id="buyTokens" style="display:none; flex-direction:column; align-items:center; gap:1rem;">
+  <div id="iftBalance" style="color:#0f0; font-weight:600; font-size:1.1em;">IFTs: 0</div>
+  <button id="buyIFTBtn">Adicionar 999 IFTs</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<footer id="footerIFT" style="position:fixed; bottom:10px; left:50%; transform:translateX(-50%);
+  font-size:0.9em; color:#0f0; opacity:0.7; display:none;">
+  Restam <span id="iftLeft">0</span> IFTs
+</footer>
+
 <script>
 const unlockArea = document.getElementById('unlockArea');
 const loginBox   = document.getElementById('loginBox');
@@ -162,19 +166,24 @@ const logoutBtn  = document.getElementById('logoutBtn');
 const logoutArea = loginBox.querySelector('.logout-area');
 const buyArea    = document.getElementById('buyTokens');
 const buyIFTBtn  = document.getElementById('buyIFTBtn');
+const balanceBox = document.getElementById('iftBalance');
+const footerIFT  = document.getElementById('footerIFT');
+const iftLeftEl  = document.getElementById('iftLeft');
 const storedKey  = 'infodose_user';
 
-particlesJS('particles-js', {
-  particles: {
-    number: { value: 40, density: { enable: true, value_area: 600 } },
-    color: { value: ['#0ff','#f0f'] },
-    shape: { type: 'circle' },
-    opacity: { value: 0.4, random: true },
-    size: { value: 2.5, random: true },
-    move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
-  },
-  retina_detect: true
-});
+let iftTimer = null;
+let lastInteraction = Date.now();
+
+function updateIFTDisplay() {
+  const ift = parseInt(localStorage.getItem('IFT') || '0');
+  balanceBox.textContent = `IFTs: ${ift}`;
+  iftLeftEl.textContent = ift;
+  if (ift > 0) {
+    footerIFT.style.display = 'block';
+  } else {
+    footerIFT.style.display = 'none';
+  }
+}
 
 function showLogin() {
   logoutArea.style.display = 'none';
@@ -187,35 +196,79 @@ function showLogout() {
   logoutArea.style.display = 'flex';
   buyArea.style.display    = 'none';
   loginBox.classList.add('active');
+  updateIFTDisplay();
 }
 function showBuy() {
   loginForm.style.display  = 'none';
   logoutArea.style.display = 'none';
-  buyArea.style.display    = 'block';
+  buyArea.style.display    = 'flex';
   loginBox.classList.add('active');
+  updateIFTDisplay();
 }
 
-// Simulação de verificação local (sem servidor)
 function checkAccess(user) {
-  if (user.toLowerCase() === 'kodux') {
-    return goToIndex();
-  }
+  if (user.toLowerCase() === 'kodux') return goToIndex();
 
   const isReturningUser = localStorage.getItem('firstAccess') === 'true';
-
   if (!isReturningUser) {
-    console.log('[+] Primeiro acesso detectado. Criando localmente.');
     localStorage.setItem('firstAccess', 'true');
     return showBuy();
   }
 
-  const fakeBalance = parseInt(localStorage.getItem('IFT') || '0');
-  if (fakeBalance > 0) {
+  const ift = parseInt(localStorage.getItem('IFT') || '0');
+  if (ift > 0) {
+    startIFTCountdown();
     return goToIndex();
   } else {
     return showBuy();
   }
 }
+
+function goToIndex() {
+  const snd = document.getElementById('transitionSound');
+  snd.volume = 0;
+  snd.play();
+  gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
+  gsap.to('.infodose', { opacity:0, duration:0.6 });
+  setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
+  setTimeout(() => window.location.href = 'index.html', 1400);
+}
+
+function addIFT(amount) {
+  let current = parseInt(localStorage.getItem('IFT') || '0');
+  current += amount;
+  localStorage.setItem('IFT', current);
+  updateIFTDisplay();
+}
+
+function reduceIFT(amount) {
+  let current = parseInt(localStorage.getItem('IFT') || '0');
+  if (current >= amount) {
+    current -= amount;
+    localStorage.setItem('IFT', current);
+    updateIFTDisplay();
+    if (current < 1) {
+      alert('Seus IFTs acabaram.');
+      window.location.reload();
+    }
+  }
+}
+
+function startIFTCountdown() {
+  if (iftTimer) clearInterval(iftTimer);
+
+  iftTimer = setInterval(() => {
+    const now = Date.now();
+    if (now - lastInteraction >= 144000) {
+      reduceIFT(369);
+      lastInteraction = Date.now();
+    }
+  }, 15000); // verifica a cada 15 segundos
+}
+
+document.addEventListener('mousemove', () => lastInteraction = Date.now());
+document.addEventListener('keydown', () => lastInteraction = Date.now());
+document.addEventListener('click',    () => lastInteraction = Date.now());
 
 unlockArea.addEventListener('click', () => {
   const user = localStorage.getItem(storedKey);
@@ -237,35 +290,21 @@ loginForm.addEventListener('submit', e => {
 
 logoutBtn.addEventListener('click', () => {
   localStorage.removeItem(storedKey);
+  localStorage.removeItem('IFT');
+  clearInterval(iftTimer);
+  footerIFT.style.display = 'none';
   showLogin();
 });
 
 buyIFTBtn.addEventListener('click', () => {
-  alert('Compra simulada. IFTs adicionados localmente.');
-  localStorage.setItem('IFT', '999');
-  goToIndex();
+  addIFT(999);
+  alert('999 IFTs adicionados!');
 });
-
-// Botão de teste/hack (temporário)
-const testBtn = document.createElement('button');
-testBtn.textContent = '✅ Testar Compra (Hack Temporário)';
-testBtn.style.marginTop = '10px';
-testBtn.onclick = () => goToIndex();
-buyArea.appendChild(testBtn);
-
-function goToIndex() {
-  const snd = document.getElementById('transitionSound');
-  snd.volume = 0;
-  snd.play();
-  gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
-  gsap.to('.infodose', { opacity:0, duration:0.6 });
-  setTimeout(() => document.body.style.animation = 'fadeOutBody 1s forwards', 600);
-  setTimeout(() => window.location.href = 'index.html', 1400);
-}
 
 window.addEventListener('load', () => {
   if (localStorage.getItem(storedKey)) {
     showLogout();
+    startIFTCountdown();
   }
 });
 </script>
