@@ -291,7 +291,7 @@ Assistente: ${assistantBase} dual.infodose.
       logoContainer.classList.add('fading');
       logoObj.addEventListener('transitionend',function once(){
         logoObj.removeEventListener('transitionend',once);
-        logoObj.data=path;
+        logoObj.data="assets/icons/DualKittyKard-icon-3.png";
         requestAnimationFrame(()=>logoContainer.classList.remove('fading'));
       });
     }
