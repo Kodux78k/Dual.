@@ -24,15 +24,15 @@
     }
     #particles-js { position: absolute; inset: 0; z-index: 0; }
     .svg-container {
-      position: absolute; top: 260px; left: 50%;
-      width: 180px; height: 180px; transform: translateX(-50%);opacity: 0.8;
+      position: absolute; top: 266px; left: 50%;
+      width: 180px; height: 180px; transform: translateX(-50%);opacity: 0.7;
       border-radius: 50%; backdrop-filter: blur(8px);
       z-index: 1; transition: opacity var(--slow);
     }
     .svg-container.fading { opacity: 0; }
     .svg-container object { width: 100%; height: 100%; object-fit: contain; display: block;animation: pulse 2s infinite ease-in-out; }
     #assistantName {
-      margin-top: 59%; font-size: .8em; font-weight: 600;
+      margin-top: 59%; font-size: .9em; font-weight: 600;
       z-index: 1; opacity: .8;
     }
     .response-container {
@@ -181,7 +181,7 @@
   <script>
   (function(){
     const STORAGE_KEY    = 'infodoseEnabled';
-    const kittyLogoSrc   = 'assets/icons/Circulo-purple-Dual.Infodose.png';
+    const kittyLogoSrc   = 'assets/icons/DualKittyKard-icon.png';
     let originalLogoSrc  = '';
     let training = '', chunks = [], chunkIndex = 0;
     let isEnabled = false, isStudying = false;
