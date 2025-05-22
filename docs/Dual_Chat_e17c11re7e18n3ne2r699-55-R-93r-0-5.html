@@ -276,7 +276,7 @@
         if (theme!=='dark') document.body.classList.add(theme);
       }
       function toggleTheme() {
-        const order = ['dark','medium','light','vibe'];
+        const order = ['dark','light','medium','vibe'];
         let cur = localStorage.getItem(CURRENT_THEME) || 'dark';
         let idx = (order.indexOf(cur) + 1) % order.length;
         let next = order[idx];
