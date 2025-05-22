@@ -25,14 +25,14 @@
     #particles-js { position: absolute; inset: 0; z-index: 0; }
     .svg-container {
       position: absolute; top: 266px; left: 50%;
-      width: 180px; height: 180px; transform: translateX(-50%);opacity: 0.7;
+      width: 180px; height: 180px; transform: translateX(-50%);opacity: 0.8;
       border-radius: 50%; backdrop-filter: blur(8px);
       z-index: 1; transition: opacity var(--slow);
     }
     .svg-container.fading { opacity: 0; }
     .svg-container object { width: 100%; height: 100%; object-fit: contain; display: block;animation: pulse 2s infinite ease-in-out; }
     #assistantName {
-      margin-top: 59%; font-size: .9em; font-weight: 600;
+      margin-top: 200px; font-size: .9em; font-weight: 600;
       z-index: 1; opacity: .8;
     }
     .response-container {
@@ -92,8 +92,8 @@
     }
     .input-container input {
       flex: 1; padding: 10px; border: none; border-radius: 20px;
-      background: rgba(255,255,255,.1); color: inherit; font-size: 16px;
-      transition: background var(--fast);
+      background: rgba(255,255,255,.1); color: inherit; opacity:.8; font-size: 16px;
+      transition: background var(--med);
     }
     .input-container input:focus { background: rgba(255,255,255,.2); }
     .input-container button {
@@ -101,7 +101,7 @@
       background: linear-gradient(45deg,var(--primary),var(--secondary));
       font-size: 1.5em; cursor: pointer; animation: pulse 2s infinite ease-in-out;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--med); color: #1a1a1a
+      transition: transform var(--med); color: inherit;
     }
     .input-container button:hover { transform: scale(1.1); }
     .login-container {
