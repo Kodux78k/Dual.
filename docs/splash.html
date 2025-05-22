@@ -253,7 +253,41 @@ function reduceIFT(amount) {
     }
   }
 }
+// components/pixButton.js
+export function createPixButton({ valor = 5, onSuccess = () => {}, onError = () => {} }) {
+  const btn = document.createElement('button');
+  btn.className = 'pix-button';
+  btn.textContent = `Ativar IFTs - R$ ${valor},00`;
+  btn.onclick = async () => {
+    try {
+      // Simula chamada de pagamento
+      const confirmacao = confirm(`Simular pagamento de R$${valor},00 com PIX?`);
+      if (confirmacao) {
+        // Aqui você chamaria sua API real futuramente
+        // const res = await fetch('/api/pix', { method: 'POST', body: JSON.stringify({valor}) });
 
+        const transacao = {
+          id: Date.now(),
+          valor,
+          data: new Date().toLocaleString(),
+          status: 'concluído'
+        };
+        salvarTransacao(transacao);
+        onSuccess(transacao);
+      }
+    } catch (err) {
+      console.error(err);
+      onError(err);
+    }
+  };
+  return btn;
+}
+
+function salvarTransacao(transacao) {
+  const historico = JSON.parse(localStorage.getItem('historicoIFTs') || '[]');
+  historico.push(transacao);
+  localStorage.setItem('historicoIFTs', JSON.stringify(historico));
+}
 function startIFTCountdown() {
   if (iftTimer) clearInterval(iftTimer);
 
