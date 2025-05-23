@@ -83,13 +83,13 @@
       position:fixed; left:20px; right:20px; bottom:160px; padding:12px;
       background: rgba(0,0,0,.3); backdrop-filter:blur(8px); border-radius:20px;
       max-height:calc(100vh - 200px); overflow-y:auto; z-index:1;
-      transition: background var(--fast);
+      transition: background var(--slow);
     }
     body.light .response-container { background: rgba(255,255,255,.6) }
     body.medium .response-container { background: rgba(0,0,0,.2) }
     body.vibe .response-container { background: rgba(255,255,255,.2) }
 
-    .page { display:none; opacity:0; transition:opacity var(--med) ease-in-out }
+    .page { display:none; opacity:0; transition:opacity var(--slow) ease-in-out }
     .page.active { display:block; opacity:1 }
     .page.initial { text-align:center; font-size:1em }
 
