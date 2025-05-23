@@ -480,7 +480,7 @@
           let ans = data.choices?.[0]?.message?.content.trim() || 'Sem resposta.';
           conversation.push({ role:'assistant', content:ans });
           renderResponse(ans);
-          speak(ans);
+
         } catch {
           conversation.push({ role:'assistant', content:'O pulso oscilou, o fluxo continua.' });
           renderResponse('O pulso oscilou, o fluxo continua.');
@@ -588,6 +588,8 @@
           content: isEnabled ? `Usuário ${userName}: ${raw}` : raw
         });
         callAI();
+        speak(ans);
+        autoSpeakPage(i);
       }
 
       document.addEventListener('DOMContentLoaded', ()=>{
