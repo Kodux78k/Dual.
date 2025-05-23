@@ -73,7 +73,7 @@
     .svg-container { position:absolute; top:269px; left:50%; width:180px; height:180px; opacity:1; transform:translateX(-50%); z-index:1; transition:opacity var(--slow) }
     .svg-container.fading { opacity:0 }
     .svg-container object { width:100%; height:100%; object-fit:contain; display:block; animation:pulse 2s infinite ease-in-out }
-    #assistantName { margin-top:199px; font-size:1.1em; font-weight:600; z-index:1; opacity:.78 }
+    #assistantName { margin-top:199px; font-size:1.1em; font-weight:600; z-index:1; color: #d7d7d7 !important; opacity:.78 }
 
     .response-container {
       position:fixed; left:20px; right:20px; bottom:160px; padding:12px;
@@ -434,7 +434,10 @@
       }
 
       function autoSpeakPage(i){
-        let texts = Array.from(pages[i].querySelectorAll('p')).map(p=>p.innerText).join(' ');
+         let texts = Array.from(
+      pages[i].querySelectorAll('p:not(.footer-text)')
+    )
+    .map(p=>p.innerText).join(' ');
         speak(texts, ()=>{
           if (!autoAdvance) return;
           if (i < pages.length -1){
@@ -473,6 +476,7 @@
           let ans = data.choices?.[0]?.message?.content.trim() || 'Sem resposta.';
           conversation.push({ role:'assistant', content:ans });
           renderResponse(ans);
+          speak(ans);
         } catch {
           conversation.push({ role:'assistant', content:'O pulso oscilou, o fluxo continua.' });
           renderResponse('O pulso oscilou, o fluxo continua.');
