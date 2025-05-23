@@ -409,6 +409,7 @@
                 
                 block.dataset.spoken='1';
                 block.classList.add('clicked');
+                speak(para);
               } else {
                 block.classList.add('expanded');
                 if (!isEnabled){
@@ -588,8 +589,6 @@
           content: isEnabled ? `Usuário ${userName}: ${raw}` : raw
         });
         callAI();
-        speak(ans);
-        autoSpeakPage(i);
       }
 
       document.addEventListener('DOMContentLoaded', ()=>{
