@@ -60,7 +60,7 @@
     }
     @keyframes expandFooter {
       0%,100% { transform:scale(1); }
-      50%     { transform:scale(0.9); }
+      50%     { transform:scale(0.96); }
     }
     @keyframes moveGradient {
       0% { background-position:0% 50%; }
@@ -143,8 +143,8 @@
       display:block;
       margin:12px auto;
       padding:6px 12px;
-      background:var(--bg); background-opacity:.4;
-      opacity:.7;
+      background:var(--bg); 
+      opacity:.5;
       color:var(--text);
       font-size:0.8em; text-align:center; font-style:italic;
       border-radius:12px; cursor:pointer;
@@ -162,11 +162,11 @@
   background: none !important;
 }
     .footer-text:hover {
-      opacity:.7;
+      opacity:.6;
     }
     .footer-text.active {
-      opacity:.8;
-      animation:expandFooter var(--fast) ease-out;
+      opacity:.3;
+      animation:expandFooter var(--med) ease-out;
     }
 
     /* =====================
