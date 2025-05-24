@@ -391,24 +391,32 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
   (function(){
-    const STORAGE_KEY='infodoseEnabled',
-    KIT_PRIMARY='assets/icons/DualKittyKard-icon-3.png',
-          CONFIG={
-            TRAINING_FILE:'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
-            API_URL:'https://openrouter.ai/api/v1/chat/completions',
-            MODEL:'deepseek/deepseek-chat-v3-0324:free',
-            TEMP:0.2, CHUNK_SIZE:78000,
-            AUTH_TOKEN:'Bearer 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'
-          },
-          CURRENT_THEME='infodoseTheme';
-    let training='', chunks=[], chunkIndex=0,
-        isEnabled=false, isStudying=false,
-        userName='', assistantBase='',
-        conversation=[], pages=[], currentPage=0, autoAdvance=true,
-        originalLogo='';
+      const STORAGE_KEY = 'infodoseEnabled',
+            KIT_PRIMARY = 'assets/icons/DualKittyKard-icon-3.png',
+            KIT_FALLBACK = 'assets/icons/dual_Dual_Infodose.svg',
+            CONFIG = {
+              TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
+              API_URL: 'https://openrouter.ai/api/v1/chat/completions',
+              MODEL: 'deepseek/deepseek-chat-v3-0324:free',
+              TEMP: 0.2,
+              CHUNK_SIZE: 78000,
+              AUTH_TOKEN: 'Bearer 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'
+            },
+            CURRENT_THEME = 'infodoseTheme';
 
-    const $=s=>document.querySelector(s),
-          create=(t,c,h)=>{let e=document.createElement(t);if(c)e.className=c;if(h)e.innerHTML=h;return e;};
+      let training = '', chunks = [], chunkIndex = 0;
+      let isEnabled = false, isStudying = false;
+      let userName = '', assistantBase = '';
+      let conversation = [], pages = [], currentPage = 0, autoAdvance = true;
+      let originalLogo = '';
+
+      const $ = s => document.querySelector(s);
+      const create = (t, c, h) => {
+        let e = document.createElement(t);
+        if (c) e.className = c;
+        if (h) e.innerHTML = h;
+        return e;
+      };
 
     function applyTheme(t){ document.body.classList.remove('light','medium','vibe'); if(t!=='dark') document.body.classList.add(t); }
     function updateMeta(){ document.getElementById('themeColorMeta').content = getComputedStyle(document.body).getPropertyValue('--theme-color').trim(); }
@@ -629,7 +637,7 @@ function changeLogo(srcs){
                 role:'system',
                 content: `${chunks[0]||training}\n\nA voce é Assistente simbólico de Estudos dual.infodose, guie o usuário pelo universo infinito do conhecimento.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`
               }];
-              changeLogo('assets/icons/DualKittyKard-icon-3.png');
+              changeLogo([KIT_PRIMARY, KIT_FALLBACK]);
             } else {
               changeLogo(originalLogo);
             }
