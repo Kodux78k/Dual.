@@ -60,7 +60,7 @@
     }
     @keyframes expandFooter {
       0%,100% { transform:scale(1); }
-      50%     { transform:scale(1.05); }
+      50%     { transform:scale(0.9); }
     }
     @keyframes moveGradient {
       0% { background-position:0% 50%; }
@@ -144,7 +144,7 @@
       margin:12px auto;
       padding:6px 12px;
       background:var(--bg); background-opacity:.4;
-      opacity:.8;
+      opacity:.7;
       color:var(--text);
       font-size:0.8em; text-align:center; font-style:italic;
       border-radius:12px; cursor:pointer;
@@ -166,7 +166,7 @@
     }
     .footer-text.active {
       opacity:.8;
-      animation:expandFooter var(--med) ease-out;
+      animation:expandFooter var(--fast) ease-out;
     }
 
     /* =====================
