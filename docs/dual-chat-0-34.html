@@ -467,7 +467,21 @@
           ? 'Estudos dual.infodose'
           : '';
     }
-
+function changeLogo(srcs){
+        let [p,f] = Array.isArray(srcs) ? srcs : [srcs,null],
+            cont = $('#logoContainer'),
+            obj = $('#logoObj');
+        cont.classList.add('fading');
+        cont.addEventListener('transitionend', function once(){
+          cont.removeEventListener('transitionend', once);
+          obj.data = p;
+          if (f) obj.addEventListener('error', function onErr(){
+            obj.removeEventListener('error', onErr);
+            obj.data = f;
+          });
+          cont.classList.remove('fading');
+        });
+      }
     function showLoading(msg){
       const wrap=$('.pages-wrapper'); wrap.innerHTML='';
       const p=create('div','page active'),
@@ -605,14 +619,22 @@
           if(!isEnabled) $('#loginBox').classList.add('active');
           else { isEnabled=false; localStorage.removeItem(STORAGE_KEY); conversation=[]; updateUI(); }
         }
-        if(e.target.closest('#kittyBtn')){
-          autoAdvance=false; isStudying=!isStudying;
-          if(isStudying){
-            isEnabled=false; chunkIndex=1;
-            conversation=[{role:'system',content:`${chunks[0]||training}\n\nAssistente de Estudos dual.infodose.`}];
-          } else changeLogo(originalLogo);
-          updateUI();
-        }
+        if (e.target.closest('#kittyBtn')){
+            autoAdvance=false;
+            isStudying = !isStudying;
+            if (isStudying){
+              isEnabled=false;
+              chunkIndex=1;
+              conversation=[{
+                role:'system',
+                content: `${chunks[0]||training}\n\nA voce é Assistente simbólico de Estudos dual.infodose, guie o usuário pelo universo infinito do conhecimento.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`
+              }];
+              changeLogo([KIT_PRIMARY]);
+            } else {
+              changeLogo(originalLogo);
+            }
+            updateUI();
+          }
       });
       document.querySelector('.pagination').addEventListener('click', e=>{
         autoAdvance=false;
