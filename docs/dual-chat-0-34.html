@@ -392,7 +392,7 @@
   <script>
   (function(){
     const STORAGE_KEY='infodoseEnabled',
-    KIT_PRIMARY = 'assets/icons/DualKittyKard-icon-3.png',
+    KIT_PRIMARY='assets/icons/DualKittyKard-icon-3.png',
           CONFIG={
             TRAINING_FILE:'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
             API_URL:'https://openrouter.ai/api/v1/chat/completions',
@@ -629,7 +629,7 @@ function changeLogo(srcs){
                 role:'system',
                 content: `${chunks[0]||training}\n\nA voce é Assistente simbólico de Estudos dual.infodose, guie o usuário pelo universo infinito do conhecimento.\nUsuário: ${userName}.\nAssistente: Estudos dual.infodose.`
               }];
-              changeLogo([KIT_PRIMARY]);
+              changeLogo(KIT_PRIMARY);
             } else {
               changeLogo(originalLogo);
             }
