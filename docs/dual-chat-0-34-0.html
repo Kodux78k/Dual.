@@ -672,17 +672,6 @@ function changeLogo(srcs){
       callAI();
     }
 
-    function changeLogo(srcs){
-      const [p,f] = Array.isArray(srcs)?srcs:[srcs,null];
-      const cont=$('#logoContainer'), obj=$('#logoObj');
-      cont.classList.add('fading');
-      cont.addEventListener('transitionend',function once(){
-        cont.removeEventListener('transitionend',once);
-        obj.data=p; if(f) obj.addEventListener('error',fn=>{obj.removeEventListener('error',fn);obj.data=f;});
-        cont.classList.remove('fading');
-      });
-    }
-
     function speak(txt,cb){
       let clean = txt.replace(/<[^>]+>/g,'').replace(/(\*\*|\*|__|_|`)/g,'');
       const u=new SpeechSynthesisUtterance(clean);
