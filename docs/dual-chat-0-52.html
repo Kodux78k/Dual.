@@ -525,10 +525,10 @@
 
     async function callAI(){
       try {
-        const res = await fetch(CONFIG.API_URL,{
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions',{
           method:'POST',
-          headers:{ 'Authorization':CONFIG.AUTH_TOKEN,'Content-Type':'application/json' },
-          body: JSON.stringify({ model:CONFIG.MODEL, messages:conversation, temperature:CONFIG.TEMP })
+          headers:{ 'Authorization':'Bearer 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','Content-Type':'application/json' },
+          body: JSON.stringify({ model:'deepseek/deepseek-chat-v3-0324:free', messages:conversation, temperature:0.2 })
         });
         const data = await res.json();
         const ans = data.choices?.[0]?.message?.content.trim() || 'Sem resposta.';
