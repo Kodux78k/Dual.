@@ -483,21 +483,6 @@
       }
     }
 
-    function deepTrain(){
-      if(chunkIndex < chunks.length){
-        conversation.unshift({
-          role   : 'system',
-          content: `🔍 Treinamento Profundo (${chunkIndex+1}/${chunks.length}):\n\n${chunks[chunkIndex]}`
-        });
-        chunkIndex++;
-        showLoading('🔍 Carregando Treinamento Profundo…');
-        setTimeout(()=>{
-          renderResponse(`Treinamento Profundo nível ${chunkIndex} carregado.`);
-        },800);
-      } else {
-        renderResponse('Você já carregou todo o treinamento disponível.');
-      }
-    }
 
     function bindUI(){
       $('#sendBtn').addEventListener('click', onSend);
@@ -591,7 +576,7 @@
       const raw = $('#userInput').value.trim();
       if(!raw) return;
       $('#userInput').value = '';
-      if(raw.toLowerCase() === '#estado78k') return deepTrain();
+      if(raw.toLowerCase() === '#estado78k') return;
       autoAdvance = false;
       showLoading('⚡️Pulso enviado...Recebendo Intenção…');
       // escolhe prefixo correto
