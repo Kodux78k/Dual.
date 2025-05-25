@@ -573,20 +573,14 @@
     }
 
     function onSend(){
-      const raw = $('#userInput').value.trim();
+      const raw=$('#userInput').value.trim();
       if(!raw) return;
-      $('#userInput').value = '';
-      if(raw.toLowerCase() === '#estado78k') return;
-      autoAdvance = false;
-      showLoading('⚡️Pulso enviado...Recebendo Intenção…');
-      // escolhe prefixo correto
-      const content = isStudying
-        ? raw
-        : (isEnabled ? `Usuário ${userName}: ${raw}` : raw);
-      conversation.push({role:'user',content});
+      $('#userInput').value='';
+      if(raw.toLowerCase()==='estado 78k') return;
+      autoAdvance=false; showLoading('⚡️Pulso enviado...Recebendo Intenção…');
+      conversation.push({role:'user',content:isEnabled?`Usuário ${userName}: ${raw}`:raw});
       callAI();
     }
-
     document.addEventListener('DOMContentLoaded', ()=>{
       const themeBtn = document.getElementById('themeToggle');
       const saved    = localStorage.getItem(CURRENT_THEME) || 'dark';
