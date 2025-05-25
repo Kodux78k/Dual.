@@ -334,12 +334,12 @@
           KIT_PRIMARY = 'assets/icons/DualKittyKard-icon-3.png',
           KIT_FALLBACK = 'assets/icons/dual_Dual_Infodose.svg',
           CONFIG = {
-            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-29.txt',
+            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
             API_URL: 'https://openrouter.ai/api/v1/chat/completions',
             MODEL: 'deepseek/deepseek-chat-v3-0324:free',
             TEMP: 0.2,
             CHUNK_SIZE: 78000,
-            AUTH_TOKEN: 'Bearer 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'
+            AUTH_TOKEN: 'Bearer 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'
           },
           CURRENT_THEME = 'infodoseTheme';
 
@@ -525,10 +525,10 @@
 
     async function callAI(){
       try {
-        const res = await fetch('https://openrouter.ai/api/v1/chat/completions',{
+        const res = await fetch(CONFIG.API_URL,{
           method:'POST',
-          headers:{ 'Authorization':'Bearer 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','Content-Type':'application/json' },
-          body: JSON.stringify({ model:'deepseek/deepseek-chat-v3-0324:free', messages:conversation, temperature:0.2 })
+          headers:{ 'Authorization':CONFIG.AUTH_TOKEN,'Content-Type':'application/json' },
+          body: JSON.stringify({ model:CONFIG.MODEL, messages:conversation, temperature:CONFIG.TEMP })
         });
         const data = await res.json();
         const ans = data.choices?.[0]?.message?.content.trim() || 'Sem resposta.';
@@ -539,6 +539,23 @@
         renderResponse('O pulso oscilou, o fluxo continua.');
       }
     }
+
+    function deepTrain(){
+      if(chunkIndex<chunks.length){
+        conversation.unshift({
+          role:'system',
+          content:`🔍 Treinamento Profundo (${chunkIndex+1}/${chunks.length}):\n\n${chunks[chunkIndex]}`
+        });
+        chunkIndex++;
+        showLoading('🔍 Carregando Treinamento Profundo…');
+        setTimeout(()=>{
+          renderResponse(`Treinamento Profundo nível ${chunkIndex} carregado.`);
+        },800);
+      } else {
+        renderResponse('Você já carregou todo o treinamento disponível.');
+      }
+    }
+
     function bindUI(){
       $('#sendBtn').addEventListener('click',onSend);
       $('#userInput').addEventListener('keypress',e=>e.key==='Enter'&&onSend());
@@ -622,7 +639,7 @@
       const raw=$('#userInput').value.trim();
       if(!raw) return;
       $('#userInput').value='';
-      if(raw.toLowerCase()==='estado 78k') return;
+      if(raw.toLowerCase()==='estado 78k') return deepTrain();
       autoAdvance=false;
       showLoading('⚡️Pulso enviado...Recebendo Intenção…');
       conversation.push({
