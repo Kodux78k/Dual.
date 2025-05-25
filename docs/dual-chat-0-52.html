@@ -334,11 +334,11 @@
           KIT_PRIMARY = 'assets/icons/DualKittyKard-icon-3.png',
           KIT_FALLBACK = 'assets/icons/dual_Dual_Infodose.svg',
           CONFIG = {
-            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-29.txt',
+            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
             API_URL: 'https://openrouter.ai/api/v1/chat/completions',
             MODEL: 'deepseek/deepseek-chat-v3-0324:free',
             TEMP: 0.2,
-            CHUNK_SIZE: 7800,
+            CHUNK_SIZE: 78000,
             AUTH_TOKEN: 'Baerer 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'
           },
           CURRENT_THEME = 'infodoseTheme';
@@ -539,23 +539,6 @@
         renderResponse('O pulso oscilou, o fluxo continua.');
       }
     }
-
-    function deepTrain(){
-      if(chunkIndex<chunks.length){
-        conversation.unshift({
-          role:'system',
-          content:`🔍 Treinamento Profundo (${chunkIndex+1}/${chunks.length}):\n\n${chunks[chunkIndex]}`
-        });
-        chunkIndex++;
-        showLoading('🔍 Carregando Treinamento Profundo…');
-        setTimeout(()=>{
-          renderResponse(`Treinamento Profundo nível ${chunkIndex} carregado.`);
-        },800);
-      } else {
-        renderResponse('Você já carregou todo o treinamento disponível.');
-      }
-    }
-
     function bindUI(){
       $('#sendBtn').addEventListener('click',onSend);
       $('#userInput').addEventListener('keypress',e=>e.key==='Enter'&&onSend());
@@ -639,7 +622,7 @@
       const raw=$('#userInput').value.trim();
       if(!raw) return;
       $('#userInput').value='';
-      if(raw.toLowerCase()==='estado 78k') return deepTrain();
+      if(raw.toLowerCase()==='estado 78k') return;
       autoAdvance=false;
       showLoading('⚡️Pulso enviado...Recebendo Intenção…');
       conversation.push({
