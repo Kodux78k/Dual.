@@ -257,12 +257,12 @@
           KIT_PRIMARY    = 'assets/icons/DualKittyKard-icon-3.png',
           KIT_FALLBACK   = 'assets/icons/dual_Dual_Infodose.svg',
           CONFIG         = {
-            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-28.txt',
+            TRAINING_FILE: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-29.txt',
             API_URL      : 'https://openrouter.ai/api/v1/chat/completions',
             MODEL        : 'deepseek/deepseek-chat-v3-0324:free',
             TEMP         : 0.2,
-            CHUNK_SIZE   : 78000,
-            AUTH_TOKEN   : 'Bearer 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'
+            CHUNK_SIZE   : 7800,
+            AUTH_TOKEN   : 'Bearer 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'
           }, 
           CURRENT_THEME  = 'infodoseTheme';
 
@@ -468,18 +468,36 @@
 
     async function callAI(){
       try {
-        const res = await fetch(CONFIG.API_URL,{
-          method :'POST',
-          headers:{ 'Authorization':CONFIG.AUTH_TOKEN, 'Content-Type':'application/json' },
-          body   : JSON.stringify({ model:CONFIG.MODEL, messages:conversation, temperature:CONFIG.TEMP })
+        const res = await fetch(CONFIG.API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': CONFIG.AUTH_TOKEN,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: CONFIG.MODEL,
+            messages: conversation,
+            temperature: CONFIG.TEMP
+          })
         });
-        const data = await res.json();
-        const ans  = data.choices?.[0]?.message?.content.trim() || 'Sem resposta.';
-        conversation.push({role:'assistant',content:ans});
+
+        const payload = await res.json();
+        if (!res.ok) {
+          // Se a API retornou erro HTTP, lança para cair no catch
+          throw new Error(payload.error?.message || res.statusText);
+        }
+        if (!payload.choices || !payload.choices.length) {
+          throw new Error('Resposta vazia da API');
+        }
+        const ans = payload.choices[0].message.content.trim();
+        conversation.push({ role: 'assistant', content: ans });
         renderResponse(ans);
-      } catch {
-        conversation.push({role:'assistant',content:'O pulso oscilou, o fluxo continua.'});
-        renderResponse('O pulso oscilou, o fluxo continua.');
+
+      } catch (err) {
+        console.error('callAI erro:', err);
+        const fallback = 'Desculpe, não consegui obter resposta. Tente novamente.';
+        conversation.push({ role: 'assistant', content: fallback });
+        renderResponse(fallback);
       }
     }
 
