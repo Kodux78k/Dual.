@@ -426,7 +426,7 @@
       pages[np].classList.add('active');
       currentPage=np;
       $('#pageIndicator').textContent = `${np+1} / ${pages.length}`;
-      
+      if(autoAdvance) autoSpeakPage(np);
     }
 
    
@@ -464,6 +464,7 @@
         conversation.push({ role: 'assistant', content: fallback });
         renderResponse(fallback);
       }
+      
     }
     // === FIM DE callAI REFACTORED ===
 
