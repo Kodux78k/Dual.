@@ -4,13 +4,18 @@
     "assistenteFavorito": "Raros",
     "tríade": "⚡️👁️🧩"
   },
+  "KODUX": {
+    "nome": "Kodux",
+    "assistenteFavorito": "Horus",
+    "tríade": "⚡️👁️🧠"
+  },
   "blue": {
     "nome": "Blue",
     "assistenteFavorito": "Auron",
     "tríade": "🔷🌌🧠"
   },
   "outroUsuario": {
-    "nome": "Seu Nome Aqui",
+    "nome": "",
     "assistenteFavorito": "NomeDoAssistente",
     "tríade": "🔑✨🚀"
   }
