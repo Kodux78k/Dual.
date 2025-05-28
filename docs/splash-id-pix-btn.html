@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Central - Dual Infodose</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="assets/icons/icon-192.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Montserrat',sans-serif;
+      background: linear-gradient(to bottom, #000, #1a1a1a);
+      color:#fff; height:100vh; overflow:hidden;
+      display:flex; align-items:flex-start; justify-content:center;
+      padding-top: 296px;
+      position:relative; opacity:0;
+      animation:fadeInBody 1.8s ease forwards;
+    }
+    @keyframes fadeInBody { to { opacity:1; } }
+    @keyframes fadeOutBody { to { opacity:0; } }
+
+    #particles-js { position:absolute; inset:0; z-index:0; }
+
+    .center-group {
+      z-index:1;
+      display:flex; flex-direction:column;
+      align-items:center; gap:1rem;
+      cursor:pointer; padding:20px;
+    }
+    .logo-container {
+      width:180px;
+      animation:glow 3s ease-in-out infinite alternate;
+      transition:transform .8s;
+      pointer-events:none;
+    }
+    .logo-container object { width:100%; display:block; }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 10px #0ff) drop-shadow(0 0 20px #f0f); }
+      to   { filter: drop-shadow(0 0 25px #0ff) drop-shadow(0 0 35px #f0f); }
+    }
+    .infodose {
+      font-size:1.6em; font-weight:300;
+      opacity:0; animation:fadeIn 1.5s forwards 1s;
+      pointer-events:none;
+    }
+    .infodose strong { font-weight:600; }
+    @keyframes fadeIn { to { opacity:1; } }
+
+    .login-container {
+      width:280px;
+      padding:1rem;
+      background:rgba(0,0,0,0.7);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:10px;
+      backdrop-filter:blur(8px);
+      display:flex; flex-direction:column; gap:1rem;
+      opacity:0; pointer-events:none;
+      transition:opacity .3s;
+    }
+    .login-container.active {
+      opacity:1; pointer-events:auto;
+    }
+    .login-container input {
+      width:100%; background:transparent;
+      border:none; border-bottom:1px solid rgba(255,255,255,0.5);
+      padding:0.5rem 0; font-size:1em; font-weight:300;
+      color:#fff; outline:none; text-align:center;
+    }
+    .login-container input::placeholder {
+      color:rgba(255,255,255,0.6); font-weight:300;
+    }
+    .login-container button {
+      width:100%;
+      background:transparent; border:1px solid #0ff;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#0ff;
+      cursor:pointer; transition:all .25s;
+    }
+    .login-container button:hover {
+      background:#0ff; color:#000; border-color:#0ff;
+    }
+    .activate-button {
+      width:100%;
+      background:transparent; border:1px solid #0f0;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#0f0;
+      cursor:pointer; transition:all .25s;
+    }
+    .activate-button:hover {
+      background:#0f0; color:#000; border-color:#0f0;
+    }
+    .logout-area button {
+      width:100%;
+      background:transparent; border:1px solid #f55;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#f55;
+      cursor:pointer; transition:all .25s;
+    }
+    .logout-area button:hover {
+      background:#f55; color:#000; border-color:#f55;
+    }
+    #buyTokens button {
+      width:100%;
+      background:transparent; border:1px solid #0f0;
+      border-radius:6px; padding:0.6rem 0;
+      font-size:1em; font-weight:600; color:#0f0;
+      cursor:pointer; transition:all .25s;
+    }
+    #buyTokens button:hover {
+      background:#0f0; color:#000; border-color:#0f0;
+    }
+    #messageBox {
+      display:none;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #ff0;
+      border-radius:6px;
+      padding:0.8rem;
+      text-align:center;
+      font-weight:400;
+      color:#ff0;
+      font-size:0.95em;
+    }
+
+    @media(max-width:360px) {
+      .logo-container { width:140px; }
+      .infodose { font-size:1.3em; }
+      .login-container { width:90vw; }
+    }
+    @media(max-height: 700px) {
+      .center-group { margin-top: 20px; }
+    }
+    @media(min-height: 900px) {
+      .center-group { margin-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <svg style="display:none"><filter id="distort">
+    <feTurbulence baseFrequency="0.012" numOctaves="2" result="turb"/>
+    <feDisplacementMap in="SourceGraphic" in2="turb" scale="24"/>
+  </filter></svg>
+
+  <audio id="transitionSound" src="assets/sounds/suave_portal.mp3" preload="auto"></audio>
+  <div id="particles-js"></div>
+
+  <div class="center-group" id="unlockArea">
+    <div class="logo-container">
+      <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+    </div>
+    <div class="infodose">dual.<strong>Infodose</strong></div>
+
+    <div class="login-container" id="loginBox">
+      <form id="loginForm">
+        <input type="text" id="user" placeholder="Usuário" required>
+        <input type="password" id="pass" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+      </form>
+
+      <!-- Botão para quem não tem conta -->
+      <button id="activateBtn" class="activate-button">Ativar Infodose</button>
+
+      <!-- Caixa de mensagem -->
+      <div id="messageBox"></div>
+
+      <div class="logout-area" style="display:none;">
+        <button id="logoutBtn">Desconectar</button>
+      </div>
+      <div id="buyTokens" style="display:none;">
+        <button id="buyIFTBtn">Comprar 1.000.000 IFT (PIX)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script type="module">
+    import { loadStripe } from 'https://cdn.jsdelivr.net/npm/@stripe/stripe-js@1.42.0/+esm';
+
+    const unlockArea  = document.getElementById('unlockArea');
+    const loginBox    = document.getElementById('loginBox');
+    const loginForm   = document.getElementById('loginForm');
+    const userInput   = document.getElementById('user');
+    const passInput   = document.getElementById('pass');
+    const activateBtn = document.getElementById('activateBtn');
+    const messageBox  = document.getElementById('messageBox');
+    const logoutBtn   = document.getElementById('logoutBtn');
+    const logoutArea  = loginBox.querySelector('.logout-area');
+    const buyArea     = document.getElementById('buyTokens');
+    const buyIFTBtn   = document.getElementById('buyIFTBtn');
+    const storedKey   = 'infodose_user';
+
+    const USERS_JSON = '/users/usersid.json';
+    const PIX_LINK   = 'https://nubank.com.br/cobrar/55sr1/68379371-42e5-4f54-897c-805ae1be1b17';
+
+    // particles.js config
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 40, density: { enable: true, value_area: 600 } },
+        color: { value: ['#0ff','#f0f'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4, random: true },
+        size: { value: 2.5, random: true },
+        move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
+      },
+      retina_detect: true
+    });
+
+    function showLogin() {
+      messageBox.style.display = 'none';
+      logoutArea.style.display = 'none';
+      buyArea.style.display    = 'none';
+      loginForm.style.display  = 'flex';
+      activateBtn.style.display= 'block';
+      loginBox.classList.add('active');
+    }
+    function showLogout() {
+      messageBox.style.display    = 'none';
+      loginForm.style.display     = 'none';
+      activateBtn.style.display   = 'none';
+      logoutArea.style.display    = 'flex';
+      buyArea.style.display       = 'none';
+      loginBox.classList.add('active');
+    }
+    function showBuy() {
+      loginForm.style.display     = 'none';
+      activateBtn.style.display   = 'none';
+      logoutArea.style.display    = 'none';
+      buyArea.style.display       = 'block';
+      loginBox.classList.add('active');
+    }
+
+    function showMessage(msg) {
+      messageBox.textContent   = msg;
+      messageBox.style.display = 'block';
+    }
+
+    async function checkAccess(user) {
+      const masters = ['kodux','bllue','antonieta'];
+      if (masters.includes(user.toLowerCase())) {
+        goToIndex();
+      } else {
+        showMessage('Usuário ainda não conectado com o pulso.');
+        showBuy();
+        buyIFTBtn.onclick = () => window.location.href = PIX_LINK;
+      }
+    }
+
+    unlockArea.addEventListener('click', () => {
+      const u = localStorage.getItem(storedKey);
+      if (u) {
+        checkAccess(u);
+      } else {
+        showLogin();
+        gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
+      }
+    });
+
+    loginForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const rawUser = userInput.value.trim();
+      const u       = rawUser.toLowerCase();
+      const p       = passInput.value.trim();
+      if (!u || !p) return alert('Preencha usuário e senha.');
+
+      try {
+        const resp  = await fetch(USERS_JSON);
+        if (!resp.ok) throw new Error('Erro ao carregar credenciais.');
+        const creds = await resp.json();
+
+        if (creds[u]) {
+          // mestre
+          if (creds[u] === p) {
+            localStorage.setItem(storedKey, rawUser);
+            setTimeout(() => checkAccess(rawUser), 300);
+          } else {
+            alert('Senha incorreta para usuário mestre.');
+          }
+        } else {
+          // comum via botão “Ativar Infodose”
+          showMessage('Usuário ainda não conectado com o pulso.');
+          showBuy();
+          buyIFTBtn.onclick = () => window.location.href = PIX_LINK;
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    activateBtn.addEventListener('click', () => {
+      showMessage('Usuário ainda não conectado com o pulso.');
+      showBuy();
+      buyIFTBtn.onclick = () => window.location.href = PIX_LINK;
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem(storedKey);
+      showLogin();
+    });
+
+    buyIFTBtn.addEventListener('click', () => {
+      window.location.href = PIX_LINK;
+    });
+
+    function goToIndex() {
+      const snd = document.getElementById('transitionSound');
+      snd.volume = 0; snd.play();
+      gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
+      gsap.to('.infodose',        { opacity:0, duration:0.6 });
+      setTimeout(()=>document.body.style.animation='fadeOutBody 1s forwards', 600);
+      setTimeout(()=>window.location.href='index.html', 1400);
+    }
+
+    window.addEventListener('load', () => {
+      if (localStorage.getItem(storedKey)) showLogout();
+    });
+  </script>
+</body>
+</html>
