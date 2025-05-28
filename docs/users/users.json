@@ -1,0 +1,17 @@
+{
+  "kodux": {
+    "nome": "Kodux",
+    "assistenteFavorito": "Raros",
+    "tríade": "⚡️👁️🧩"
+  },
+  "blue": {
+    "nome": "Blue",
+    "assistenteFavorito": "Auron",
+    "tríade": "🔷🌌🧠"
+  },
+  "outroUsuario": {
+    "nome": "Seu Nome Aqui",
+    "assistenteFavorito": "NomeDoAssistente",
+    "tríade": "🔑✨🚀"
+  }
+}
