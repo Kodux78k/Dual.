@@ -109,6 +109,16 @@
       .infodose { font-size:1.3em; }
       .login-container { width:90vw; }
     }
+    @media(max-height: 700px) {
+      .center-group {
+        margin-top: 20px;
+      }
+    }
+    @media(min-height: 900px) {
+      .center-group {
+        margin-top: 80px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -130,6 +140,7 @@
     <div class="login-container" id="loginBox">
       <form id="loginForm">
         <input type="text" id="user" placeholder="Usuário" required>
+        <input type="password" id="pass" placeholder="Senha" required>
         <button type="submit">Entrar</button>
       </form>
       <div class="logout-area" style="display:none;">
@@ -141,26 +152,33 @@
     </div>
   </div>
 
-  <!-- config.js contém window.env se precisar (API_KEYS etc) -->
-  <script src="/config/config.js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script type="module">
+    import { loadStripe } from 'https://cdn.jsdelivr.net/npm/@stripe/stripe-js@1.42.0/+esm';
+
     const unlockArea = document.getElementById('unlockArea');
     const loginBox   = document.getElementById('loginBox');
     const loginForm  = document.getElementById('loginForm');
     const userInput  = document.getElementById('user');
+    const passInput  = document.getElementById('pass');
     const logoutBtn  = document.getElementById('logoutBtn');
     const logoutArea = loginBox.querySelector('.logout-area');
     const buyArea    = document.getElementById('buyTokens');
     const buyIFTBtn  = document.getElementById('buyIFTBtn');
     const storedKey  = 'infodose_user';
+    const stripePk   = 'pk_live_SEU_PUBLISHABLE_KEY';
 
-    let usersData = {};
-
-    // carrega lista de usuários permitidos (kodux, blue, antonieta)
-    fetch('/users/users.json')
-      .then(r => r.json())
-      .then(json => { usersData = json; })
-      .catch(() => usersData = {});
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 40, density: { enable: true, value_area: 600 } },
+        color: { value: ['#0ff','#f0f'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4, random: true },
+        size: { value: 2.5, random: true },
+        move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
+      },
+      retina_detect: true
+    });
 
     function showLogin() {
       logoutArea.style.display = 'none';
@@ -181,19 +199,27 @@
       loginBox.classList.add('active');
     }
 
-    function goToIndex() {
-      const snd = document.getElementById('transitionSound');
-      snd.volume = 0; snd.play();
-      gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
-      gsap.to('.infodose', { opacity:0, duration:0.6 });
-      setTimeout(()=>document.body.style.animation='fadeOutBody 1s forwards', 600);
-      setTimeout(()=>window.location.href='index.html', 1400);
+    async function checkAccess(user) {
+      const allowedUsers = ['kodux', 'bllue', 'antonieta'];
+      const name = user.toLowerCase();
+      if (allowedUsers.includes(name)) {
+        goToIndex();
+        return;
+      }
+      const res  = await fetch(`/api/usage?userId=${encodeURIComponent(user)}`, { credentials: 'include' });
+      const data = await res.json();
+      if (!data.authenticated) return showLogin();
+      if (data.isAdmin || data.saldo.IFT > 0) {
+        goToIndex();
+      } else {
+        showBuy();
+      }
     }
 
     unlockArea.addEventListener('click', () => {
       const user = localStorage.getItem(storedKey);
-      if (user && usersData[user.toLowerCase()]) {
-        showLogout();
+      if (user) {
+        checkAccess(user);
       } else {
         showLogin();
         gsap.fromTo(loginBox, { y:-20 }, { y:0, duration:0.6, ease:'power2.out' });
@@ -202,12 +228,10 @@
 
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
-      const u = userInput.value.trim().toLowerCase();
-      if (!u || !usersData[u]) {
-        return alert('Usuário não encontrado. Use kodux, blue ou antonieta.');
-      }
+      const u = userInput.value.trim(), p = passInput.value.trim();
+      if (!u||!p) return alert('Preencha os dados');
       localStorage.setItem(storedKey, u);
-      goToIndex();
+      setTimeout(() => checkAccess(u), 300);
     });
 
     logoutBtn.addEventListener('click', () => {
@@ -215,9 +239,30 @@
       showLogin();
     });
 
-    // placeholder: comprar IFT
-    buyIFTBtn.addEventListener('click', () => {
-      alert('Fluxo de compra não implementado aqui.');
+    buyIFTBtn.addEventListener('click', async () => {
+      const stripe = await loadStripe(stripePk);
+      const res    = await fetch('/api/create-checkout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ packageId: 'IFT_1000', userId: localStorage.getItem(storedKey) })
+      });
+      const { url } = await res.json();
+      window.location.href = url;
+    });
+
+    function goToIndex() {
+      const snd = document.getElementById('transitionSound');
+      snd.volume = 0; snd.play();
+      gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out', filter:'url(#distort)' });
+      gsap.to('.infodose', { opacity:0, duration:0.6 });
+      setTimeout(()=>document.body.style.animation='fadeOutBody 1s forwards', 600);
+      setTimeout(()=>window.location.href='index.html', 1400);
+    }
+    window.addEventListener('load', () => {
+      if (localStorage.getItem(storedKey)) {
+        showLogout();
+      }
     });
   </script>
 </body>
