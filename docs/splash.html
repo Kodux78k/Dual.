@@ -184,7 +184,14 @@
     // substitua pelo seu link PIX real
 
     particlesJS('particles-js', {
-      particles: { /* ... sua config ... */ },
+      particles: {
+        number: { value: 40, density: { enable: true, value_area: 600 } },
+        color: { value: ['#0ff','#f0f'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4, random: true },
+        size: { value: 2.5, random: true },
+        move: { enable: true, speed: 1.2, random: true, out_mode: 'out' }
+      },
       retina_detect: true
     });
 
