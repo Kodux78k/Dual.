@@ -117,9 +117,9 @@
     }
     .logout-area .username {
       font-weight: 600;
-      color: #0ff;
-      margin-bottom: 0.5rem;
-      font-size: 1.05em;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      font-size: 0.9em;
     }
     .logout-area .btn-full {
       background: rgba(255,50,50,0.1);
@@ -233,7 +233,7 @@
       passInput.style.display  = 'none';
       submitBtn.style.display  = 'none';
       logoutArea.style.display = 'block';
-      loggedUser.textContent   = user ? ` ${user}.Dual` : '';
+      loggedUser.textContent   = user ? `${user}` : '';
       buyArea.style.display    = 'none';
       messageBox.style.display = 'none';
     }
