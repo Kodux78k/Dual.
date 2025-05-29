@@ -48,10 +48,10 @@
     }
     .infodose {
       font-size:1.6em; font-weight:300;
-      animation:fadeIn 1.5s forwards 1s;
+      animation:fadeIn 1.5s forwards 1s; opacity:0;
     }
     .infodose strong { font-weight:600 }
-    @keyframes fadeIn { to { opacity:1 } }
+    @keyframes fadeIn { to { opacity:0 } }
 
     .login-container {
       width:280px; padding:1rem;
@@ -118,8 +118,8 @@
     .logout-area .username {
       font-weight: 300;
       color: #fff;
-      margin-bottom: 0.8rem;
-      font-size: 0.9em;
+      margin-bottom: 1rem;
+      font-size: 0.9em; opacity:0.8;
     }
     .logout-area .btn-full {
       background: rgba(255,50,50,0.1);
