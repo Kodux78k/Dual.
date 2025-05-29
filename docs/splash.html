@@ -26,7 +26,6 @@
       opacity:0; animation:fadeInBody 1.8s ease forwards;
     }
     @keyframes fadeInBody { to { opacity:1 } }
-    @keyframes fadeOutBody { to { opacity:0 } }
 
     #particles-js {
       position:absolute; inset:0; z-index:0;
@@ -40,6 +39,7 @@
     .logo-container {
       width:180px;
       animation:glow 3s ease-in-out infinite alternate;
+      cursor: pointer;
     }
     .logo-container object { width:100%; display:block }
     @keyframes glow {
@@ -51,7 +51,6 @@
       opacity:0; animation:fadeIn 1.5s forwards 1s;
     }
     .infodose strong { font-weight:600 }
-    @keyframes fadeIn { to { opacity:1 } }
 
     .login-container {
       width:280px; padding:1rem;
@@ -100,9 +99,7 @@
       background: linear-gradient(45deg, rgba(0,255,255,0.5), rgba(255,0,255,0.5));
       border-radius: 20px;
       z-index: -1;
-      -webkit-mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
     }
@@ -110,8 +107,11 @@
       transform:scale(1.05);
       background:rgba(255,255,255,0.15);
     }
-
-    /* estilo do botão Desconectar */
+    .logout-area {
+      display: none;
+      margin-top: 1rem;
+      outline: none;
+    }
     .logout-area .btn-full {
       background: rgba(255,50,50,0.1);
       color: #f55;
@@ -144,19 +144,17 @@
       transform:scale(1.05);
       background:rgba(255,255,255,0.15);
     }
-    @media(max-width:360px) {
-      .logo-container { width:140px }
-      .infodose { font-size:1.3em }
-      .login-container { width:90vw }
-    }
   </style>
 </head>
 <body>
 
+  <!-- Som ao fundo -->
+  <audio id="bgSound" src="assets/Sounds/sequence.mp3" autoplay loop></audio>
+
   <div id="particles-js"></div>
 
   <div class="center-group">
-    <div class="logo-container">
+    <div class="logo-container" id="logoDual">
       <object data="assets/icons/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
     </div>
     <div class="infodose">dual.<strong>Infodose</strong></div>
@@ -168,7 +166,7 @@
 
       <div id="messageBox"></div>
 
-      <div class="logout-area" style="display:none; margin-top:1rem;">
+      <div class="logout-area">
         <button id="logoutBtn" class="btn-full">Desconectar</button>
       </div>
 
@@ -188,32 +186,26 @@
     const buyBtn     = document.getElementById('buyIFTBtn');
     const logoutArea = document.querySelector('.logout-area');
     const logoutBtn  = document.getElementById('logoutBtn');
+    const logoDual   = document.getElementById('logoDual');
     const storedKey  = 'infodose_user';
 
     const USERS_JSON = 'users/usersid.json';
     const PIX_LINK   = 'https://nubank.com.br/cobrar/55sr1/68379371-42e5-4f54-897c-805ae1be1b17';
 
-    // bloqueio de scroll
+    const goToIndex = () => {
+      gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out' });
+      gsap.to('.infodose',      { opacity:0, duration:0.6 });
+      setTimeout(()=>window.location.href='index.html', 1400);
+    };
+
     const lockScroll = () => {
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
       document.documentElement.style.height = '100vh';
       document.body.style.height = '100vh';
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
       window.scrollTo(0, 0);
     };
-    window.addEventListener('load', lockScroll);
-    document.querySelectorAll('input, .login-container, .btn-full').forEach(el => {
-      el.addEventListener('focus', lockScroll);
-      el.addEventListener('click', lockScroll);
-    });
-    const observer = new MutationObserver(() => {
-      if (document.body.style.overflow !== 'hidden') lockScroll();
-    });
-    observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
 
-    // UI switching
     function showLoginUI() {
       loginBox.classList.add('active');
       userInput.style.display  = '';
@@ -223,6 +215,7 @@
       buyArea.style.display    = 'none';
       messageBox.style.display = 'none';
     }
+
     function showLogoutUI() {
       loginBox.classList.add('active');
       userInput.style.display  = 'none';
@@ -233,16 +226,25 @@
       messageBox.style.display = 'none';
     }
 
-    // inicial
+    // Simulação de reconhecimento facial
+    function detectFacial() {
+      const user = localStorage.getItem(storedKey);
+      if (user) goToIndex();
+    }
+
+    // Inicial
     window.addEventListener('load', () => {
-      if (localStorage.getItem(storedKey)) {
-        showLogoutUI();
-      } else {
-        showLoginUI();
-      }
+      lockScroll();
+      document.getElementById('bgSound')?.play().catch(()=>{});
+      localStorage.getItem(storedKey) ? showLogoutUI() : showLoginUI();
+      detectFacial(); // simula reconhecimento ao carregar
     });
 
-    // login
+    // Clique no logo → ir para index
+    logoDual.addEventListener('click', () => {
+      goToIndex();
+    });
+
     submitBtn.addEventListener('click', async () => {
       const rawUser = userInput.value.trim();
       const u = rawUser.toLowerCase();
@@ -259,7 +261,7 @@
         const creds = await res.json();
         if (creds[u] && creds[u] === p) {
           localStorage.setItem(storedKey, rawUser);
-          showLogoutUI();
+          goToIndex();
         } else {
           showLoginUI();
           messageBox.textContent = creds[u] ? 'Senha incorreta para usuário mestre.' : 'Usuário ainda não conectado com o pulso.';
@@ -272,18 +274,15 @@
       }
     });
 
-    // logout
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem(storedKey);
       showLoginUI();
     });
 
-    // comprar tokens
     buyBtn.addEventListener('click', () => {
       window.location.href = PIX_LINK;
     });
 
-    // partículas
     particlesJS('particles-js', {
       particles: {
         number:{value:42,density:{enable:true,value_area:600}},
