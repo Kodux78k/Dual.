@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Central - Dual Infodose</title>
-   <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#000000" />
   <link rel="icon" href="assets/icons/icon-192.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"/>
@@ -12,6 +12,10 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      overscroll-behavior: none;
+      touch-action: none;
+    }
     body {
       font-family:'Montserrat',sans-serif;
       background: linear-gradient(to bottom, #000, #1a1a1a);
@@ -53,7 +57,6 @@
       width:280px; padding:1rem;
       background:rgba(0,0,0,0.6);
       border:4px solid transparent;
-    
       border-radius:24px; backdrop-filter:blur(8px);
       display:flex; flex-direction:column; gap:1rem;
       opacity:0; transition:opacity .3s;
@@ -73,46 +76,59 @@
     .login-container input:focus {
       background:rgba(255,255,255,0.1);
     }
-    .btn-full {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  padding: 0.8rem 0;
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: none;
-  border-radius: 20px;
-  font-size: 1em;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  transition: transform 0.3s, background 0.3s;
-}
 
-.btn-full::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px; /* tamanho da borda */
-  background: linear-gradient(45deg, rgba(0,255,255,0.5), rgba(255,0,255,0.5));
-  border-radius: 20px;
-  z-index: -1;
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
+    .btn-full {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      padding: 0.8rem 0;
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      border-radius: 20px;
+      font-size: 1em;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .btn-full::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      background: linear-gradient(45deg, rgba(0,255,255,0.5), rgba(255,0,255,0.5));
+      border-radius: 20px;
+      z-index: -1;
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
     .btn-full:hover {
       transform:scale(1.05);
       background:rgba(255,255,255,0.15);
     }
+
+    /* estilo do botão Desconectar */
+    .logout-area .btn-full {
+      background: rgba(255,50,50,0.1);
+      color: #f55;
+    }
+    .logout-area .btn-full::before {
+      background: linear-gradient(45deg, rgba(255,100,100,0.5), rgba(200,0,0,0.5));
+    }
+
     #messageBox {
       display:none;
       background: rgba(0,0,0,0.5);
       border-radius:16px; padding:0.8rem;
       text-align:center; color:#0ff;
       font-size:0.95em; opacity:0.9;
+    }
+    #buyTokens {
+      display:none;
     }
     #buyTokens button {
       width:100%; padding:0.8rem 0;
@@ -152,50 +168,122 @@
 
       <div id="messageBox"></div>
 
-      <div id="buyTokens" style="display:none;">
+      <div class="logout-area" style="display:none; margin-top:1rem;">
+        <button id="logoutBtn" class="btn-full">Desconectar</button>
+      </div>
+
+      <div id="buyTokens">
         <button id="buyIFTBtn">Comprar 1.000.000 IFT (PIX)</button>
       </div>
     </div>
   </div>
 
   <script type="module">
-    const loginBox  = document.getElementById('loginBox');
-    const userInput = document.getElementById('user');
-    const passInput = document.getElementById('pass');
-    const submitBtn = document.getElementById('submitBtn');
-    const messageBox= document.getElementById('messageBox');
-    const buyArea   = document.getElementById('buyTokens');
-    const buyBtn    = document.getElementById('buyIFTBtn');
-    const storedKey = 'infodose_user';
+    const loginBox   = document.getElementById('loginBox');
+    const userInput  = document.getElementById('user');
+    const passInput  = document.getElementById('pass');
+    const submitBtn  = document.getElementById('submitBtn');
+    const messageBox = document.getElementById('messageBox');
+    const buyArea    = document.getElementById('buyTokens');
+    const buyBtn     = document.getElementById('buyIFTBtn');
+    const logoutArea = document.querySelector('.logout-area');
+    const logoutBtn  = document.getElementById('logoutBtn');
+    const storedKey  = 'infodose_user';
 
     const USERS_JSON = 'users/usersid.json';
     const PIX_LINK   = 'https://nubank.com.br/cobrar/55sr1/68379371-42e5-4f54-897c-805ae1be1b17';
 
-    // Sempre força overflow hidden no body, mesmo após interações
-const lockScroll = () => {
-  document.documentElement.style.overflow = 'hidden';
-  document.body.style.overflow = 'hidden';
-  document.documentElement.style.height = '100vh';
-  document.body.style.height = '100vh';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  window.scrollTo(0, 0);
-};
+    // bloqueio de scroll
+    const lockScroll = () => {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.height = '100vh';
+      document.body.style.height = '100vh';
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('load', lockScroll);
+    document.querySelectorAll('input, .login-container, .btn-full').forEach(el => {
+      el.addEventListener('focus', lockScroll);
+      el.addEventListener('click', lockScroll);
+    });
+    const observer = new MutationObserver(() => {
+      if (document.body.style.overflow !== 'hidden') lockScroll();
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
 
-// Garante ao carregar
-window.addEventListener('load', lockScroll);
+    // UI switching
+    function showLoginUI() {
+      loginBox.classList.add('active');
+      userInput.style.display  = '';
+      passInput.style.display  = '';
+      submitBtn.style.display  = '';
+      logoutArea.style.display = 'none';
+      buyArea.style.display    = 'none';
+      messageBox.style.display = 'none';
+    }
+    function showLogoutUI() {
+      loginBox.classList.add('active');
+      userInput.style.display  = 'none';
+      passInput.style.display  = 'none';
+      submitBtn.style.display  = 'none';
+      logoutArea.style.display = 'block';
+      buyArea.style.display    = 'none';
+      messageBox.style.display = 'none';
+    }
 
-// Reforça após foco ou clique
-document.querySelectorAll('input, .login-container, .btn-full').forEach(el => {
-  el.addEventListener('focus', lockScroll);
-  el.addEventListener('click', lockScroll);
-});
+    // inicial
+    window.addEventListener('load', () => {
+      if (localStorage.getItem(storedKey)) {
+        showLogoutUI();
+      } else {
+        showLoginUI();
+      }
+    });
 
-// Reforço contínuo se algo alterar o estilo
-const observer = new MutationObserver(() => {
-  if (document.body.style.overflow !== 'hidden') lockScroll();
-});
-observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+    // login
+    submitBtn.addEventListener('click', async () => {
+      const rawUser = userInput.value.trim();
+      const u = rawUser.toLowerCase();
+      const p = passInput.value.trim();
+      if (!u || !p) {
+        showLoginUI();
+        messageBox.textContent = 'Por favor, preencha usuário e senha.';
+        messageBox.style.display = 'block';
+        return;
+      }
+      try {
+        const res   = await fetch(USERS_JSON);
+        if (!res.ok) throw new Error('Falha ao carregar credenciais.');
+        const creds = await res.json();
+        if (creds[u] && creds[u] === p) {
+          localStorage.setItem(storedKey, rawUser);
+          showLogoutUI();
+        } else {
+          showLoginUI();
+          messageBox.textContent = creds[u] ? 'Senha incorreta para usuário mestre.' : 'Usuário ainda não conectado com o pulso.';
+          messageBox.style.display = 'block';
+        }
+      } catch (err) {
+        showLoginUI();
+        messageBox.textContent = err.message;
+        messageBox.style.display = 'block';
+      }
+    });
+
+    // logout
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem(storedKey);
+      showLoginUI();
+    });
+
+    // comprar tokens
+    buyBtn.addEventListener('click', () => {
+      window.location.href = PIX_LINK;
+    });
+
+    // partículas
     particlesJS('particles-js', {
       particles: {
         number:{value:42,density:{enable:true,value_area:600}},
@@ -206,57 +294,6 @@ observer.observe(document.body, { attributes: true, attributeFilter: ['style'] }
         move:{enable:true,speed:1.2,random:true,out_mode:'out'}
       },
       retina_detect:true
-    });
-
-    function showLogin() {
-      loginBox.classList.add('active');
-      messageBox.style.display = 'none';
-      buyArea.style.display    = 'none';
-    }
-    function showBuy(msg) {
-      messageBox.textContent = msg;
-      messageBox.style.display = 'block';
-      buyArea.style.display    = 'block';
-    }
-    function goToIndex() {
-      gsap.to('.logo-container', { scale:0, duration:1, ease:'power3.out' });
-      gsap.to('.infodose',      { opacity:0, duration:0.6 });
-      setTimeout(()=>window.location.href='index.html', 1400);
-    }
-
-    window.addEventListener('load', () => {
-      showLogin();
-    });
-
-    submitBtn.addEventListener('click', async () => {
-      const rawUser = userInput.value.trim();
-      const u       = rawUser.toLowerCase();
-      const p       = passInput.value.trim();
-      if (!u||!p) {
-        showBuy('Por favor, preencha usuário e senha.');
-        return;
-      }
-      try {
-        const res   = await fetch(USERS_JSON);
-        if (!res.ok) throw new Error('Falha ao carregar credenciais.');
-        const creds = await res.json();
-        if (creds[u]) {
-          if (creds[u] === p) {
-            localStorage.setItem(storedKey, rawUser);
-            goToIndex();
-          } else {
-            showBuy('Senha incorreta para usuário mestre.');
-          }
-        } else {
-          showBuy('Usuário ainda não conectado com o pulso.');
-        }
-      } catch (err) {
-        showBuy(err.message);
-      }
-    });
-
-    buyBtn.addEventListener('click', () => {
-      window.location.href = PIX_LINK;
     });
   </script>
 </body>
