@@ -107,6 +107,7 @@
       transform:scale(1.05);
       background:rgba(255,255,255,0.15);
     }
+
     .logout-area {
       display: none;
       margin-top: 1rem;
@@ -148,8 +149,8 @@
 </head>
 <body>
 
-  <!-- Som ao fundo -->
-  <audio id="bgSound" src="assets/Sounds/sequence.mp3" autoplay loop></audio>
+  <!-- Som de fundo -->
+  <audio id="bgSound" src="assets/sounds/suave_portal.mp3" autoplay loop></audio>
 
   <div id="particles-js"></div>
 
@@ -226,23 +227,19 @@
       messageBox.style.display = 'none';
     }
 
-    // Simulação de reconhecimento facial
     function detectFacial() {
       const user = localStorage.getItem(storedKey);
-      if (user) goToIndex();
+      if (user) {
+        // Aqui simula um reconhecimento facial real
+        goToIndex(); // Só acontece se facial for "detectado"
+      }
     }
 
-    // Inicial
     window.addEventListener('load', () => {
       lockScroll();
       document.getElementById('bgSound')?.play().catch(()=>{});
       localStorage.getItem(storedKey) ? showLogoutUI() : showLoginUI();
-      detectFacial(); // simula reconhecimento ao carregar
-    });
-
-    // Clique no logo → ir para index
-    logoDual.addEventListener('click', () => {
-      goToIndex();
+      // detectFacial(); // Só ative essa linha se quiser simular reconhecimento
     });
 
     submitBtn.addEventListener('click', async () => {
@@ -261,7 +258,7 @@
         const creds = await res.json();
         if (creds[u] && creds[u] === p) {
           localStorage.setItem(storedKey, rawUser);
-          goToIndex();
+          goToIndex(); // login bem-sucedido redireciona
         } else {
           showLoginUI();
           messageBox.textContent = creds[u] ? 'Senha incorreta para usuário mestre.' : 'Usuário ainda não conectado com o pulso.';
@@ -277,6 +274,11 @@
     logoutBtn.addEventListener('click', () => {
       localStorage.removeItem(storedKey);
       showLoginUI();
+    });
+
+    logoDual.addEventListener('click', () => {
+      const user = localStorage.getItem(storedKey);
+      if (user) goToIndex(); // só entra se estiver logado
     });
 
     buyBtn.addEventListener('click', () => {
