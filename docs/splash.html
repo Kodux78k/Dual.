@@ -48,9 +48,10 @@
     }
     .infodose {
       font-size:1.6em; font-weight:300;
-      opacity:0; animation:fadeIn 1.5s forwards 1s;
+      animation:fadeIn 1.5s forwards 1s;
     }
     .infodose strong { font-weight:600 }
+    @keyframes fadeIn { to { opacity:1 } }
 
     .login-container {
       width:280px; padding:1rem;
@@ -112,6 +113,13 @@
       display: none;
       margin-top: 1rem;
       outline: none;
+      text-align: center;
+    }
+    .logout-area .username {
+      font-weight: 600;
+      color: #0ff;
+      margin-bottom: 0.5rem;
+      font-size: 1.05em;
     }
     .logout-area .btn-full {
       background: rgba(255,50,50,0.1);
@@ -150,7 +158,7 @@
 <body>
 
   <!-- Som de fundo -->
-  <audio id="bgSound" src="assets/sounds/suave_portal.mp3" autoplay loop></audio>
+  <audio id="bgSound" src="assets/sound/suave_portal.mp3" autoplay loop></audio>
 
   <div id="particles-js"></div>
 
@@ -168,6 +176,7 @@
       <div id="messageBox"></div>
 
       <div class="logout-area">
+        <div id="loggedUsername" class="username"></div>
         <button id="logoutBtn" class="btn-full">Desconectar</button>
       </div>
 
@@ -187,6 +196,7 @@
     const buyBtn     = document.getElementById('buyIFTBtn');
     const logoutArea = document.querySelector('.logout-area');
     const logoutBtn  = document.getElementById('logoutBtn');
+    const loggedUser = document.getElementById('loggedUsername');
     const logoDual   = document.getElementById('logoDual');
     const storedKey  = 'infodose_user';
 
@@ -217,29 +227,22 @@
       messageBox.style.display = 'none';
     }
 
-    function showLogoutUI() {
+    function showLogoutUI(user) {
       loginBox.classList.add('active');
       userInput.style.display  = 'none';
       passInput.style.display  = 'none';
       submitBtn.style.display  = 'none';
       logoutArea.style.display = 'block';
+      loggedUser.textContent   = user ? `Estamos em pulso .Dual,<strong> ${user} </strong>` : '';
       buyArea.style.display    = 'none';
       messageBox.style.display = 'none';
-    }
-
-    function detectFacial() {
-      const user = localStorage.getItem(storedKey);
-      if (user) {
-        // Aqui simula um reconhecimento facial real
-        goToIndex(); // Só acontece se facial for "detectado"
-      }
     }
 
     window.addEventListener('load', () => {
       lockScroll();
       document.getElementById('bgSound')?.play().catch(()=>{});
-      localStorage.getItem(storedKey) ? showLogoutUI() : showLoginUI();
-      // detectFacial(); // Só ative essa linha se quiser simular reconhecimento
+      const stored = localStorage.getItem(storedKey);
+      stored ? showLogoutUI(stored) : showLoginUI();
     });
 
     submitBtn.addEventListener('click', async () => {
@@ -258,16 +261,18 @@
         const creds = await res.json();
         if (creds[u] && creds[u] === p) {
           localStorage.setItem(storedKey, rawUser);
-          goToIndex(); // login bem-sucedido redireciona
+          goToIndex(); // redireciona
         } else {
           showLoginUI();
           messageBox.textContent = creds[u] ? 'Senha incorreta para usuário mestre.' : 'Usuário ainda não conectado com o pulso.';
           messageBox.style.display = 'block';
+          buyArea.style.display = 'block';
         }
       } catch (err) {
         showLoginUI();
         messageBox.textContent = err.message;
         messageBox.style.display = 'block';
+        buyArea.style.display = 'block';
       }
     });
 
@@ -278,7 +283,7 @@
 
     logoDual.addEventListener('click', () => {
       const user = localStorage.getItem(storedKey);
-      if (user) goToIndex(); // só entra se estiver logado
+      if (user) goToIndex();
     });
 
     buyBtn.addEventListener('click', () => {
