@@ -18,7 +18,7 @@
       color:#fff;
       height:100vh; overflow:hidden;
       display:flex; align-items:center; justify-content:center;
-      padding-top:286px; position:relative;
+      padding-top:90px; position:relative;
       opacity:0; animation:fadeInBody 1.8s ease forwards;
     }
     @keyframes fadeInBody { to { opacity:1 } }
@@ -171,6 +171,31 @@
     const USERS_JSON = 'users/usersid.json';
     const PIX_LINK   = 'https://nubank.com.br/cobrar/55sr1/68379371-42e5-4f54-897c-805ae1be1b17';
 
+    // Sempre força overflow hidden no body, mesmo após interações
+const lockScroll = () => {
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.height = '100vh';
+  document.body.style.height = '100vh';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  window.scrollTo(0, 0);
+};
+
+// Garante ao carregar
+window.addEventListener('load', lockScroll);
+
+// Reforça após foco ou clique
+document.querySelectorAll('input, .login-container, .btn-full').forEach(el => {
+  el.addEventListener('focus', lockScroll);
+  el.addEventListener('click', lockScroll);
+});
+
+// Reforço contínuo se algo alterar o estilo
+const observer = new MutationObserver(() => {
+  if (document.body.style.overflow !== 'hidden') lockScroll();
+});
+observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
     particlesJS('particles-js', {
       particles: {
         number:{value:42,density:{enable:true,value_area:600}},
