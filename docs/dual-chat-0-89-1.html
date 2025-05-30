@@ -332,7 +332,7 @@
       $('#historyBtn').classList.toggle('active',isHistory);
       $('#assistantName').textContent = isHistory
         ? 'Codex dual.infodose'
-        : (isStudying ? assistantBase+'Estudos dual.' : (isEnabled ? assistantBase+' dual.infodose':''));  
+        : (isStudying ? 'Estudos dual.infodose' : (isEnabled ? assistantBase+' dual.infodose':''));  
       const container=$('#logoContainer'), logo=$('#logoObj');
       container.classList.add('fading');
       setTimeout(()=>{
@@ -340,7 +340,7 @@
         else if(isStudying) logo.data='assets/icons/DualKittyKard-icon-3.png';
         else                 logo.data='assets/icons/3D_logo_Dual_Infodose_10.png';
         container.classList.remove('fading');
-      },600);
+      },300);
     }
 
     function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
