@@ -212,13 +212,13 @@
   audio.play().catch(() => {}); // tenta tocar o som
   
   // Inicia animações
-  gsap.to('.logo-container', { scale: 0, opacity: 0.6, duration: 1.4, ease: 'power3.out' });
+  gsap.to('.logo-container', { scale: 0, opacity: 0.6, duration: 1.2, ease: 'power3.out' });
   gsap.to('.infodose', { opacity: 0, duration: 0.9 });
 
   // Espera um pouco para deixar o som tocar antes de sair
   setTimeout(() => {
     window.location.href = 'index.html';
-  }, 1200);
+  }, 1500);
 };
 
     const lockScroll = () => {
