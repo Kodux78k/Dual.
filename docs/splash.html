@@ -214,11 +214,12 @@
   // Inicia animações
   gsap.to('.logo-container', { scale: 0, duration: 1.2, ease: 'power3.out' });
   gsap.to('.infodose', { opacity: 0, duration: 0.6 });
+  gsap.to('.loginBox', { opacity: 0, duration: 0.4 });
 
   // Espera um pouco para deixar o som tocar antes de sair
   setTimeout(() => {
     window.location.href = 'index.html';
-  }, 1400);
+  }, 1300);
 };
 
     const lockScroll = () => {
