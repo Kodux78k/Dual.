@@ -296,7 +296,7 @@
           HISTORY_KEY  = 'historyMode',
           CONFIG = {
             TRAINING_MAIN: 'data/Super_Treinamento_Universal_Dual_Infodose_v1-29.txt',
-            TRAINING_HISTORY: 'data/historias-dual.txt',
+            TRAINING_HISTORY: 'data/codex-azura.txt',
             API_URL: 'https://openrouter.ai/api/v1/chat/completions',
             MODEL: 'deepseek/deepseek-chat-v3-0324:free',
             TEMP: 0.2,
@@ -368,8 +368,8 @@
       $('#kittyBtn').classList.toggle('active', isStudying);
       $('#historyBtn').classList.toggle('active', isHistory);
       $('#assistantName').textContent = isHistory
-        ? 'modo História Dual'
-        : (isStudying ? 'Estudos dual.infodose' : (isEnabled ? assistantBase+' dual.infodose' : ''));
+        ? 'Codex 📖 dual.infodose'
+        : (isStudying ? 'Estudos 📚 dual.infodose' : (isEnabled ? assistantBase+' dual.infodose' : ''));
       // troca suave de logo
       const container = $('#logoContainer');
       const logo = $('#logoObj');
