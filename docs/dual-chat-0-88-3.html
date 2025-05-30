@@ -251,7 +251,7 @@
         <button class="paste-button" title="Colar"><object data="assets/icons/BW_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
         <button id="toggleBtn" class="toggle-button" title="Login"><object data="assets/icons/circle_icon_fade_rente.png" type="image/png" width="33" height="33"></object></button>
         <button id="kittyBtn" class="kitty-button" title="Estudos"><object data="assets/icons/DualKittyKard-icon-3.png" type="image/png" width="33" height="33"></object></button>
-        <button id="historyBtn" class="history-button" title="Modo História"><object data="assets/icons/dual_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
+        <button id="historyBtn" class="history-button" title="Modo História"><object data="assets/icons/Gold_calice_Horus_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
       </div>
       <div class="pagination">
         <button data-action="prev" aria-label="Página anterior">⟵</button>
@@ -334,13 +334,13 @@
       $('#historyBtn').classList.toggle('active', isHistory);
 
       $('#assistantName').textContent = isHistory
-        ? 'modo História Dual'
+        ? 'Codex dual.Infodose'
         : (isStudying ? 'Estudos dual.infodose' : (isEnabled ? assistantBase+' dual.infodose' : ''));
 
       const container = $('#logoContainer'), logo = $('#logoObj');
       container.classList.add('fading');
       setTimeout(()=>{
-        if(isHistory)      logo.data = 'assets/icons/dual_Dual_Infodose.png';
+        if(isHistory)      logo.data = 'assets/icons/Gold_calice_Horus_Dual_Infodose.png';
         else if(isStudying) logo.data = 'assets/icons/DualKittyKard-icon-3.png';
         else                logo.data = 'assets/icons/3D_logo_Dual_Infodose_10.png';
         container.classList.remove('fading');
