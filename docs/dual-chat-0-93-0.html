@@ -231,7 +231,7 @@
   <div id="particles-js"></div>
 
   <div class="svg-container" id="logoContainer">
-    <object id="logoObj" data="assets/icons/3D_logo_Dual_Infodose_10.png" type="image/png"></object>
+    <object id="logoObj" data="assets/icons/pill_Dual.png" type="image/png"></object>
   </div>
   <div id="assistantName" aria-live="polite"></div>
 
@@ -248,7 +248,7 @@
         <button class="paste-button" title="Colar"><object data="assets/icons/BW_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
         <button id="toggleBtn" class="toggle-button" title="Login"><object data="assets/icons/circle_icon_fade_rente.png" type="image/png" width="33" height="33"></object></button>
         <button id="kittyBtn" class="kitty-button" title="Estudos"><object data="assets/icons/DualKittyKard-icon-3.png" type="image/png" width="33" height="33"></object></button>
-        <button id="historyBtn" class="history-button" title="Modo História"><object data="assets/icons/dual_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
+        <button id="historyBtn" class="history-button" title="Modo História"><object data="assets/icons/Ancora_Dual_Infodose.svg" type="image/svg+xml" width="24" height="24"></object></button>
       </div>
       <div class="pagination">
         <button data-action="prev" aria-label="Página anterior">⟵</button>
@@ -353,15 +353,15 @@
       $('#kittyBtn').classList.toggle('active',isStudying);
       $('#historyBtn').classList.toggle('active',isHistory);
       $('#assistantName').textContent = isHistory
-        ? 'Codex dual.infodose'
+        ? 'CODEX: dual.infodose'
         : (isStudying ? 'Estudos dual.infodose' : (isEnabled ? assistantBase+' dual.infodose':''));  
       // logo
       const cont=$('#logoContainer'), logo=$('#logoObj');
       cont.classList.add('fading');
       setTimeout(()=>{
-        if(isHistory)       logo.data='assets/icons/pill_Dual.png';
+        if(isHistory)       logo.data='assets/icons/Gold_calice_Horus_Dual_Infodose.png';
         else if(isStudying) logo.data='assets/icons/DualKittyKard-icon-3.png';
-        else                 logo.data='assets/icons/3D_logo_Dual_Infodose_10.png';
+        else                 logo.data='assets/icons/pill_Dual.png';
         cont.classList.remove('fading');
       },600);
     }
