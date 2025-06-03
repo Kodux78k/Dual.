@@ -1,0 +1,47 @@
+# n8n - Nó Python Script
+# Entrada esperada: nome, telefone, descricao
+import re
+
+input_data = items[0]['json']
+descricao = input_data.get('descricao', '').lower()
+
+# Classificação básica por palavras-chave
+pendencia = "Outros"
+
+if any(kw in descricao for kw in ["escritura", "não registrada", "registro"]):
+    pendencia = "Escritura não registrada"
+elif any(kw in descricao for kw in ["herança", "irmão", "partilha", "inventário"]):
+    pendencia = "Herança / Inventário"
+elif any(kw in descricao for kw in ["itbi", "imposto", "transmissão"]):
+    pendencia = "ITBI / Tributação"
+elif any(kw in descricao for kw in ["documento", "regularizar", "papelada"]):
+    pendencia = "Documentação geral"
+elif any(kw in descricao for kw in ["iptu", "débito", "irregular"]):
+    pendencia = "IPTU Irregular"
+
+# Mensagem para WhatsApp
+mensagem = f"""
+Olá {input_data.get('nome', 'amigo')}! 🙋‍♂️
+
+Vi sua mensagem sobre regularização.
+
+Meu pai é engenheiro e especialista nisso há mais de 15 anos em Sorocaba.
+
+📌 Assunto identificado: {pendencia}
+
+Ele pode te ajudar com tudo — desde a documentação até resolver na prefeitura.
+
+Posso te passar o WhatsApp direto dele?
+
+Gratidão! 🙏
+"""
+
+return [{
+    "json": {
+        "nome": input_data.get("nome"),
+        "telefone": input_data.get("telefone"),
+        "descricao": input_data.get("descricao"),
+        "classificacao": pendencia,
+        "mensagem": mensagem
+    }
+}]
