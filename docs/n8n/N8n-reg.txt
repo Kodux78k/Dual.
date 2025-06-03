@@ -1,0 +1,156 @@
+# ----------------------------------------------
+# Nó “Code” em Python (N8n)
+# Entrada esperada em items[0]['json']:
+#   - nome
+#   - telefone
+#   - descricao
+#   - bairro
+#   - tipo_de_projeto
+# Saída: 
+#   - campos para Google Sheets + texto completo do projeto em Markdown
+# ----------------------------------------------
+
+import datetime
+
+item = items[0]['json']
+
+# Captura dos dados de entrada
+nome             = item.get('nome', "").strip()
+telefone         = item.get('telefone', "").strip()
+descricao        = item.get('descricao', "").strip()
+bairro           = item.get('bairro', "").strip()
+tipo_de_projeto  = item.get('tipo_de_projeto', "").lower().strip()
+data_solicitacao = datetime.datetime.now().strftime("%d/%m/%Y")
+
+# 1. Definição do objetivo geral conforme tipo_de_projeto
+objetivo = ""
+if tipo_de_projeto == "escritura":
+    objetivo = f"Advogar e regularizar a escrituração completa do imóvel de {nome} localizado em {bairro}."
+elif tipo_de_projeto == "heranca":
+    objetivo = f"Regularizar a situação de herança/inventário de {nome} referente a imóvel(s) no bairro {bairro}."
+elif tipo_de_projeto == "iptu":
+    objetivo = f"Corrigir pendências de IPTU e atualizar cadastro imobiliário para {nome} no bairro {bairro}."
+elif tipo_de_projeto == "itbi":
+    objetivo = f"Assessorar no pagamento e registro de ITBI do imóvel de {nome} situado em {bairro}."
+else:
+    objetivo = f"Regularizar pendência documental relacionada ao imóvel de {nome} no bairro {bairro}."
+
+# 2. Listagem de documentos necessários
+docs_necessarios = []
+if tipo_de_projeto == "escritura":
+    docs_necessarios = [
+        "Certidão de Matrícula atualizada do imóvel",
+        "Cópia do RG e CPF do(a) proprietário(a)",
+        "Comprovante de endereço atualizado",
+        "Contrato de compra e venda, se houver",
+        "Declaração de anuência de todos os co-proprietários (se aplicável)"
+    ]
+elif tipo_de_projeto == "heranca":
+    docs_necessarios = [
+        "Certidão de óbito do(a) falecido(a)",
+        "RG e CPF de cada herdeiro",
+        "Comprovante de endereço de cada herdeiro",
+        "Termo de Inventariante (se já houver processo)",
+        "Declaração de separação de bens ou pacto antenupcial (se for o caso)"
+    ]
+elif tipo_de_projeto == "iptu":
+    docs_necessarios = [
+        "Último carnê de IPTU",
+        "Planta baixa aprovada (se houve ampliação)",
+        "Cópia do IPTU anterior para conferência",
+        "Comprovante de pagamento parcial (se houver débito)"
+    ]
+elif tipo_de_projeto == "itbi":
+    docs_necessarios = [
+        "Guia de ITBI emitida pela prefeitura",
+        "Comprovante de pagamento do ITBI",
+        "Certidão de Matrícula atualizada",
+        "Cópia do RG e CPF do comprador e do vendedor"
+    ]
+else:
+    docs_necessarios = [
+        "RG e CPF do(a) interessado(a)",
+        "Comprovante de endereço atualizado",
+        "Cópia de matrícula ou escritura (mesmo que esteja irregular)",
+        "Demais documentos específicos, a definir em reunião inicial"
+    ]
+
+# 3. Definição do cronograma estimado (exemplo estático; pode ser adaptado)
+cronograma = [
+    "Fase 1 (1 semana): Coleta de documentos e reunião inicial com cliente.",
+    "Fase 2 (2 semanas): Elaboração de petições, minutas e requerimentos.",
+    "Fase 3 (3 semanas): Protocolo em cartório e/ou Prefeitura; acompanhamento de trâmites.",
+    "Fase 4 (até 1 semana extra): Entrega final da documentação regularizada ao cliente."
+]
+
+# 4. Valoração e condições (Modelo genérico)
+honorarios = (
+    "Honorários variáveis a combinar após análise preliminar. "
+    "Estimativa inicial: R$ 1.500 a R$ 3.500, dependendo da complexidade. "
+    "Taxas de cartório e impostos sob responsabilidade do cliente."
+)
+
+# 5. Montagem do texto em MARKDOWN
+texto_markdown = f"""
+# Projeto de Regularização Imobiliária
+
+**Cliente:** {nome}  
+**Telefone:** {telefone}  
+**Bairro/Endereço:** {bairro}  
+**Data da Solicitação:** {data_solicitacao}  
+
+---
+
+## 1. Objetivo Geral
+{objetivo}
+
+---
+
+## 2. Documentos Necessários
+{chr(10).join([f"- {d}" for d in docs_necessarios])}
+
+---
+
+## 3. Etapas do Projeto
+{chr(10).join([f"1. {etapa}" for etapa in cronograma])}
+
+---
+
+## 4. Cronograma Estimado
+- {cronograma[0]}
+- {cronograma[1]}
+- {cronograma[2]}
+- {cronograma[3]}
+
+---
+
+## 5. Honorários e Condições
+{honorarios}
+
+---
+
+## 6. Observações Finais
+- Os prazos podem variar de acordo com a demanda dos órgãos competentes.
+- Caso seja necessária documentação adicional, o cliente será informado imediatamente.
+- Após aprovação do orçamento, será emitido contrato de prestação de serviços.
+
+---
+
+> Desenvolvido pelo escritório de engenharia e regularização fundiária do Sr. [Nome do Seu Pai],  
+> referência em Sorocaba há mais de 15 anos.
+"""
+
+# 6. Preparamos a saída para N8n
+return [{
+    "json": {
+        # Campos para gravar no Google Sheets
+        "nome": nome,
+        "telefone": telefone,
+        "descricao": descricao,
+        "bairro": bairro,
+        "classificacao": tipo_de_projeto.title(),
+        "data_solicitacao": data_solicitacao,
+        # Campo extra: o texto em Markdown do projeto
+        "projeto_markdown": texto_markdown
+    }
+}]
