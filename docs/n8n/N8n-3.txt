@@ -1,0 +1,328 @@
+{
+  "name": "Projeto Regularizacao Completo KOBLLUX",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lead-regularizacao",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "# Entrada esperada em items[0]['json']:\n#   - nome\n#   - telefone\n#   - descricao\n#   - bairro\n#   - tipo_de_projeto\nimport datetime\n\nitem = items[0]['json']\nnome = item.get('nome', \"\").strip()\ntelefone = item.get('telefone', \"\").strip()\ndescricao = item.get('descricao', \"\").strip()\nbairro = item.get('bairro', \"\").strip()\ntipo_de_projeto = item.get('tipo_de_projeto', \"\").lower().strip()\ndata_solicitacao = datetime.datetime.now().strftime(\"%d/%m/%Y\")\n\n# 1. Classificação do lead (mesmo script anterior, pode ser mantido ou ampliado)\npendencia = \"Outros\"\nif any(kw in descricao for kw in [\"escritura\", \"não registrada\", \"registro\"]):\n    pendencia = \"Escritura não registrada\"\nelif any(kw in descricao for kw in [\"herança\", \"irmão\", \"partilha\", \"inventário\"]):\n    pendencia = \"Herança / Inventário\"\nelif any(kw in descricao for kw in [\"itbi\", \"imposto\", \"transmissão\"]):\n    pendencia = \"ITBI / Tributação\"\nelif any(kw in descricao for kw in [\"documento\", \"regularizar\", \"papelada\"]):\n    pendencia = \"Documentação geral\"\nelif any(kw in descricao for kw in [\"iptu\", \"débito\", \"irregular\"]):\n    pendencia = \"IPTU Irregular\"\n\n# 2. Construir o Projeto de Regularização em Markdown\nobjetivo = \"\"\nif tipo_de_projeto == \"escritura\":\n    objetivo = f\"Advogar e regularizar a escrituração completa do imóvel de {nome} localizado em {bairro}.\"\nelif tipo_de_projeto == \"heranca\":\n    objetivo = f\"Regularizar a situação de herança/inventário de {nome} referente a imóvel(s) no bairro {bairro}.\"\nelif tipo_de_projeto == \"iptu\":\n    objetivo = f\"Corrigir pendências de IPTU e atualizar cadastro imobiliário para {nome} no bairro {bairro}.\"\nelif tipo_de_projeto == \"itbi\":\n    objetivo = f\"Assessorar no pagamento e registro de ITBI do imóvel de {nome} situado em {bairro}.\"\nelse:\n    objetivo = f\"Regularizar pendência documental relacionada ao imóvel de {nome} no bairro {bairro}.\"\n\ndocs_necessarios = []\nif tipo_de_projeto == \"escritura\":\n    docs_necessarios = [\n        \"Certidão de Matrícula atualizada do imóvel\",\n        \"Cópia do RG e CPF do(a) proprietário(a)\",\n        \"Comprovante de endereço atualizado\",\n        \"Contrato de compra e venda, se houver\",\n        \"Declaração de anuência de todos os co-proprietários (se aplicável)\"\n    ]\nelif tipo_de_projeto == \"heranca\":\n    docs_necessarios = [\n        \"Certidão de óbito do(a) falecido(a)\",\n        \"RG e CPF de cada herdeiro\",\n        \"Comprovante de endereço de cada herdeiro\",\n        \"Termo de Inventariante (se já houver processo)\",\n        \"Declaração de separação de bens ou pacto antenupcial (se for o caso)\"\n    ]\nelif tipo_de_projeto == \"iptu\":\n    docs_necessarios = [\n        \"Último carnê de IPTU\",\n        \"Planta baixa aprovada (se houve ampliação)\",\n        \"Cópia do IPTU anterior para conferência\",\n        \"Comprovante de pagamento parcial (se houver débito)\"\n    ]\nelif tipo_de_projeto == \"itbi\":\n    docs_necessarios = [\n        \"Guia de ITBI emitida pela prefeitura\",\n        \"Comprovante de pagamento do ITBI\",\n        \"Certidão de Matrícula atualizada\",\n        \"Cópia do RG e CPF do comprador e do vendedor\"\n    ]\nelse:\n    docs_necessarios = [\n        \"RG e CPF do(a) interessado(a)\",\n        \"Comprovante de endereço atualizado\",\n        \"Cópia de matrícula ou escritura (mesmo que esteja irregular)\",\n        \"Demais documentos específicos, a definir em reunião inicial\"\n    ]\n\ncronograma = [\n    \"Fase 1 (1 semana): Coleta de documentos e reunião inicial com cliente.\",\n    \"Fase 2 (2 semanas): Elaboração de petições, minutas e requerimentos.\",\n    \"Fase 3 (3 semanas): Protocolo em cartório e/ou Prefeitura; acompanhamento de trâmites.\",\n    \"Fase 4 (até 1 semana extra): Entrega final da documentação regularizada ao cliente.\"\n]\n\nhonorarios = (\n    \"Honorários variáveis a combinar após análise preliminar. \"\n    \"Estimativa inicial: R$ 1.500 a R$ 3.500, dependendo da complexidade. \"\n    \"Taxas de cartório e impostos sob responsabilidade do cliente.\"\n)\n\ntexto_markdown = f\"\"\"\n# Projeto de Regularização Imobiliária\n\n**Cliente:** {nome}  \n**Telefone:** {telefone}  \n**Bairro/Endereço:** {bairro}  \n**Data da Solicitação:** {data_solicitacao}  \n\n---\n\n## 1. Objetivo Geral\n{objetivo}\n\n---\n\n## 2. Documentos Necessários\n{chr(10).join([f\"- {d}\" for d in docs_necessarios])}\n\n---\n\n## 3. Etapas do Projeto\n{chr(10).join([f\"1. {etapa}\" for etapa in cronograma])}\n\n---\n\n## 4. Cronograma Estimado\n- {cronograma[0]}\n- {cronograma[1]}\n- {cronograma[2]}\n- {cronograma[3]}\n\n---\n\n## 5. Honorários e Condições\n{honorarios}\n\n---\n\n## 6. Observações Finais\n- Os prazos podem variar de acordo com a demanda dos órgãos competentes.\n- Caso seja necessária documentação adicional, o cliente será informado imediatamente.\n- Após aprovação do orçamento, será emitido contrato de prestação de serviços.\n\n---\n\n> Desenvolvido pelo escritório de engenharia e regularização fundiária do Sr. [Nome do Seu Pai],  \n> referência em Sorocaba há mais de 15 anos.\n\"\"\"\n\n# Montar resposta para registro no Google Sheets e para geração de arquivos\nreturn [{\n    \"json\": {\n        \"nome\": nome,\n        \"telefone\": telefone,\n        \"descricao\": descricao,\n        \"bairro\": bairro,\n        \"classificacao\": pendencia,\n        \"data_solicitacao\": data_solicitacao,\n        \"projeto_markdown\": texto_markdown\n    }\n}]\n"
+      },
+      "id": "2",
+      "name": "Code (Python)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "sheetId": "INSIRA_AQUI_O_ID_DA_SUA_PLANILHA",
+        "range": "Leads!A1:G1",
+        "options": {
+          "valueInputMode": "USER_ENTERED",
+          "rawData": [
+            [
+              "={{$json[\"nome\"]}}",
+              "={{$json[\"telefone\"]}}",
+              "={{$json[\"classificacao\"]}}",
+              "={{$json[\"bairro\"]}}",
+              "={{$json[\"descricao\"]}}",
+              "={{$json[\"data_solicitacao\"]}}",
+              "={{$json[\"projeto_markdown\"].slice(0, 50)}}..."
+            ]
+          ]
+        }
+      },
+      "id": "3",
+      "name": "Google Sheets - Append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        750,
+        200
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "default",
+          "name": "Minha Conta Google"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "filePath": "/tmp/projeto_{{$json[\"nome\"]}}.md",
+        "binaryPropertyName": "data"
+      },
+      "id": "4",
+      "name": "Write Binary File",
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "typeVersion": 1,
+      "position": [
+        750,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "command": "echo \"{{$json[\"projeto_markdown\"]}}\" > /tmp/projeto_{{$json[\"nome\"]}}.md\npandoc /tmp/projeto_{{$json[\"nome\"]}}.md -o /tmp/projeto_{{$json[\"nome\"]}}.pdf"
+      },
+      "id": "5",
+      "name": "Execute Command (Pandoc)",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "filePath": "/tmp/projeto_{{$json[\"nome\"]}}.pdf"
+      },
+      "id": "6",
+      "name": "Read Binary File (PDF)",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "typeVersion": 1,
+      "position": [
+        1250,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fileName": "projeto_{{$json[\"nome\"]}}.pdf",
+        "binaryPropertyName": "data"
+      },
+      "id": "7",
+      "name": "Google Drive - Upload",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        1500,
+        400
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "default",
+          "name": "Drive Conta"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/instanceID/messages/chat",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        },
+        "bodyParametersJson": "={\n  \"token\": \"SEU_TOKEN_ULTRAMSG\",\n  \"to\": \"55{{$json[\"telefone\"]}}@c.us\",\n  \"body\": \"Olá {{$json[\"nome\"]}}! Seu Projeto de Regularização está pronto: {{$node[\"Google Drive - Upload\"].json[\"webViewLink\"]}}\"\n}"
+      },
+      "id": "8",
+      "name": "HTTP Request - WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1750,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "waitTime": 48,
+        "unit": "hours"
+      },
+      "id": "9",
+      "name": "Wait 48h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/instanceID/messages/chat",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        },
+        "bodyParametersJson": "={\n  \"token\": \"SEU_TOKEN_ULTRAMSG\",\n  \"to\": \"55{{$json[\"telefone\"]}}@c.us\",\n  \"body\": \"Olá {{$json[\"nome\"]}}! Tudo bem? Gostaria de saber se você conseguiu revisar o Projeto de Regularização que enviamos. Posso ajudar em algo?\"\n}"
+      },
+      "id": "10",
+      "name": "HTTP Request - Follow-up WA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "seu-email@provedor.com",
+        "toEmail": "={{$json[\"nome\"]}} <{{$json[\"telefone\"]}}@example.com>",
+        "subject": "Projeto de Regularização - {{$json[\"nome\"]}}",
+        "text": "Olá {{$json[\"nome\"]}}! Em anexo está o PDF com o Projeto de Regularização.\n\nLink direto no Drive: {{$node[\"Google Drive - Upload\"].json[\"webViewLink\"]}}\n\nQualquer dúvida, estou à disposição.\n",
+        "attachmentsUi": {
+          "parameter": [
+            {
+              "binaryPropertyName": "data",
+              "fileName": "projeto_{{$json[\"nome\"]}}.pdf"
+            }
+          ]
+        }
+      },
+      "id": "11",
+      "name": "SMTP - Send Email",
+      "type": "n8n-nodes-base.smtp",
+      "typeVersion": 1,
+      "position": [
+        1750,
+        600
+      ],
+      "credentials": {
+        "smtp": {
+          "id": "default",
+          "name": "Minha Conta SMTP"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code (Python)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Python)": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Append",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Write Binary File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Append": {
+      "main": []
+    },
+    "Write Binary File": {
+      "main": [
+        [
+          {
+            "node": "Execute Command (Pandoc)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command (Pandoc)": {
+      "main": [
+        [
+          {
+            "node": "Read Binary File (PDF)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Binary File (PDF)": {
+      "main": [
+        [
+          {
+            "node": "Google Drive - Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive - Upload": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - WhatsApp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SMTP - Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Wait 48h",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 48h": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Follow-up WA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Follow-up WA": {
+      "main": []
+    },
+    "SMTP - Send Email": {
+      "main": []
+    }
+  },
+  "active": false,
+  "settings": {},
+  "tags": [],
+  "createdAt": "2025-06-02T00:00:00.000Z",
+  "updatedAt": "2025-06-02T00:00:00.000Z"
+}
