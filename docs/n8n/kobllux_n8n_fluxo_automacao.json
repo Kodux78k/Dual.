@@ -1,0 +1,86 @@
+{
+  "name": "Projeto Regularizacao KOBLLUX",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lead-regularizacao",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "\n# Entrada esperada em items[0]['json']:\n#   - nome\n#   - telefone\n#   - descricao\n#   - bairro\n#   - tipo_de_projeto\nimport datetime\n\nitem = items[0]['json']\nnome = item.get('nome', \"\").strip()\ntelefone = item.get('telefone', \"\").strip()\ndescricao = item.get('descricao', \"\").strip()\nbairro = item.get('bairro', \"\").strip()\ntipo_de_projeto = item.get('tipo_de_projeto', \"\").lower().strip()\ndata_solicitacao = datetime.datetime.now().strftime(\"%d/%m/%Y\")\n\nobjetivo = \"\"\nif tipo_de_projeto == \"escritura\":\n    objetivo = f\"Advogar e regularizar a escritura\u00e7\u00e3o completa do im\u00f3vel de {nome} localizado em {bairro}.\"\nelif tipo_de_projeto == \"heranca\":\n    objetivo = f\"Regularizar a situa\u00e7\u00e3o de heran\u00e7a/invent\u00e1rio de {nome} referente a im\u00f3vel(s) no bairro {bairro}.\"\nelif tipo_de_projeto == \"iptu\":\n    objetivo = f\"Corrigir pend\u00eancias de IPTU e atualizar cadastro imobili\u00e1rio para {nome} no bairro {bairro}.\"\nelif tipo_de_projeto == \"itbi\":\n    objetivo = f\"Assessorar no pagamento e registro de ITBI do im\u00f3vel de {nome} situado em {bairro}.\"\nelse:\n    objetivo = f\"Regularizar pend\u00eancia documental relacionada ao im\u00f3vel de {nome} no bairro {bairro}.\"\n\ndocs_necessarios = []\nif tipo_de_projeto == \"escritura\":\n    docs_necessarios = [\n        \"Certid\u00e3o de Matr\u00edcula atualizada do im\u00f3vel\",\n        \"C\u00f3pia do RG e CPF do(a) propriet\u00e1rio(a)\",\n        \"Comprovante de endere\u00e7o atualizado\",\n        \"Contrato de compra e venda, se houver\",\n        \"Declara\u00e7\u00e3o de anu\u00eancia de todos os co-propriet\u00e1rios (se aplic\u00e1vel)\"\n    ]\nelif tipo_de_projeto == \"heranca\":\n    docs_necessarios = [\n        \"Certid\u00e3o de \u00f3bito do(a) falecido(a)\",\n        \"RG e CPF de cada herdeiro\",\n        \"Comprovante de endere\u00e7o de cada herdeiro\",\n        \"Termo de Inventariante (se j\u00e1 houver processo)\",\n        \"Declara\u00e7\u00e3o de separa\u00e7\u00e3o de bens ou pacto antenupcial (se for o caso)\"\n    ]\nelif tipo_de_projeto == \"iptu\":\n    docs_necessarios = [\n        \"\u00daltimo carn\u00ea de IPTU\",\n        \"Planta baixa aprovada (se houve amplia\u00e7\u00e3o)\",\n        \"C\u00f3pia do IPTU anterior para confer\u00eancia\",\n        \"Comprovante de pagamento parcial (se houver d\u00e9bito)\"\n    ]\nelif tipo_de_projeto == \"itbi\":\n    docs_necessarios = [\n        \"Guia de ITBI emitida pela prefeitura\",\n        \"Comprovante de pagamento do ITBI\",\n        \"Certid\u00e3o de Matr\u00edcula atualizada\",\n        \"C\u00f3pia do RG e CPF do comprador e do vendedor\"\n    ]\nelse:\n    docs_necessarios = [\n        \"RG e CPF do(a) interessado(a)\",\n        \"Comprovante de endere\u00e7o atualizado\",\n        \"C\u00f3pia de matr\u00edcula ou escritura (mesmo que esteja irregular)\",\n        \"Demais documentos espec\u00edficos, a definir em reuni\u00e3o inicial\"\n    ]\n\ncronograma = [\n    \"Fase 1 (1 semana): Coleta de documentos e reuni\u00e3o inicial com cliente.\",\n    \"Fase 2 (2 semanas): Elabora\u00e7\u00e3o de peti\u00e7\u00f5es, minutas e requerimentos.\",\n    \"Fase 3 (3 semanas): Protocolo em cart\u00f3rio e/ou Prefeitura; acompanhamento de tr\u00e2mites.\",\n    \"Fase 4 (at\u00e9 1 semana extra): Entrega final da documenta\u00e7\u00e3o regularizada ao cliente.\"\n]\n\nhonorarios = (\n    \"Honor\u00e1rios vari\u00e1veis a combinar ap\u00f3s an\u00e1lise preliminar. \"\n    \"Estimativa inicial: R$ 1.500 a R$ 3.500, dependendo da complexidade. \"\n    \"Taxas de cart\u00f3rio e impostos sob responsabilidade do cliente.\"\n)\n\ntexto_markdown = f\"\"\"\n# Projeto de Regulariza\u00e7\u00e3o Imobili\u00e1ria\n\n**Cliente:** {nome}  \n**Telefone:** {telefone}  \n**Bairro/Endere\u00e7o:** {bairro}  \n**Data da Solicita\u00e7\u00e3o:** {data_solicitacao}  \n\n---\n\n## 1. Objetivo Geral\n{objetivo}\n\n---\n\n## 2. Documentos Necess\u00e1rios\n{chr(10).join([f\"- {d}\" for d in docs_necessarios])}\n\n---\n\n## 3. Etapas do Projeto\n{chr(10).join([f\"1. {etapa}\" for etapa in cronograma])}\n\n---\n\n## 4. Cronograma Estimado\n- {cronograma[0]}\n- {cronograma[1]}\n- {cronograma[2]}\n- {cronograma[3]}\n\n---\n\n## 5. Honor\u00e1rios e Condi\u00e7\u00f5es\n{honorarios}\n\n---\n\n## 6. Observa\u00e7\u00f5es Finais\n- Os prazos podem variar de acordo com a demanda dos \u00f3rg\u00e3os competentes.\n- Caso seja necess\u00e1ria documenta\u00e7\u00e3o adicional, o cliente ser\u00e1 informado imediatamente.\n- Ap\u00f3s aprova\u00e7\u00e3o do or\u00e7amento, ser\u00e1 emitido contrato de presta\u00e7\u00e3o de servi\u00e7os.\n\n---\n\n> Desenvolvido pelo escrit\u00f3rio de engenharia e regulariza\u00e7\u00e3o fundi\u00e1ria do Sr. [Nome do Seu Pai],  \n> refer\u00eancia em Sorocaba h\u00e1 mais de 15 anos.\n\"\"\"\n\nreturn [{\n    \"json\": {\n        \"nome\": nome,\n        \"telefone\": telefone,\n        \"descricao\": descricao,\n        \"bairro\": bairro,\n        \"classificacao\": tipo_de_projeto.title(),\n        \"data_solicitacao\": data_solicitacao,\n        \"projeto_markdown\": texto_markdown\n    }\n}]\n"
+      },
+      "id": "2",
+      "name": "Code (Python)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "sheetId": "INSIRA_AQUI_O_ID_DA_SUA_PLANILHA",
+        "range": "Leads!A1",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        }
+      },
+      "id": "3",
+      "name": "Google Sheets - Append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        750,
+        300
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "default",
+          "name": "Minha Conta Google"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code (Python)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code (Python)": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "tags": [],
+  "createdAt": "2025-06-03T01:02:42.036586",
+  "updatedAt": "2025-06-03T01:02:42.036596"
+}
