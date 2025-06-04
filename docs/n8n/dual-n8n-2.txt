@@ -1,0 +1,474 @@
+{
+  "name": "Fluxo Expandido: Dual-Trinity-Ciclo-Verdade-Uno-Movimento-Vida",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Start Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 200],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "fluxo-simbólico",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "2",
+      "name": "Definir Início",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 100],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Início",
+              "value": "Geração"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3",
+      "name": "Definir Meio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 200],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Meio",
+              "value": "Transformação"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "4",
+      "name": "Definir Fim",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Fim",
+              "value": "Conclusão"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5",
+      "name": "Montar Trinity",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [650, 200],
+      "parameters": {
+        "functionCode": "// Recebe os valores Início, Meio e Fim e monta o objeto trinity\nconst data = items[0].json;\nreturn [{ json: {\n  trinity: {\n    inicio: data['Início'],\n    meio: data['Meio'],\n    fim: data['Fim']\n  }\n}}];"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Definir Ciclo como Verdade",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 100],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Ciclo",
+              "value": "Verdade"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "7",
+      "name": "Definir Uno como Zero",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 200],
+      "parameters": {
+        "values": {
+          "number": [
+            {
+              "name": "Uno",
+              "value": 0
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "8",
+      "name": "Definir Um como Movimento",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 300],
+      "parameters": {
+        "values": {
+          "number": [
+            {
+              "name": "Um",
+              "value": 1
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9",
+      "name": "Definir Vida como Tudo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 400],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Vida",
+              "value": "Tudo"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "10",
+      "name": "Movimento Dual (IF)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1050, 200],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"action\"] || \"create\"}}",
+              "operation": "equal",
+              "value2": "create"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "11",
+      "name": "Movimento = \"Um\"",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1250, 150],
+      "parameters": {
+        "values": {
+          "number": [
+            {
+              "name": "MovimentoDual",
+              "value": 1
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "12",
+      "name": "Movimento = \"Zero\"",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1250, 250],
+      "parameters": {
+        "values": {
+          "number": [
+            {
+              "name": "MovimentoDual",
+              "value": 0
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "13",
+      "name": "Consolidar Símbolos",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1450, 250],
+      "parameters": {
+        "functionCode": "// Consolida todos os valores simbólicos num único payload\nconst data = items[0].json;\nconst payload = {\n  trinity: data.trinity,\n  ciclo: data.Ciclo,\n  uno: data.Uno,\n  um: data.Um,\n  vida: data.Vida,\n  movimentoDual: data.MovimentoDual,\n  timestamp: new Date().toISOString()\n};\nreturn [{ json: payload }];"
+      }
+    },
+    {
+      "id": "14",
+      "name": "Resposta HTTP",
+      "type": "n8n-nodes-base.httpResponse",
+      "typeVersion": 1,
+      "position": [1650, 250],
+      "parameters": {
+        "responseCode": 200,
+        "options": {}
+      }
+    },
+    {
+      "id": "15",
+      "name": "Loop Trigger (Vida)",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [200, 600],
+      "parameters": {
+        "interval": 60,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "16",
+      "name": "Mensagem Ciclo de Vida",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 600],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "lifeCycleMsg",
+              "value": "A vida é tudo: o Uno, o Um, o Ciclo que se renova."
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "17",
+      "name": "Consolidar Loop",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [650, 600],
+      "parameters": {
+        "functionCode": "// Monta o payload do loop de vida com simbologias fixas\nconst loopPayload = {\n  trinity: { inicio: \"Geração\", meio: \"Transformação\", fim: \"Conclusão\" },\n  ciclo: \"Verdade\",\n  uno: 0,\n  um: 1,\n  vida: \"Tudo\",\n  movimentoDual: \"Cycle\",\n  lifeCycleMsg: items[0].json.lifeCycleMsg,\n  timestamp: new Date().toISOString()\n};\nreturn [{ json: loopPayload }];"
+      }
+    },
+    {
+      "id": "18",
+      "name": "Log Payload de Vida",
+      "type": "n8n-nodes-base.consoleLog",
+      "typeVersion": 1,
+      "position": [850, 600],
+      "parameters": {
+        "message": "Payload do ciclo de vida:",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "1": {
+      "main": [
+        [
+          {
+            "node": "2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2": {
+      "main": [
+        [
+          {
+            "node": "3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3": {
+      "main": [
+        [
+          {
+            "node": "4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4": {
+      "main": [
+        [
+          {
+            "node": "5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5": {
+      "main": [
+        [
+          {
+            "node": "6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6": {
+      "main": [
+        [
+          {
+            "node": "7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7": {
+      "main": [
+        [
+          {
+            "node": "9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8": {
+      "main": [
+        [
+          {
+            "node": "9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9": {
+      "main": [
+        [
+          {
+            "node": "10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10": {
+      "main": [
+        [
+          {
+            "node": "11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11": {
+      "main": [
+        [
+          {
+            "node": "13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12": {
+      "main": [
+        [
+          {
+            "node": "13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13": {
+      "main": [
+        [
+          {
+            "node": "14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15": {
+      "main": [
+        [
+          {
+            "node": "16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "16": {
+      "main": [
+        [
+          {
+            "node": "17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "17": {
+      "main": [
+        [
+          {
+            "node": "18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  ],
+  "active": false,
+  "settings": {},
+  "staticData": {}
+}

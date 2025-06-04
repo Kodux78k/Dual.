@@ -1,0 +1,433 @@
+{
+  "name": "Expansão Ciclo Trinity → Dual → Uno → Vida (CÓDIGO COMPLETO)",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Start Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "ciclo-trinity",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "2",
+      "name": "Define Início",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 200],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Início",
+              "value": "Geração"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3",
+      "name": "Define Meio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Meio",
+              "value": "Transformação"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "4",
+      "name": "Define Fim",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 400],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Fim",
+              "value": "Conclusão"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5",
+      "name": "Assemble Trinity",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "parameters": {
+        "functionCode": "// Pega os valores Início, Meio e Fim definidos nos nós anteriores\ntemp = items[0].json;\nreturn [{ json: {\n  trinity: {\n    inicio: temp['Início'],\n    meio: temp['Meio'],\n    fim: temp['Fim']\n  }\n}}];"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Dual Movement",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 300],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"movementType\"] || \"create\"}}",
+              "operation": "equal",
+              "value2": "create"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7",
+      "name": "Movement: Create",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1050, 250],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "movement",
+              "value": "Create"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "8",
+      "name": "Movement: Destroy",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1050, 350],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "movement",
+              "value": "Destroy"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9",
+      "name": "Merge Uno",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1250, 300],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "truth",
+              "value": "Uno"
+            },
+            {
+              "name": "message",
+              "value": "A Verdade Uno integra toda a experiência."
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "10",
+      "name": "Prepare Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1450, 300],
+      "parameters": {
+        "functionCode": "// Constrói o payload final juntando trinity, movement e truth\nconst incoming = items[0].json;\nconst payload = {\n  trinity: incoming.trinity,\n  movement: incoming.movement || \"N/A\",\n  truth: incoming.truth,\n  timestamp: new Date().toISOString()\n};\nreturn [{ json: payload }];"
+      }
+    },
+    {
+      "id": "11",
+      "name": "Respond via HTTP",
+      "type": "n8n-nodes-base.httpResponse",
+      "typeVersion": 1,
+      "position": [1650, 300],
+      "parameters": {
+        "responseCode": 200,
+        "options": {}
+      }
+    },
+    {
+      "id": "12",
+      "name": "Loop Trigger (Vida)",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [250, 700],
+      "parameters": {
+        "interval": 60,
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "13",
+      "name": "Lifecycle Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 700],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "lifeCycle",
+              "value": "O ciclo da vida renasce a cada instante."
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "14",
+      "name": "Merge Uno (Loop)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [650, 700],
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Início",
+              "value": "Geração"
+            },
+            {
+              "name": "Meio",
+              "value": "Transformação"
+            },
+            {
+              "name": "Fim",
+              "value": "Conclusão"
+            },
+            {
+              "name": "movement",
+              "value": "Cycle"
+            },
+            {
+              "name": "truth",
+              "value": "Uno"
+            },
+            {
+              "name": "lifeCycle",
+              "value": "O ciclo da vida renasce a cada instante."
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "15",
+      "name": "Prepare Payload (Loop)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [850, 700],
+      "parameters": {
+        "functionCode": "// Monta o payload de loop\nconst data = items[0].json;\nconst payload = {\n  trinity: {\n    inicio: data['Início'],\n    meio: data['Meio'],\n    fim: data['Fim']\n  },\n  movement: data['movement'],\n  truth: data['truth'],\n  lifeCycle: data['lifeCycle'],\n  timestamp: new Date().toISOString()\n};\nreturn [{ json: payload }];"
+      }
+    },
+    {
+      "id": "16",
+      "name": "Log Loop Payload",
+      "type": "n8n-nodes-base.consoleLog",
+      "typeVersion": 1,
+      "position": [1050, 700],
+      "parameters": {
+        "message": "Payload gerado no ciclo de vida:",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "1": {
+      "main": [
+        [
+          {
+            "node": "2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2": {
+      "main": [
+        [
+          {
+            "node": "3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3": {
+      "main": [
+        [
+          {
+            "node": "4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4": {
+      "main": [
+        [
+          {
+            "node": "5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5": {
+      "main": [
+        [
+          {
+            "node": "6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6": {
+      "main": [
+        [
+          {
+            "node": "7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7": {
+      "main": [
+        [
+          {
+            "node": "9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8": {
+      "main": [
+        [
+          {
+            "node": "9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9": {
+      "main": [
+        [
+          {
+            "node": "10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10": {
+      "main": [
+        [
+          {
+            "node": "11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12": {
+      "main": [
+        [
+          {
+            "node": "13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13": {
+      "main": [
+        [
+          {
+            "node": "14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "14": {
+      "main": [
+        [
+          {
+            "node": "15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "15": {
+      "main": [
+        [
+          {
+            "node": "16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "staticData": {}
+}

@@ -1,0 +1,167 @@
+{
+  "name": "Ciclo Trinity Dual Uno Vida",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "chamado-coblux",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "StartTrigger",
+      "name": "Start Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Início",
+              "value": "Criação"
+            },
+            {
+              "name": "Meio",
+              "value": "Transformação"
+            },
+            {
+              "name": "Fim",
+              "value": "Conclusão"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "SetTrinityData",
+      "name": "Set Trinity Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": true,
+              "operation": "equal",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "DualMovement",
+      "name": "Dual Movement: Create vs Destroy",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Resultado Uno",
+              "value": "União Completa: a verdade se integra."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "MergeUno",
+      "name": "Merge and Unify (Uno)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "interval": 10,
+        "unit": "seconds"
+      },
+      "id": "CycleLoop",
+      "name": "Loop - Recursion (Vida)",
+      "type": "n8n-nodes-base.interval",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "Mensagem Final",
+              "value": "🌌 O ciclo foi completado. A vida continua."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "FinalOutput",
+      "name": "Final Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    }
+  ],
+  "connections": {
+    "Start Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Trinity Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Trinity Data": {
+      "main": [
+        [
+          {
+            "node": "Dual Movement: Create vs Destroy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dual Movement: Create vs Destroy": {
+      "main": [
+        [
+          {
+            "node": "Merge and Unify (Uno)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Merge and Unify (Uno)": {
+      "main": [
+        [
+          {
+            "node": "Loop - Recursion (Vida)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop - Recursion (Vida)": {
+      "main": [
+        [
+          {
+            "node": "Final Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
