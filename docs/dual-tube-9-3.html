@@ -1001,34 +1001,40 @@
       videoDescriptionContainer.style.display = 'block';
 
       try {
-        // Monta prompt para a IA recuperar a descrição do vídeo no YouTube
-        const youtubeUrl = `https://www.youtube.com/watch?v=${currentVideoId}`;
-        const promptText = `Por favor, forneça a descrição completa do vídeo do YouTube neste link: ${youtubeUrl}`;
+  // Monta prompt para a IA recuperar a descrição do vídeo no YouTube
+  const youtubeUrl = `https://www.youtube.com/watch?v=${currentVideoId}`;
+  const promptText = `Por favor, forneça a descrição completa do vídeo do YouTube neste link: ${youtubeUrl}`;
 
-        const payload = {
-          model: 'deepseek/deepseek-r1:free',
-          messages: [
-            { role: 'system', content: 'Você é um assistente Dual.Infodose que retorna descrições de vídeos do YouTube.' },
-            { role: 'user', content: promptText }
-          ]
-        };
+  const payload = {
+    model: 'deepseek/deepseek-r1:free',
+    messages: [
+      { role: 'system', content: 'Você é um assistente Dual.Infodose que retorna descrições de vídeos do YouTube.' },
+      { role: 'user', content: promptText }
+    ]
+  };
 
-        const res = await fetch(CONFIG.API_URL, {
-          method: 'POST',
-          headers: {
-            'Authorization': CONFIG.AUTH_TOKEN,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error(`Erro: ${res.status}`);
-        const data = await res.json();
-        const desc = data.choices?.[0]?.message?.content || data.message || '';
-        videoDescription.textContent = desc.trim();
-      } catch (err) {
-        console.error(err);
-        videoDescription.textContent = "Não foi possível carregar a descrição.";
-      }
+  // Chamada para OpenRouter
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': CONFIG.AUTH_TOKEN,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://seusite.com.br/',    // obrigatória: coloque a URL raiz do seu site
+      'X-Title': 'DualInfodose VídeoDescrição'        // opcional, mas recomendado para rastrear
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) throw new Error(`Erro ao chamar OpenRouter: ${res.status}`);
+
+  const data = await res.json();
+  const desc = data.choices?.[0]?.message?.content || data.message || '';
+  videoDescription.textContent = desc.trim();
+
+} catch (err) {
+  console.error(err);
+  videoDescription.textContent = "Não foi possível carregar a descrição.";
+}
     });
 
     // Botão “Falar Descrição”
