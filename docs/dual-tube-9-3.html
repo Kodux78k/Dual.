@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 
   <!-- Configurações do Chat (API_URL e AUTH_TOKEN) -->
-  <script src="config/config.js" defer></script>
+  <script src="config/configkey.js" defer></script>
 
   <style>
     /* ----------------------------------------
@@ -1006,9 +1006,9 @@
         const promptText = `Por favor, forneça a descrição completa do vídeo do YouTube neste link: ${youtubeUrl}`;
 
         const payload = {
-          model: 'gpt-4o-mini',
+          model: 'deepseek/deepseek-r1:free',
           messages: [
-            { role: 'system', content: 'Você é um assistente que retorna descrições de vídeos do YouTube.' },
+            { role: 'system', content: 'Você é um assistente Dual.Infodose que retorna descrições de vídeos do YouTube.' },
             { role: 'user', content: promptText }
           ]
         };
