@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>A.Infodose Home v2.1 – Ícones Originais</title>
+
+  <!-- Fonte Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Partículas.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+  <!-- Configurações do Chat (API_URL e AUTH_TOKEN) -->
+  <script src="config/config.js" defer></script>
+
+  <style>
+    /* -------------------------------
+       VARIÁVEIS GERAIS E DE TEMA
+    ------------------------------- */
+    :root {
+      --bg-dark: linear-gradient(to bottom, #000, #1a1a1a);
+      --text-dark: #d7d7d7;
+      --accent1: #D28B36;
+      --accent2: #1FC8DB;
+      --fast: 0.4s;
+      --med: 0.8s;
+      --slow: 1.8s;
+      --glass-bg: rgba(255,255,255,0.08);
+      --glass-blur: blur(10px);
+      --font-base: 16px;
+    }
+    body.light {
+      --bg-dark: linear-gradient(to bottom, #666, #e0e0e0);
+      --text-dark: #444;
+    }
+    body.medium {
+      --bg-dark: linear-gradient(to bottom, #555, #333);
+      --text-dark: #eee;
+    }
+    body.vibe {
+      --bg-dark: linear-gradient(135deg, #D28B36, #1FC8DB);
+      --text-dark: #fff;
+    }
+    /* Modo alto contraste */
+    body.high-contrast {
+      filter: contrast(1.5) brightness(1.1);
+    }
+    html {
+      font-size: var(--font-base);
+    }
+
+    /* -------------------------------
+       RESET E ESTILIZAÇÕES GERAIS
+    ------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      font-family: 'Montserrat', sans-serif;
+      transition: background var(--slow), color var(--slow), filter var(--slow), font-size var(--slow);
+      animation: fadeIn var(--slow) ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(0); }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-100%); }
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.012); }
+    }
+
+    /* -------------------------------
+       PARTICLES.JS AO FUNDO
+    ------------------------------- */
+    #particles-js {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* -------------------------------
+       BOTÕES TEMA, MENU E SETTINGS
+    ------------------------------- */
+    #themeToggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0.8;
+      z-index: 10;
+      transition: opacity var(--med);
+    }
+    #themeToggle:hover {
+      opacity: 1;
+    }
+    #themeToggle object {
+      width: 100%;
+      height: 100%;
+    }
+
+    #menuToggle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0.8;
+      z-index: 10;
+      transition: opacity var(--fast);
+    }
+    #menuToggle:hover {
+      opacity: 1;
+    }
+    #menuToggle object {
+      width: 100%;
+      height: 100%;
+    }
+
+    #settingsToggle {
+      position: absolute;
+      top: 20px;
+      right: 60px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0.8;
+      z-index: 10;
+      transition: opacity var(--fast);
+    }
+    #settingsToggle:hover {
+      opacity: 1;
+    }
+    #settingsToggle object {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* -------------------------------
+       CABEÇALHO (saudação + busca)
+    ------------------------------- */
+    header {
+      position: relative;
+      width: 100%;
+      padding: 20px 100px 20px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 5;
+    }
+    #greeting {
+      font-size: 1.2em;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+    #videoSearch {
+      flex: 1;
+      max-width: 450px;
+      margin-left: 20px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+      font-size: 1rem;
+      transition: background var(--fast);
+    }
+    #videoSearch:focus {
+      background: rgba(255,255,255,0.2);
+      outline: none;
+    }
+
+    /* -------------------------------
+       MODAL DE SETTINGS (contrast + font-size)
+    ------------------------------- */
+    .settings-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      backdrop-filter: var(--glass-blur);
+      padding: 20px;
+      z-index: 25;
+    }
+    .settings-modal.active {
+      display: block;
+    }
+    .settings-modal h3 {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+      text-align: center;
+    }
+    .settings-modal label {
+      display: block;
+      margin: 12px 0 6px;
+      color: var(--text-dark);
+      font-size: 0.95em;
+    }
+    .settings-modal input[type="range"] {
+      width: 100%;
+      margin-top: 4px;
+    }
+    .settings-modal .close-settings {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2em;
+      color: var(--text-dark);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity var(--fast);
+    }
+    .settings-modal .close-settings:hover {
+      opacity: 1;
+    }
+
+    /* -------------------------------
+       LAYOUT PRINCIPAL: SIDEBAR + CONTEÚDO
+    ------------------------------- */
+    .container {
+      position: relative;
+      flex: 1;
+      display: flex;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    /* -------------------------------
+       SIDEBAR DE PLAYLISTS (glassmorfismo)
+    ------------------------------- */
+    #sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border-right: 1px solid rgba(255,255,255,0.15);
+      transform: translateX(-100%);
+      transition: transform var(--med) ease;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #sidebar.open {
+      transform: translateX(0);
+      animation: slideIn var(--med) ease forwards;
+    }
+    #sidebar h2 {
+      font-size: 1.3em;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--text-dark);
+      padding-bottom: 6px;
+      color: var(--text-dark);
+    }
+    #playlistList {
+      list-style: none;
+      overflow-y: auto;
+      flex: 1;
+    }
+    #playlistList li {
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 6px;
+      transition: background var(--fast);
+      font-size: 1em;
+      background: rgba(255,255,255,0.02);
+      color: var(--text-dark);
+    }
+    #playlistList li:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    #playlistList li.active {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* -------------------------------
+       CONTEÚDO PRINCIPAL
+    ------------------------------- */
+    #mainContent {
+      flex: 1;
+      margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      overflow: auto;
+      padding-bottom: 40px;
+    }
+    /* Seção de banner (dinâmico por playlist) */
+    #bannerSection {
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      border-radius: 8px;
+      padding: 40px 30px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #bannerSection h1 {
+      font-size: 2em;
+      margin-bottom: 8px;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    }
+    #bannerSection p {
+      font-size: 1rem;
+      opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+
+    /* Bloco “DualRecomenda” */
+    .block {
+      margin-bottom: 30px;
+    }
+    .block h2 {
+      font-size: 1.5em;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+    .block h3 {
+      font-size: 1.2em;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+      opacity: 0.8;
+    }
+
+    /* Carrossel refinado (até 3 itens visíveis) */
+    .carousel-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .carousel {
+      display: flex;
+      overflow: hidden;
+      gap: 12px;
+      flex: 1;
+    }
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .thumb-large {
+      min-width: 320px;
+      height: 180px;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform var(--fast), box-shadow var(--fast);
+      flex-shrink: 0;
+    }
+    .thumb-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb-large:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 12px rgba(0,255,255,0.3);
+    }
+    .carousel-arrow {
+      width: 40px;
+      height: 40px;
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: #fff;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: background var(--fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      z-index: 5;
+    }
+    .carousel-arrow:hover {
+      background: rgba(0,0,0,0.6);
+    }
+    #arrowLeft {
+      left: -20px;
+    }
+    #arrowRight {
+      right: -20px;
+    }
+    .carousel-indicator {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 0.9em;
+      padding: 4px 8px;
+      border-radius: 12px;
+    }
+
+    /* Seção principal de vídeos (iframe) */
+    #mainPlayer {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 */
+      position: relative;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    #mainPlayer iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Miniaturas pequenas (grid) */
+    #thumbnailsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .thumbnail {
+      position: relative;
+      width: 120px;
+      height: 68px; /* 16:9 */
+      background: #111;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--fast), box-shadow var(--fast);
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumbnail:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(0,255,255,0.3);
+    }
+
+    /* -------------------------------
+       MODAL DE LOGIN (glassmorfismo)
+    ------------------------------- */
+    .login-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      padding: 1.5rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      backdrop-filter: var(--glass-blur);
+      z-index: 20;
+    }
+    .login-container.active {
+      display: block;
+    }
+    .login-container h3 {
+      margin-bottom: 12px;
+      font-size: 1.1em;
+      text-align: center;
+      color: var(--text-dark);
+    }
+    .login-container input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      margin: 0.8rem 0;
+      padding: 0.4rem 0;
+      font-size: 1rem;
+      color: #fff;
+    }
+    .login-container input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .login-container button {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.5rem 0;
+      border: 1px solid var(--accent2);
+      border-radius: 8px;
+      background: transparent;
+      font-size: 1rem;
+      color: var(--accent2);
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+    }
+    .login-container button:hover {
+      background: var(--accent2);
+      color: #000;
+    }
+
+    /* -------------------------------
+       RODAPÉ DE INSTRUÇÃO
+    ------------------------------- */
+    .footer-text {
+      display: block;
+      margin: 12px auto;
+      padding: 6px 12px;
+      background: var(--bg-dark);
+      opacity: 0.5;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      text-align: center;
+      font-style: italic;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity var(--slow), transform var(--slow);
+      animation: moveGradient 8s linear infinite;
+    }
+    @keyframes moveGradient {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .footer-text:hover {
+      opacity: 0.6;
+    }
+    .footer-text.active {
+      opacity: 0.8;
+      animation: expandFooter var(--med) ease-out;
+    }
+    @keyframes expandFooter {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(0.96); }
+    }
+
+    /* -------------------------------
+       CHAT “dual.Infodose” (glassmorfismo)
+    ------------------------------- */
+    .chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      max-height: 550px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 20px 80px 20px;
+      z-index: 15;
+    }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .chat-header h3 {
+      font-size: 1em;
+      color: var(--text-dark);
+    }
+    .chat-header button {
+      background: none;
+      border: none;
+      color: var(--text-dark);
+      font-size: 1.1em;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity var(--fast);
+    }
+    .chat-header button:hover {
+      opacity: 1;
+    }
+    .assistant-buttons {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .assistant-buttons button {
+      flex: 1;
+      padding: 6px 8px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background var(--fast), transform var(--fast);
+    }
+    .assistant-buttons button.selected {
+      background: var(--accent2);
+      transform: scale(1.03);
+    }
+    .assistant-buttons button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Camada de histórico (tooltip) */
+    .chat-history {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      width: calc(100% - 40px);
+      max-height: 200px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      font-size: 0.9em;
+      border-radius: 6px;
+      padding: 8px;
+      display: none;
+      z-index: 20;
+    }
+    .chat-history.active {
+      display: block;
+    }
+    .chat-history p {
+      margin: 6px 0;
+    }
+
+    /* Balão de legenda (captions) */
+    .chat-captions {
+      position: absolute;
+      bottom: 60px;
+      left: 20px;
+      width: calc(100% - 40px);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 0.95em;
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
+      z-index: 20;
+      text-align: center;
+    }
+    .chat-captions.active {
+      display: block;
+    }
+
+    .input-container {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    /* Copiado de  [oai_citation:0‡dual-chat-0-95-0.html](file-service://file-AGw7q4sjW5EvKqRfxyaJvQ) */
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,1);
+      color: inherit;
+      font-size: 1rem;
+      transition: background var(--fast);
+      opacity: 0.7;
+    }
+    .input-container input:focus {
+      background: rgba(255,255,255,2);
+    }
+    /* Botão Enviar – usa SVG “Send_buttom_Dual-Infodose.svg” */
+    .input-container #sendBtn {
+      width: 60px;
+      height: 60px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: transform var(--med), opacity var(--fast);
+      animation: pulse 2s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .input-container #sendBtn:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    .input-container #sendBtn object {
+      width: 36px;
+      height: 36px;
+    }
+    /* Botão de voz – “Reset_buttom_Dual-Infodose.svg” */
+    #voiceBtn {
+      width: 60px;
+      height: 60px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--fast), opacity var(--slow);
+      opacity: 0.7;
+    }
+    #voiceBtn:hover {
+      background: rgba(255,255,255,0.15);
+      opacity: 1;
+    }
+    #voiceBtn object {
+      width: 36px;
+      height: 36px;
+    }
+
+    /* -------------------------------
+       RESPONSIVIDADE
+    ------------------------------- */
+    @media (max-width: 900px) {
+      #mainContent {
+        margin-left: 0;
+      }
+      .carousel, #thumbnailsContainer {
+        justify-content: center;
+      }
+      #sidebar {
+        width: 100%;
+      }
+      .chat-container {
+        width: 90%;
+        right: 5%;
+        bottom: 10px;
+      }
+      #voiceBtn {
+        display: none;
+      }
+    }
+    @media (max-width: 600px) {
+      #videoSearch {
+        display: none;
+      }
+      header {
+        padding: 20px 40px 20px 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Partículas ao fundo -->
+  <div id="particles-js"></div>
+
+  <!-- Botões fixos -->
+  <button id="menuToggle" aria-label="Abrir/fechar menu de playlists">
+    <object data="assets/icons/Bars_buttom_Dual-Infodose.svg" type="image/svg+xml"></object>
+  </button>
+  <button id="settingsToggle" aria-label="Abrir configurações">
+    <object data="assets/icons/Bars_buttom_Dual-Infodose.svg" type="image/svg+xml"></object>
+  </button>
+  <button id="themeToggle" aria-label="Alternar tema">
+    <object data="assets/icons/Toggle_off_outline_Dual-Infodose.svg" type="image/svg+xml"></object>
+  </button>
+
+  <!-- Modal de configurações (contrast + font-size) -->
+  <div class="settings-modal" id="settingsModal">
+    <button class="close-settings" aria-label="Fechar configurações">✖</button>
+    <h3>Configurações</h3>
+    <label for="contrastSwitch">Alto Contraste</label>
+    <input type="checkbox" id="contrastSwitch" />
+    <label for="fontSizeRange">Tamanho da Fonte</label>
+    <input type="range" id="fontSizeRange" min="14" max="22" step="1" value="16" />
+  </div>
+
+  <!-- Cabeçalho com saudação e busca -->
+  <header>
+    <div id="greeting">Olá, convidado</div>
+    <input type="text" id="videoSearch" placeholder="🔍 Buscar por título ou tag..." aria-label="Buscar vídeos" />
+  </header>
+
+  <!-- Container principal: sidebar + conteúdo -->
+  <div class="container">
+    <!-- Sidebar de Playlists -->
+    <nav id="sidebar" aria-label="Menu de playlists">
+      <h2>DualRecomenda para <span id="userNameDisplay">convidado</span></h2>
+      <ul id="playlistList">
+        <li data-playlist="Se chegou até aqui merece saber">Se chegou até aqui merece saber</li>
+        <li data-playlist="Do seu jeito, sempre único, sempre seu">Do seu jeito, sempre único, sempre seu</li>
+        <li data-playlist="Ativações guiadas">Ativações guiadas</li>
+      </ul>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div id="mainContent">
+      <!-- Seção de banner (dinâmico por playlist) -->
+      <section id="bannerSection">
+        <div>
+          <h1 id="bannerTitle">Bem-vindo à A.Infodose</h1>
+          <p id="bannerSubtitle">Explore seus conteúdos favoritos.</p>
+        </div>
+      </section>
+
+      <!-- Bloco “DualRecomenda” -->
+      <div class="block" id="block-recomenda">
+        <h2>DualRecomenda</h2>
+        <h3 id="recomendaSubtitle">Vídeos em destaque</h3>
+        <div class="carousel-container">
+          <button class="carousel-arrow" id="arrowLeft" aria-label="Vídeo anterior">←</button>
+          <div class="carousel" id="carouselRecomenda" role="region" aria-roledescription="carrossel" aria-label="Vídeos recomendados"></div>
+          <button class="carousel-arrow" id="arrowRight" aria-label="Próximo vídeo">→</button>
+          <div class="carousel-indicator" id="carouselIndicator">0 de 0</div>
+        </div>
+      </div>
+
+      <!-- Seção principal de vídeos (iframe) -->
+      <div id="mainPlayer">
+        <!-- Iframe será inserido via JS -->
+      </div>
+
+      <!-- Bloco de miniaturas pequenas -->
+      <div id="thumbnailsContainer"></div>
+    </div>
+  </div>
+
+  <!-- Modal de login (glass) -->
+  <div class="login-container" id="loginBox">
+    <h3>Entre com seu nome</h3>
+    <form id="loginForm">
+      <input type="text" id="videoUserName" placeholder="Seu nome" required />
+      <button type="submit">Ativar</button>
+    </form>
+  </div>
+
+  <!-- Rodapé de instrução (glass) -->
+  <p class="footer-text"><em>Do seu jeito. <strong>Sempre</strong> único. <strong>Sempre</strong> seu.</em></p>
+
+  <!-- CHAT dual.Infodose (só áudio) -->
+  <div class="chat-container" id="chatContainer">
+    <!-- Cabeçalho do chat -->
+    <div class="chat-header">
+      <h3>dual.Infodose Chat</h3>
+      <button id="closeChat" aria-label="Fechar chat">✖</button>
+    </div>
+    <!-- Botões de seleção de Assistente -->
+    <div class="assistant-buttons" id="assistantButtons">
+      <button data-assistant="Dual.infodose" class="selected">Dual</button>
+      <button data-assistant="Codex.dual">Codex</button>
+      <button data-assistant="Horus.dual">Horus</button>
+    </div>
+    <!-- Histórico do chat (tooltip) -->
+    <div class="chat-history" id="chatHistory"></div>
+    <!-- Legendas em tempo real -->
+    <div class="chat-captions" id="chatCaptions"></div>
+    <!-- Input de mensagem e botões -->
+    <div class="input-container">
+      <input id="userInput" type="text" placeholder="Diga: 'oi, Dual'..." aria-label="Digite sua mensagem" />
+      <button id="sendBtn" aria-label="Enviar">
+        <object data="assets/icons/Send_buttom_Dual-Infodose.svg" type="image/svg+xml"></object>
+      </button>
+      <button id="voiceBtn" aria-label="Falar">
+        <object data="assets/icons/Reset_buttom_Dual-Infodose.svg" type="image/svg+xml"></object>
+      </button>
+    </div>
+    <!-- Rodapé do chat -->
+    <p class="footer-text"><em>Do seu jeito. <strong>Sempre</strong> único. <strong>Sempre</strong> seu.</em></p>
+  </div>
+
+  <script>
+  (function() {
+    /***************************************
+     * ELEMENTOS PRINCIPAIS
+     ***************************************/
+    const themeToggle         = document.getElementById('themeToggle');
+    const menuToggle          = document.getElementById('menuToggle');
+    const settingsToggle      = document.getElementById('settingsToggle');
+    const settingsModal       = document.getElementById('settingsModal');
+    const closeSettingsBtn    = settingsModal.querySelector('.close-settings');
+    const contrastSwitch      = document.getElementById('contrastSwitch');
+    const fontSizeRange       = document.getElementById('fontSizeRange');
+
+    const greetingEl          = document.getElementById('greeting');
+    const userNameDisplay     = document.getElementById('userNameDisplay');
+    const videoSearchInput    = document.getElementById('videoSearch');
+
+    const loginBox            = document.getElementById('loginBox');
+    const loginForm           = document.getElementById('loginForm');
+    const videoUserNameInput  = document.getElementById('videoUserName');
+
+    const sidebar             = document.getElementById('sidebar');
+    const playlistList        = document.getElementById('playlistList');
+
+    const bannerSection       = document.getElementById('bannerSection');
+    const bannerTitle         = document.getElementById('bannerTitle');
+    const bannerSubtitle      = document.getElementById('bannerSubtitle');
+
+    const carouselRecomenda   = document.getElementById('carouselRecomenda');
+    const arrowLeft           = document.getElementById('arrowLeft');
+    const arrowRight          = document.getElementById('arrowRight');
+    const carouselIndicator   = document.getElementById('carouselIndicator');
+
+    const mainPlayerDiv       = document.getElementById('mainPlayer');
+    const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+
+    // Chat
+    const chatContainer       = document.getElementById('chatContainer');
+    const closeChatBtn        = document.getElementById('closeChat');
+    const assistantButtons    = document.getElementById('assistantButtons');
+    const userInput           = document.getElementById('userInput');
+    const sendBtn             = document.getElementById('sendBtn');
+    const voiceBtn            = document.getElementById('voiceBtn');
+    const chatHistoryDiv      = document.getElementById('chatHistory');
+    const chatCaptionsDiv     = document.getElementById('chatCaptions');
+
+    /***************************************
+     * ESTADO GLOBAL
+     ***************************************/
+    let currentTheme      = localStorage.getItem('koduxTheme') || 'dark';
+    let highContrast      = localStorage.getItem('highContrast') === 'true';
+    let currentFontSize   = parseInt(localStorage.getItem('fontSize')) || 16;
+    let videoUser         = localStorage.getItem('videoUser') || '';
+    let currentPlaylist   = '';
+    let currentVideos     = [];
+    let featuredVideos    = [];
+    let carouselIndex     = 0;
+    let conversation      = [];
+    let isSending         = false;
+    let assistantBase     = localStorage.getItem('assistantBase') || 'Dual.infodose';
+
+    /***************************************
+     * METADATA DOS VÍDEOS (título + tags)
+     ***************************************/
+    const videoMetadata = {
+      "qldgs0aLdB0": { title: "Sinopse – A Fórmula da Dopamina Sexy", tags: ["dopamina","fórmula","sinopse","energia"] },
+      "Bt_rLbMjJDk": { title: "Trilhas Potencializadoras dos Aromas", tags: ["aromas","trilhas","meditação"] },
+      "Id2NI9tv1r4": { title: "Infodose – Pra quem merece saber", tags: ["merecer","saber","recompensa"] },
+      "FbutKMpd8MY": { title: "Sinopse – O Espaço da Mente", tags: ["mente","sinopse","fundamentos"] },
+      "1L9_rFmIGJ8": { title: "Sinopse – A Recompensa", tags: ["recompensa","dopamina","motivação"] },
+      "qldgs0aLdB0B": { title: "Sinopse Extra – Fórmula da Dopamina", tags: ["dopamina","fórmula","único"] },
+      "hfQ1L6fCfAo": { title: "Meditação – A Deriva no Espaço da Mente", tags: ["meditação","despertar","mente"] },
+      "Tq99vQNQ6dQ": { title: "Meditação – A Deriva na Mente do Espaço", tags: ["meditação","expansão","criatividade"] },
+      "DTDfkHwuMic": { title: "Meditação – Navegando pelo Universo da Mente", tags: ["meditação","universo","navegar"] },
+      "OVfqxW_Xlhw": { title: "Meditação – Sinfonia da Expansão Criativa", tags: ["meditação","sinfonia","criativo"] },
+      "kCHvLOtJIwQ": { title: "Meditação – Uma Jornada de Transformação", tags: ["meditação","jornada","transformação"] }
+    };
+
+    /***************************************
+     * PLAYLISTS (com lista completa e destaques)
+     ***************************************/
+    const playlists = {
+      "Se chegou até aqui merece saber": {
+        bannerImage: "https://via.placeholder.com/1200x300/1a1a1a/ffffff?text=Se+Chegou+Até+Aqui+Merece+Saber",
+        subtitle: "Conteúdos essenciais sobre dopamina e recompensas",
+        videos: ["qldgs0aLdB0","Bt_rLbMjJDk","Id2NI9tv1r4"],
+        featured: ["qldgs0aLdB0","Bt_rLbMjJDk","Id2NI9tv1r4"]
+      },
+      "Do seu jeito, sempre único, sempre seu": {
+        bannerImage: "https://via.placeholder.com/1200x300/333333/ffffff?text=Do+Seu+Jeito%2C+Sempre+Único",
+        subtitle: "Sinopses e fundamentos para sua jornada",
+        videos: ["FbutKMpd8MY","1L9_rFmIGJ8","qldgs0aLdB0B"],
+        featured: ["FbutKMpd8MY","1L9_rFmIGJ8","qldgs0aLdB0B"]
+      },
+      "Ativações guiadas": {
+        bannerImage: "https://via.placeholder.com/1200x300/000000/ffffff?text=Ativações+Guiadas",
+        subtitle: "Meditações para ativar sua mente",
+        videos: ["hfQ1L6fCfAo","Tq99vQNQ6dQ","DTDfkHwuMic","OVfqxW_Xlhw","kCHvLOtJIwQ"],
+        featured: ["hfQ1L6fCfAo","Tq99vQNQ6dQ","DTDfkHwuMic"]
+      }
+    };
+
+    /***************************************
+     * FUNÇÕES DE TEMA E SETTINGS
+     ***************************************/
+    function applyTheme(theme) {
+      document.body.classList.remove('light','medium','vibe');
+      if (theme !== 'dark') document.body.classList.add(theme);
+    }
+    function toggleTheme() {
+      const order = ['dark','light','medium','vibe'];
+      let idx = order.indexOf(currentTheme);
+      idx = (idx + 1) % order.length;
+      currentTheme = order[idx];
+      applyTheme(currentTheme);
+      localStorage.setItem('koduxTheme', currentTheme);
+    }
+    function openSettings() {
+      settingsModal.classList.add('active');
+      contrastSwitch.checked = highContrast;
+      fontSizeRange.value = currentFontSize;
+    }
+    function closeSettings() {
+      settingsModal.classList.remove('active');
+    }
+    function toggleContrast(e) {
+      highContrast = e.target.checked;
+      if (highContrast) {
+        document.body.classList.add('high-contrast');
+      } else {
+        document.body.classList.remove('high-contrast');
+      }
+      localStorage.setItem('highContrast', highContrast.toString());
+    }
+    function adjustFontSize(e) {
+      currentFontSize = parseInt(e.target.value);
+      document.documentElement.style.setProperty('--font-base', currentFontSize + 'px');
+      localStorage.setItem('fontSize', currentFontSize.toString());
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+    document.body.addEventListener('click', e => {
+      if (!e.target.closest('#sidebar') && !e.target.closest('#menuToggle')) {
+        sidebar.classList.remove('open');
+      }
+    });
+    settingsToggle.addEventListener('click', openSettings);
+    closeSettingsBtn.addEventListener('click', closeSettings);
+    contrastSwitch.addEventListener('change', toggleContrast);
+    fontSizeRange.addEventListener('input', adjustFontSize);
+
+    /***************************************
+     * INICIAR PARTICLES.JS
+     ***************************************/
+    document.addEventListener('DOMContentLoaded', () => {
+      const ACC1 = getComputedStyle(document.documentElement).getPropertyValue('--accent1').trim();
+      const ACC2 = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim();
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 40 },
+          color: { value: [ACC1, ACC2] },
+          shape: { type: 'circle' },
+          opacity: { value: 0.4 },
+          size: { value: 2.4 },
+          move: { enable: true, speed: 1.5 }
+        },
+        retina_detect: true
+      });
+    });
+
+    /***************************************
+     * LOGIN / USUÁRIO
+     ***************************************/
+    function showLogin() {
+      loginBox.classList.add('active');
+    }
+    function hideLogin() {
+      loginBox.classList.remove('active');
+    }
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = videoUserNameInput.value.trim();
+      if (!/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
+        alert('Por favor, use apenas letras e espaços.');
+        return;
+      }
+      videoUser = name;
+      localStorage.setItem('videoUser', videoUser);
+      updateGreeting();
+      hideLogin();
+      initApp();
+    });
+
+    /***************************************
+     * SAUDAÇÃO E ATUALIZAÇÃO DE NOME
+     ***************************************/
+    function updateGreeting() {
+      greetingEl.textContent = videoUser ? `Olá, ${videoUser}` : 'Olá, convidado';
+      userNameDisplay.textContent = videoUser || 'convidado';
+    }
+
+    /***************************************
+     * SIDEBAR / SELEÇÃO DE PLAYLIST
+     ***************************************/
+    playlistList.addEventListener('click', e => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      selectPlaylist(li.dataset.playlist);
+    });
+
+    function selectPlaylist(name) {
+      currentPlaylist = name;
+      const data = playlists[name];
+      currentVideos = [...data.videos];
+      featuredVideos = [...data.featured];
+      carouselIndex = 0;
+
+      bannerSection.style.backgroundImage = `url('${data.bannerImage}')`;
+      bannerTitle.textContent = name;
+      bannerSubtitle.textContent = data.subtitle;
+
+      Array.from(playlistList.children).forEach(li => {
+        li.classList.toggle('active', li.dataset.playlist === name);
+      });
+
+      renderCarousel();
+      renderThumbnails(currentVideos);
+      sidebar.classList.remove('open');
+    }
+
+    /***************************************
+     * CARROSSEL REFINADO (até 3 itens visíveis)
+     ***************************************/
+    function renderCarousel() {
+      carouselRecomenda.innerHTML = '';
+      featuredVideos.forEach((id, idx) => {
+        const thumbDiv = document.createElement('div');
+        thumbDiv.className = 'thumb-large';
+        thumbDiv.dataset.id = id;
+        const img = document.createElement('img');
+        img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+        img.alt = videoMetadata[id]?.title || 'Vídeo YouTube';
+        thumbDiv.appendChild(img);
+        thumbDiv.addEventListener('click', () => loadVideoInPlayer(id));
+        carouselRecomenda.appendChild(thumbDiv);
+      });
+      updateCarouselPosition();
+    }
+
+    function updateCarouselPosition() {
+      const width = carouselRecomenda.children[0]?.offsetWidth + 12 || 0;
+      carouselRecomenda.scrollTo({ left: carouselIndex * width, behavior: 'smooth' });
+      carouselIndicator.textContent = `${carouselIndex+1} de ${featuredVideos.length}`;
+    }
+
+    arrowLeft.addEventListener('click', () => {
+      if (carouselIndex > 0) {
+        carouselIndex--;
+        updateCarouselPosition();
+      }
+    });
+    arrowRight.addEventListener('click', () => {
+      if (carouselIndex < featuredVideos.length - 1) {
+        carouselIndex++;
+        updateCarouselPosition();
+      }
+    });
+
+    /***************************************
+     * RENDER THUMBNAILS (grid pequeno)
+     ***************************************/
+    function renderThumbnails(list) {
+      thumbnailsContainer.innerHTML = '';
+      list.forEach(id => {
+        const thumbDiv = document.createElement('div');
+        thumbDiv.className = 'thumbnail';
+        thumbDiv.dataset.id = id;
+        const img = document.createElement('img');
+        img.src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+        img.alt = videoMetadata[id]?.title || 'Vídeo YouTube';
+        thumbDiv.appendChild(img);
+        thumbDiv.addEventListener('click', () => loadVideoInPlayer(id));
+        thumbnailsContainer.appendChild(thumbDiv);
+      });
+    }
+
+    /***************************************
+     * CARREGAR VÍDEO NO PLAYER
+     ***************************************/
+    function loadVideoInPlayer(id) {
+      mainPlayerDiv.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      mainPlayerDiv.appendChild(iframe);
+    }
+
+    /***************************************
+     * FILTRO DE BUSCA (por título e tags)
+     ***************************************/
+    videoSearchInput.addEventListener('input', () => {
+      const term = videoSearchInput.value.toLowerCase();
+      currentVideos = playlists[currentPlaylist].videos.filter(id => {
+        const meta = videoMetadata[id];
+        if (!meta) return false;
+        const inTitle = meta.title.toLowerCase().includes(term);
+        const inTags = meta.tags.some(tag => tag.toLowerCase().includes(term));
+        return inTitle || inTags;
+      });
+      featuredVideos = playlists[currentPlaylist].featured.filter(id => currentVideos.includes(id));
+      carouselIndex = 0;
+      renderCarousel();
+      renderThumbnails(currentVideos);
+    });
+
+    /***************************************
+     * INICIALIZAÇÃO DO APP
+     ***************************************/
+    function initApp() {
+      applyTheme(currentTheme);
+      if (highContrast) document.body.classList.add('high-contrast');
+      document.documentElement.style.setProperty('--font-base', currentFontSize + 'px');
+      updateGreeting();
+      if (!currentPlaylist) {
+        selectPlaylist("Se chegou até aqui merece saber");
+      } else {
+        selectPlaylist(currentPlaylist);
+      }
+      initChat();
+    }
+    if (!videoUser) {
+      showLogin();
+    } else {
+      initApp();
+    }
+
+    /***************************************
+     * CHAT dual.Infodose (ÁUDIO + LEGENDAS + HISTÓRICO)
+     ***************************************/
+    function initChat() {
+      conversation = [{
+        role: 'system',
+        content: `Você é o assistente ${assistantBase}. Converse de forma cinematográfica e use linguagem vibracional.`
+      }];
+      Array.from(assistantButtons.children).forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.assistant === assistantBase);
+      });
+      updateChatHistoryDisplay();
+    }
+    chatContainer.style.display = 'flex';
+    closeChatBtn.addEventListener('click', () => {
+      chatContainer.style.display = 'none';
+    });
+    assistantButtons.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      assistantBase = btn.dataset.assistant;
+      localStorage.setItem('assistantBase', assistantBase);
+      Array.from(assistantButtons.children).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      initChat();
+    });
+
+    // Histórico de chat
+    chatHistoryDiv.addEventListener('mouseenter', () => chatHistoryDiv.classList.add('active'));
+    chatHistoryDiv.addEventListener('mouseleave', () => chatHistoryDiv.classList.remove('active'));
+    function updateChatHistoryDisplay() {
+      chatHistoryDiv.innerHTML = '';
+      const ultimos = conversation.slice(-6);
+      ultimos.forEach(m => {
+        const p = document.createElement('p');
+        p.textContent = (m.role === 'user' ? 'Você: ' : (m.role === 'assistant' ? 'IA: ' : '')) + m.content;
+        chatHistoryDiv.appendChild(p);
+      });
+    }
+
+    // Legendas em tempo real
+    function showCaption(text) {
+      chatCaptionsDiv.textContent = text;
+      chatCaptionsDiv.classList.add('active');
+      setTimeout(() => {
+        chatCaptionsDiv.classList.remove('active');
+      }, Math.max(2000, text.length * 50));
+    }
+
+    sendBtn.addEventListener('click', onSend);
+    userInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') onSend();
+    });
+    voiceBtn.addEventListener('click', () => {
+      const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      rec.lang = 'pt-BR';
+      rec.start();
+      rec.onresult = evt => {
+        userInput.value = evt.results[0][0].transcript;
+        onSend();
+      };
+    });
+
+    async function onSend() {
+      if (isSending) return;
+      const raw = userInput.value.trim();
+      if (!raw) return;
+      userInput.value = '';
+      isSending = true;
+
+      conversation.push({ role: 'user', content: raw });
+      updateChatHistoryDisplay();
+
+      const payload = {
+        model: 'gpt-4o-mini',
+        messages: conversation.map(m => ({ role: m.role, content: m.content }))
+      };
+
+      try {
+        showCaption('Pensando...');
+        const res = await fetch(CONFIG.API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': CONFIG.AUTH_TOKEN,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`Erro na requisição: ${res.status}`);
+        const data = await res.json();
+        const aiContent = data.choices?.[0]?.message?.content || data.message || '';
+        if (aiContent) {
+          conversation.push({ role: 'assistant', content: aiContent });
+          updateChatHistoryDisplay();
+          showCaption(aiContent);
+          const utter = new SpeechSynthesisUtterance(aiContent);
+          speechSynthesis.speak(utter);
+        }
+      } catch (err) {
+        console.error(err);
+        const errMsg = 'Ocorreu um erro ao se comunicar com a IA.';
+        showCaption(errMsg);
+        const utterErr = new SpeechSynthesisUtterance(errMsg);
+        speechSynthesis.speak(utterErr);
+      } finally {
+        isSending = false;
+      }
+    }
+  })();
+  </script>
+</body>
+</html>

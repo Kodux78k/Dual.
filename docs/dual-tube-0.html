@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vídeos – Kodux Player</title>
+
+  <!-- Fonte Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Partículas.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+  <style>
+    :root {
+      --bg: linear-gradient(to bottom, #000, #1a1a1a);
+      --text: #d7d7d7;
+      --accent1: #D28B36;
+      --accent2: #1FC8DB;
+      --fast: 0.4s;
+      --med: 0.8s;
+      --slow: 1.8s;
+    }
+    body.light  { --bg: linear-gradient(to bottom, #666, #e0e0e0); --text: #444; }
+    body.medium { --bg: linear-gradient(to bottom, #555, #333);   --text: #eee; }
+    body.vibe   { --bg: linear-gradient(135deg, #D28B36, #1FC8DB); --text: #fff; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      transition: background var(--slow), color var(--slow);
+      animation: fadeIn var(--slow) ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(0); }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-100%); }
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.012); }
+    }
+
+    /* Partículas ao fundo */
+    #particles-js {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* Botão de alternar tema */
+    #themeToggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--text);
+      border-radius: 50%;
+      background: transparent;
+      opacity: 0.6;
+      cursor: pointer;
+      transition: opacity var(--med), border-color var(--med);
+      z-index: 10;
+    }
+    #themeToggle:hover { opacity: 0.9; }
+    #themeToggle::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--text);
+      opacity: 0.2;
+    }
+
+    /* Botão de menu (sidebar) */
+    #menuToggle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: var(--accent1);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      color: #fff;
+      opacity: 0.9;
+      transition: opacity var(--fast);
+      z-index: 10;
+    }
+    #menuToggle:hover { opacity: 1; }
+
+    /* Cabeçalho principal (área de busca e saudação) */
+    header {
+      position: relative;
+      width: 100%;
+      padding: 20px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 5;
+    }
+    #greeting {
+      font-size: 1.1em;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+    #videoSearch {
+      flex: 1;
+      max-width: 400px;
+      margin-left: 20px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+      font-size: 14px;
+      transition: background var(--fast);
+    }
+    #videoSearch:focus {
+      background: rgba(255,255,255,0.2);
+      outline: none;
+    }
+
+    /* Layout principal: sidebar + conteúdo */
+    .container {
+      position: relative;
+      flex: 1;
+      display: flex;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    /* Sidebar (menu lateral) */
+    #sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      transform: translateX(-100%);
+      transition: transform var(--med) ease;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #sidebar.open {
+      transform: translateX(0);
+      animation: slideIn var(--med) ease forwards;
+    }
+    #sidebar h2 {
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 6px;
+    }
+    #archetypeList {
+      list-style: none;
+      overflow-y: auto;
+      flex: 1;
+    }
+    #archetypeList li {
+      margin: 8px 0;
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 4px;
+      transition: background var(--fast);
+    }
+    #archetypeList li:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    #archetypeSuggestion {
+      margin-top: 12px;
+      font-size: 0.95em;
+      line-height: 1.4;
+      min-height: 60px;
+      overflow-y: auto;
+    }
+    .saveArchetypeBtn {
+      margin-top: 10px;
+      padding: 6px 10px;
+      background: var(--accent2);
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity var(--fast);
+    }
+    .saveArchetypeBtn:hover {
+      opacity: 0.8;
+    }
+
+    /* Conteúdo principal de vídeos */
+    #mainContent {
+      flex: 1;
+      margin-left: 20px; /* distância mínima para sidebar */
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      overflow: hidden;
+    }
+    #mainPlayer {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 */
+      position: relative;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #mainPlayer iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    #thumbnailsContainer {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      overflow-y: auto;
+      max-height: calc(100vh - 300px);
+    }
+    .thumbnail {
+      position: relative;
+      width: 120px;
+      height: 68px; /* 16:9 */
+      background: #111;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--fast), box-shadow var(--fast);
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumbnail:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(0,255,255,0.3);
+    }
+    .removeBtn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      color: #fff;
+      font-size: 0.8em;
+      padding: 2px 4px;
+      border-radius: 3px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity var(--fast);
+    }
+    .removeBtn:hover {
+      opacity: 1;
+    }
+
+    /* Adicionar novo vídeo */
+    #addVideoContainer {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+    }
+    #videoUrlInput {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+      font-size: 14px;
+      transition: background var(--fast);
+    }
+    #videoUrlInput:focus {
+      background: rgba(255,255,255,0.2);
+      outline: none;
+    }
+    #addVideoBtn {
+      padding: 8px 16px;
+      background: var(--accent1);
+      border: none;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: opacity var(--fast);
+    }
+    #addVideoBtn:hover {
+      opacity: 0.8;
+    }
+
+    /* Modal de login */
+    .login-container {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 280px;
+      padding: 1.5rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+    .login-container.active {
+      display: block;
+    }
+    .login-container h3 {
+      margin-bottom: 12px;
+      font-size: 1.1em;
+      text-align: center;
+    }
+    .login-container input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      margin: 0.8rem 0;
+      padding: 0.4rem 0;
+      font-size: 0.95em;
+      color: #fff;
+    }
+    .login-container input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .login-container button {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.5rem 0;
+      border: 1px solid var(--accent2);
+      border-radius: 8px;
+      background: transparent;
+      font-size: 0.95em;
+      color: var(--accent2);
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+    }
+    .login-container button:hover {
+      background: var(--accent2);
+      color: #000;
+    }
+
+    /* Footer simples de instrução */
+    .footer-text {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8em;
+      opacity: 0.5;
+      font-style: italic;
+      cursor: pointer;
+      animation: moveGradient 8s linear infinite;
+      background: var(--bg);
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    @keyframes moveGradient {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .footer-text:hover { opacity: 0.7; }
+
+    /* Responsividade */
+    @media (max-width: 800px) {
+      #mainContent {
+        margin-left: 0;
+      }
+      #thumbnailsContainer {
+        justify-content: center;
+      }
+      #sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Partículas ao fundo -->
+  <div id="particles-js"></div>
+
+  <!-- Botão de menu lateral -->
+  <button id="menuToggle" title="Menu">☰</button>
+
+  <!-- Botão de alternar tema -->
+  <button id="themeToggle" title="Alternar tema" aria-label="Alternar tema"></button>
+
+  <!-- Cabeçalho com saudação e busca -->
+  <header>
+    <div id="greeting">Olá, convidado</div>
+    <input type="text" id="videoSearch" placeholder="🔍 Buscar vídeos..." aria-label="Buscar vídeos" />
+  </header>
+
+  <!-- Container principal: sidebar + conteúdo -->
+  <div class="container">
+    <!-- Sidebar com playlists de arquétipos -->
+    <nav id="sidebar">
+      <h2>Playlists – Arquétipos</h2>
+      <ul id="archetypeList">
+        <li data-archetype="Arquétipo 1">Arquétipo 1</li>
+        <li data-archetype="Arquétipo 2">Arquétipo 2</li>
+        <li data-archetype="Arquétipo 3">Arquétipo 3</li>
+        <li data-archetype="Arquétipo 4">Arquétipo 4</li>
+        <li data-archetype="Arquétipo 5">Arquétipo 5</li>
+        <li data-archetype="Arquétipo 6">Arquétipo 6</li>
+        <li data-archetype="Arquétipo 7">Arquétipo 7</li>
+        <li data-archetype="Arquétipo 8">Arquétipo 8</li>
+        <li data-archetype="Arquétipo 9">Arquétipo 9</li>
+        <li data-archetype="Arquétipo 10">Arquétipo 10</li>
+        <li data-archetype="Arquétipo 11">Arquétipo 11</li>
+        <li data-archetype="Arquétipo 12">Arquétipo 12</li>
+      </ul>
+      <div id="archetypeSuggestion">
+        <!-- Aqui aparecem sugestões ao clicar no arquétipo -->
+      </div>
+      <button class="saveArchetypeBtn" id="saveToArchetype" style="display: none;">
+        Salvar este vídeo
+      </button>
+    </nav>
+
+    <!-- Conteúdo principal de vídeos -->
+    <div id="mainContent">
+      <!-- Player grande -->
+      <div id="mainPlayer">
+        <!-- O iframe será inserido via JS -->
+      </div>
+
+      <!-- Adicionar novo vídeo -->
+      <div id="addVideoContainer">
+        <input type="text" id="videoUrlInput" placeholder="Cole a URL do YouTube aqui..." />
+        <button id="addVideoBtn">+</button>
+      </div>
+
+      <!-- Lista de miniaturas -->
+      <div id="thumbnailsContainer">
+        <!-- Miniaturas criadas dinamicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de login para usuário -->
+  <div class="login-container" id="loginBox">
+    <h3>Entre com seu nome</h3>
+    <form id="loginForm">
+      <input type="text" id="videoUserName" placeholder="Seu nome" required />
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <!-- Texto de rodapé (instrutivo) -->
+  <div class="footer-text">Toque para expandir</div>
+
+  <script>
+  (function() {
+    const ACCENT1 = getComputedStyle(document.documentElement).getPropertyValue('--accent1').trim();
+    const ACCENT2 = getComputedStyle(document.documentElement).getPropertyValue('--accent2').trim();
+
+    // Inicializa partículas.js
+    document.addEventListener('DOMContentLoaded', () => {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 40 },
+          color: { value: [ACCENT1, ACCENT2] },
+          shape: { type: 'circle' },
+          opacity: { value: 0.4 },
+          size: { value: 2.4 },
+          move: { enable: true, speed: 1.5 }
+        },
+        retina_detect: true
+      });
+    });
+
+    // Elementos principais
+    const themeToggle       = document.getElementById('themeToggle');
+    const menuToggle        = document.getElementById('menuToggle');
+    const sidebar           = document.getElementById('sidebar');
+    const greetingEl        = document.getElementById('greeting');
+    const loginBox          = document.getElementById('loginBox');
+    const loginForm         = document.getElementById('loginForm');
+    const videoUserNameInput= document.getElementById('videoUserName');
+
+    const mainPlayerDiv     = document.getElementById('mainPlayer');
+    const videoUrlInput     = document.getElementById('videoUrlInput');
+    const addVideoBtn       = document.getElementById('addVideoBtn');
+    const thumbnailsContainer = document.getElementById('thumbnailsContainer');
+
+    const videoSearchInput  = document.getElementById('videoSearch');
+
+    const archetypeList     = document.getElementById('archetypeList');
+    const archetypeSuggestion = document.getElementById('archetypeSuggestion');
+    const saveToArchetypeBtn  = document.getElementById('saveToArchetype');
+
+    // Estado
+    let currentTheme = localStorage.getItem('koduxTheme') || 'dark';
+    let videoUser    = localStorage.getItem('videoUser') || '';
+    let videos       = []; // { id: 'abc123', url: '...', title: '...' }
+    let filteredVideos = []; // para busca
+    let currentVideoId = null;
+    let selectedArchetype = '';
+
+    // ---------- Funções de tema ----------
+    function applyTheme(theme) {
+      document.body.classList.remove('light','medium','vibe');
+      if (theme !== 'dark') document.body.classList.add(theme);
+    }
+    function toggleTheme() {
+      const order = ['dark','light','medium','vibe'];
+      let idx = order.indexOf(currentTheme);
+      idx = (idx + 1) % order.length;
+      currentTheme = order[idx];
+      applyTheme(currentTheme);
+      localStorage.setItem('koduxTheme', currentTheme);
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // ---------- Funções de login/usuário ----------
+    function showLogin() {
+      loginBox.classList.add('active');
+    }
+    function hideLogin() {
+      loginBox.classList.remove('active');
+    }
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = videoUserNameInput.value.trim();
+      if (!name) return;
+      videoUser = name;
+      localStorage.setItem('videoUser', videoUser);
+      hideLogin();
+      initApp();
+    });
+
+    // ---------- Funções de sidebar ----------
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+    // Ao clicar fora da sidebar, fechar
+    document.body.addEventListener('click', (e) => {
+      if (!e.target.closest('#sidebar') && !e.target.closest('#menuToggle')) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    // ---------- Funções de vídeos ----------
+    function loadVideosFromStorage() {
+      if (!videoUser) return;
+      const key = 'videos_' + videoUser;
+      const raw = localStorage.getItem(key);
+      videos = raw ? JSON.parse(raw) : [];
+      filteredVideos = [...videos];
+    }
+    function saveVideosToStorage() {
+      const key = 'videos_' + videoUser;
+      localStorage.setItem(key, JSON.stringify(videos));
+    }
+    function extractYouTubeId(url) {
+      // Suporte a youtube.com/watch?v=ID ou youtu.be/ID
+      const reg1 = /(?:\?v=|\/embed\/|\.be\/)([A-Za-z0-9_-]{11})/;
+      const match = url.match(reg1);
+      return match ? match[1] : null;
+    }
+    function renderThumbnails(list) {
+      thumbnailsContainer.innerHTML = '';
+      list.forEach(video => {
+        const thumbDiv = document.createElement('div');
+        thumbDiv.className = 'thumbnail';
+        thumbDiv.dataset.id = video.id;
+        // Imagem de thumbnail oficial do YouTube
+        const img = document.createElement('img');
+        img.src = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
+        img.alt = video.title || 'Vídeo YouTube';
+        thumbDiv.appendChild(img);
+
+        // Botão de remover
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'removeBtn';
+        removeBtn.textContent = '×';
+        removeBtn.title = 'Remover vídeo';
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeVideo(video.id);
+        });
+        thumbDiv.appendChild(removeBtn);
+
+        // Ao clicar na miniatura, carrega no player
+        thumbDiv.addEventListener('click', () => {
+          loadVideoInPlayer(video.id);
+        });
+
+        thumbnailsContainer.appendChild(thumbDiv);
+      });
+    }
+    function loadVideoInPlayer(id) {
+      currentVideoId = id;
+      mainPlayerDiv.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      mainPlayerDiv.appendChild(iframe);
+    }
+    function addVideo() {
+      const rawUrl = videoUrlInput.value.trim();
+      if (!rawUrl) return;
+      const id = extractYouTubeId(rawUrl);
+      if (!id) {
+        alert('URL do YouTube inválida.');
+        return;
+      }
+      // Se já existir, não duplicar
+      if (videos.some(v => v.id === id)) {
+        alert('Este vídeo já foi adicionado.');
+        videoUrlInput.value = '';
+        return;
+      }
+      const title = rawUrl; // Sem API para buscar título, usamos a URL mesma
+      const novo = { id, url: rawUrl, title };
+      videos.push(novo);
+      filteredVideos = [...videos];
+      saveVideosToStorage();
+      renderThumbnails(filteredVideos);
+      if (!currentVideoId) loadVideoInPlayer(id);
+      videoUrlInput.value = '';
+    }
+    function removeVideo(id) {
+      videos = videos.filter(v => v.id !== id);
+      filteredVideos = [...videos];
+      saveVideosToStorage();
+      renderThumbnails(filteredVideos);
+      if (currentVideoId === id) {
+        currentVideoId = null;
+        mainPlayerDiv.innerHTML = '';
+      }
+    }
+
+    // Filtro de busca
+    videoSearchInput.addEventListener('input', () => {
+      const term = videoSearchInput.value.toLowerCase();
+      filteredVideos = videos.filter(v => {
+        return (v.title && v.title.toLowerCase().includes(term)) || (v.url.toLowerCase().includes(term));
+      });
+      renderThumbnails(filteredVideos);
+    });
+
+    // ---------- Funções de arquétipos ----------
+    archetypeList.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      const archetype = li.dataset.archetype;
+      selectedArchetype = archetype;
+      // Exibir sugestão direcional (exemplo genérico)
+      archetypeSuggestion.innerHTML = `<strong>Sugestão para ${archetype}:</strong><br>
+        Aqui vai uma sugestão direcional personalizada para o “${archetype}”.`;
+      saveToArchetypeBtn.style.display = 'block';
+    });
+    saveToArchetypeBtn.addEventListener('click', () => {
+      if (!currentVideoId || !selectedArchetype) {
+        alert('Selecione um vídeo e um arquétipo primeiro.');
+        return;
+      }
+      const key = `playlist_${videoUser}_${selectedArchetype}`;
+      const existing = localStorage.getItem(key);
+      let arr = existing ? JSON.parse(existing) : [];
+      if (!arr.includes(currentVideoId)) {
+        arr.push(currentVideoId);
+        localStorage.setItem(key, JSON.stringify(arr));
+        alert(`Vídeo salvo em "${selectedArchetype}".`);
+      } else {
+        alert('Este vídeo já está no playlist desse arquétipo.');
+      }
+    });
+
+    // ---------- Inicialização do app ----------
+    function updateGreeting() {
+      if (videoUser) {
+        greetingEl.textContent = `Olá, ${videoUser}`;
+      } else {
+        greetingEl.textContent = 'Olá, convidado';
+      }
+    }
+    function initApp() {
+      applyTheme(currentTheme);
+      updateGreeting();
+      loadVideosFromStorage();
+      renderThumbnails(filteredVideos);
+      // Se já houver pelo menos um vídeo, carrega o primeiro
+      if (videos.length > 0 && !currentVideoId) {
+        loadVideoInPlayer(videos[0].id);
+      }
+    }
+
+    // Se não houver usuário logado, exibe modal
+    if (!videoUser) {
+      showLogin();
+    } else {
+      initApp();
+    }
+
+    // ---------- Evento ao clicar no rodapé (expande/colapsa sidebar) ----------
+    document.querySelector('.footer-text').addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+
+    // ---------- Associação do botão adicionar vídeo ----------
+    addVideoBtn.addEventListener('click', addVideo);
+
+    // Previne que clique dentro do conteúdo feche a sidebar
+    document.getElementById('mainContent').addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  })();
+  </script>
+</body>
+</html>
