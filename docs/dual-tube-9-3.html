@@ -1128,7 +1128,7 @@
       conversation.push({ role: 'user', content: raw });
 
       const payload = {
-        model: 'gpt-4o-mini',
+        model: 'deepseek/deepseek-r1:free',
         messages: conversation.map(m => ({ role: m.role, content: m.content }))
       };
 
