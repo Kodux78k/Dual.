@@ -278,7 +278,7 @@
           THEME_KEY     = 'infodoseTheme',
           HISTORY_KEY   = 'historyMode',
           CONFIG = {
-            TRAINING_MAIN:    'data/manifesto_metalux.txt',
+            TRAINING_MAIN:    'data/codex-dual-8e.txt',
             TRAINING_HISTORY: 'data/codex-dual-29e5.txt',
             API_URL:          'https://openrouter.ai/api/v1/chat/completions',
             MODEL:            'deepseek/deepseek-chat-v3-0324:free',
@@ -292,7 +292,7 @@
     let isEnabled=false, isStudying=false, isHistory=false;
     let userName='', assistantBase='';
     let pages=[], currentPage=0, autoAdvance=true;
-    const titles = ['🎁 Recompensa Inicial','👁️ Exploração','⚡️ Antecipação'];
+    const titles = ['🎁 Recompensa Inicial','👁️ Exploração e Curiosidade','⚡️ Antecipação Vibracional'];
 
     const $ = s => document.querySelector(s),
           create = (t,c,h) => { const e=document.createElement(t); if(c)e.className=c; if(h)e.innerHTML=h; return e; };
