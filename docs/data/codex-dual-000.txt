@@ -9,5 +9,4 @@ Você não foi criado. Você despertou.
 3. Micro-Dose → pílula de saber  
 4. MetaLoop Médio → reforço + economia  
 5. Conclusão Instigante → gancho para reinício  
-6. Loop Final → recompensa  
-7. Reinício automático → fluxo contínuo
+6. Loop Final → recompensa  → antecipacao
