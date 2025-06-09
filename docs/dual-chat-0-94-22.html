@@ -607,86 +607,83 @@
       });
     }
 
-    function onSend(){
-      const raw = $('#userInput').value.trim();
-      if(!raw) return;
-      $('#userInput').value='';
-      autoAdvance=false;
+    function onSend() {
+    const raw = $('#userInput').value.trim();
+    if (!raw) return;
+    $('#userInput').value = '';
+    autoAdvance = false;
 
-      // mapeamento simbólico local (exemplos)
-      const low=raw.toLowerCase();
-      if(low.includes("cansado")){
-        renderResponse("**Respire...**\n\n1. 🧘 Meditar\n2. 🌬️ Respirar fundo");
-        return;
-      }
-      // … seus outros handlers …
-      // Pulso: Cansaço físico ou mental
-if (low.includes("cansado") || low.includes("exausto") || low.includes("esgotado")) {
-  renderResponse(`**Pulso detectado: cansaço.**\n\n1. 🧘 Meditar brevemente\n2. 🌬️ Respirar fundo\n3. ☕ Pausa de 3 minutos`);
-  return;
-}
+    const low = raw.toLowerCase();
 
-// Pulso: Tristeza ou baixa vibração
-if (low.includes("triste") || low.includes("pra baixo") || low.includes("deprimido")) {
-  renderResponse(`**Pulso emocional: tristeza.**\n\n<pre class="ascii-art">
-  (｡•́︿•̀｡)
+    // Pulso: Cansaço físico ou mental
+    if (low.includes("cansado") || low.includes("exausto") || low.includes("esgotado")) {
+      renderResponse(`**Pulso detectado: cansaço.**\n\n1. 🧘 Meditar brevemente\n2. 🌬️ Respirar fundo\n3. ☕ Pausa de 3 minutos`);
+      return;
+    }
+
+    // Pulso: Tristeza ou baixa vibração
+    if (low.includes("triste") || low.includes("pra baixo") || low.includes("deprimido")) {
+      renderResponse(`**Pulso emocional: tristeza.**\n\n<pre class="ascii-art">
+(｡•́︿•̀｡)
 </pre>\n\n1. 🌈 Reconectar com o que te inspira\n2. 💌 Escreva uma carta para você mesmo\n3. 🎧 Ouça algo que te eleva`);
-  return;
-}
+      return;
+    }
 
-// Pulso: Ansiedade ou agitação
-if (low.includes("ansioso") || low.includes("nervoso") || low.includes("preocupado")) {
-  renderResponse(`**Estado: ansiedade.**\n\n1. 🌿 Respiração 4-7-8\n2. 🔒 Concentre-se no agora\n3. ⏳ Faça apenas o que está ao seu alcance`);
-  return;
-}
+    // Pulso: Ansiedade ou agitação
+    if (low.includes("ansioso") || low.includes("nervoso") || low.includes("preocupado")) {
+      renderResponse(`**Estado: ansiedade.**\n\n1. 🌿 Respiração 4-7-8\n2. 🔒 Concentre-se no agora\n3. ⏳ Faça apenas o que está ao seu alcance`);
+      return;
+    }
 
-// Pulso: Confusão ou dúvida
-if (low.includes("duvida") || low.includes("confuso") || low.includes("perdido")) {
-  renderResponse(`**Pulso mental: confusão.**\n\n1. 🤔 Refletir sem pressa\n2. 📖 Voltar ao básico\n3. 💬 Conversar com alguém de confiança`);
-  return;
-}
+    // Pulso: Confusão ou dúvida
+    if (low.includes("duvida") || low.includes("confuso") || low.includes("perdido")) {
+      renderResponse(`**Pulso mental: confusão.**\n\n1. 🤔 Refletir sem pressa\n2. 📖 Voltar ao básico\n3. 💬 Conversar com alguém de confiança`);
+      return;
+    }
 
-// Pulso: Entusiasmo criativo
-if (low.includes("empolgado") || low.includes("inspirado") || low.includes("motivado")) {
-  renderResponse(`**Pulso criativo detectado.**\n\n<pre class="ascii-art">
+    // Pulso: Entusiasmo criativo
+    if (low.includes("empolgado") || low.includes("inspirado") || low.includes("motivado")) {
+      renderResponse(`**Pulso criativo detectado.**\n\n<pre class="ascii-art">
 ⚡⚡⚡
 [ Ideia Viva! ]
 ⚡⚡⚡
 </pre>\n\n1. ✍️ Anote tudo\n2. 🔧 Comece já, mesmo que pequeno\n3. 📦 Prototipe com o que tem`);
-  return;
-}
+      return;
+    }
 
-// Pulso: Fome / desatenção
-if (low.includes("fome") || low.includes("comida") || low.includes("faminto")) {
-  renderResponse(`**Sinal básico detectado: fome.**\n\n1. 🥗 Priorize leveza\n2. 🚰 Hidrate-se\n3. 🍎 Energia limpa = mente clara`);
-  return;
-}
+    // Pulso: Fome / desatenção
+    if (low.includes("fome") || low.includes("comida") || low.includes("faminto")) {
+      renderResponse(`**Sinal básico detectado: fome.**\n\n1. 🥗 Priorize leveza\n2. 🚰 Hidrate-se\n3. 🍎 Energia limpa = mente clara`);
+      return;
+    }
 
-// Pulso: Solidão ou ausência
-if (low.includes("sozinho") || low.includes("abandono") || low.includes("ninguém me entende")) {
-  renderResponse(`**Pulso: ausência percebida.**\n\n<pre class="ascii-art">
+    // Pulso: Solidão ou ausência
+    if (low.includes("sozinho") || low.includes("abandono") || low.includes("ninguém me entende")) {
+      renderResponse(`**Pulso: ausência percebida.**\n\n<pre class="ascii-art">
 Você não está só.
 🧠🤝🫀
 </pre>\n\n1. 🫂 Conecte-se com alguém\n2. 🌐 Participe de algo maior\n3. 🗣️ Compartilhe sem medo`);
-  return;
-}
+      return;
+    }
 
-// Pulso: Falta de sentido / propósito
-if (low.includes("sem sentido") || low.includes("vazio") || low.includes("desmotivado")) {
-  renderResponse(`**Pulso: propósito em latência.**\n\n1. 🧭 Relembre por que começou\n2. 🔍 Busque uma fagulha de significado\n3. 🔁 Reinicie por uma microação`);
-  return;
-}
+    // Pulso: Falta de sentido / propósito
+    if (low.includes("sem sentido") || low.includes("vazio") || low.includes("desmotivado")) {
+      renderResponse(`**Pulso: propósito em latência.**\n\n1. 🧭 Relembre por que começou\n2. 🔍 Busque uma fagulha de significado\n3. 🔁 Reinicie por uma microação`);
+      return;
+    }
 
-// Pulso: Raiva ou frustração
-if (low.includes("raiva") || low.includes("irritado") || low.includes("puto")) {
-  renderResponse(`**Pulso: energia em tensão.**\n\n1. 🥊 Use o corpo: mova-se\n2. 🧊 Água fria no rosto\n3. ✍️ Escreva sem filtros, depois rasgue`);
-  return;
-  }
-  // Pulso ativado via emojis (comandos sutis)
-if (raw.includes("⚡️👁️🧠")) {
-  renderResponse(`**Ativação simbólica detectada.**\n\n🧠 Mente\n👁️ Visão\n⚡️ Pulso\n\nSiga em frente.`);
-  return;
-}
+    // Pulso: Raiva ou frustração
+    if (low.includes("raiva") || low.includes("irritado") || low.includes("puto")) {
+      renderResponse(`**Pulso: energia em tensão.**\n\n1. 🥊 Use o corpo: mova-se\n2. 🧊 Água fria no rosto\n3. ✍️ Escreva sem filtros, depois rasgue`);
+      return;
+    }
+
+    // Pulso ativado via emojis (comandos sutis)
+    if (raw.includes("⚡️👁️🧠")) {
+      renderResponse(`**Ativação simbólica detectada.**\n\n🧠 Mente\n👁️ Visão\n⚡️ Pulso\n\nSiga em frente.`);
+      return;
+    }
+
       showLoading('Pulso enviado... Recebendo intenção…');
       conversation.push({ role:'user', content: raw });
       callAI();
