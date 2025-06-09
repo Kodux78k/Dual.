@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>dual-Infodose Chat Cinematográfico</title>
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js" defer></script>
+
+  <!-- 2) DOMPurify (para sanitização) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js" defer></script>
+  
+  <!-- 3) Feather Icons (se você pretende usar feather.replace()) -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+
 
   <!-- Fonte Montserrat otimizada -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -320,39 +328,40 @@
 
     // --- Renderização de resposta em HTML seguro ---------------------------------
     function renderResponse(text) {
-      const wrap = document.querySelector('.pages-wrapper');
-      wrap.innerHTML = '';
-      // converte Markdown → HTML
-      const rawHtml = md.render(text);
-      // sanitiza e mantém data-* attributes
-      const safeHtml = DOMPurify.sanitize(rawHtml, {
-        ALLOWED_ATTR: ['data-action', 'data-payload', 'href', 'target']
-      });
+  const wrap = document.querySelector('.pages-wrapper');
+  wrap.innerHTML = '';
 
-      // container temporário para extrair <style>
-      const temp = document.createElement('div');
-      temp.innerHTML = safeHtml;
+  // 1) Inicializa o Markdown-it (já carregado via <script> no head)
+  const md = window.markdownit({ html: true, linkify: true });
 
-      // injeta qualquer bloco <style> no <head>
-      temp.querySelectorAll('style').forEach(styleEl => {
-        document.head.appendChild(styleEl.cloneNode(true));
-      });
+  // 2) Converte Markdown → HTML
+  const rawHtml = md.render(text);
 
-      // monta página única paginável
-      const page = document.createElement('div');
-      page.className = 'page active';
+  // 3) Sanitiza o HTML (DOMPurify já carregado)
+  const safeHtml = DOMPurify.sanitize(rawHtml, {
+    ALLOWED_ATTR: ['data-action', 'data-payload', 'href', 'target']
+  });
 
-      // move todos os nós (texto, pre, buttons, listas etc.) para dentro de page
-      Array.from(temp.childNodes).forEach(node => page.appendChild(node.cloneNode(true)));
-      wrap.appendChild(page);
+  // 4) Extrai eventuais <style> embutidos
+  const temp = document.createElement('div');
+  temp.innerHTML = safeHtml;
+  temp.querySelectorAll('style').forEach(styleEl => {
+    document.head.appendChild(styleEl.cloneNode(true));
+  });
 
-      // vincula botões dinâmicos recém-inseridos
-      bindDynamicButtons(page);
+  // 5) Monta a página única paginável
+  const page = document.createElement('div');
+  page.className = 'page active';
+  Array.from(temp.childNodes).forEach(node =>
+    page.appendChild(node.cloneNode(true))
+  );
+  wrap.appendChild(page);
 
-      // atualiza indicador de página
-      const total = document.querySelectorAll('.page').length;
-      document.getElementById('pageIndicator').textContent = `1 / ${total}`;
-    }
+  // 6) “Habilita” botões dinâmicos e atualiza indicador
+  bindDynamicButtons(page);
+  const total = document.querySelectorAll('.page').length;
+  document.getElementById('pageIndicator').textContent = `1 / ${total}`;
+}
 
     // --- Inicialização de UI e bindings ------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
