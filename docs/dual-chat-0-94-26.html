@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>dual-Infodose Chat Cinematográfico</title>
-
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js" defer></script>
+  
+  <!-- 2) DOMPurify (para sanitização) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js" defer></script>
+  
+  <!-- 3) Feather Icons (se você pretende usar feather.replace()) -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  
+  
   <!-- Fonte Montserrat otimizada -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <script src="config/config.js" defer></script>
@@ -331,41 +339,48 @@
             AUTH_TOKEN:       window.env?.API_KEYS || 'Bearer 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'
           };
   // === Carregar pulsos simbólicos do JSON ===
-let pulsos = [];
+  // --- Carregar pulsos simbólicos do JSON ---
+  let pulsos = [];
+  fetch('data/pulsos_simetricos_completo.json')
+    .then(res => res.json())
+    .then(json => { pulsos = json; })
+    .catch(err => console.error("Erro ao carregar pulsos simbólicos:", err));
 
-fetch('data/pulsos_simetricos_completo.json')
-  .then(res => res.json())
-  .then(json => { pulsos = json; })
-  .catch(err => console.error("Erro ao carregar pulsos simbólicos:", err));
+  // --- Função para detectar e renderizar resposta simbólica  ---
+  function detectarPulsoSimbolico(inputTexto) {
+    const texto = inputTexto.toLowerCase();
+    for (const p of pulsos) {
+      if (p.ativadores.some(a => texto.includes(a))) {
 
-// === Função para detectar e renderizar resposta simbólica ===
-function detectarPulsoSimbolico(inputTexto) {
-  const texto = inputTexto.toLowerCase();
-  for (const p of pulsos) {
-    if (p.ativadores.some(a => texto.includes(a))) {
+        const ascii = p.ascii ? `<pre class="ascii-art">${p.ascii}</pre>` : '';
+        const lista = p.resposta.map(r => `<li>${r}</li>`).join('');
 
-      const ascii = p.ascii ? `<pre class="ascii-art">${p.ascii}</pre>` : '';
-      const lista = p.resposta.map(r => `<li>${r}</li>`).join('');
+        const payload = JSON.stringify({
+          action: "saveDesign",
+          commands: [{
+            action: "style",
+            selector: p.design.selector,
+            property: p.design.property,
+            value: p.design.value
+          }]
+        });
 
-      const payload = JSON.stringify({
-        action: "saveDesign",
-        commands: [{
-          action: "style",
-          selector: p.design.selector,
-          property: p.design.property,
-          value: p.design.value
-        }]
-      });
+        const botao = `<button class="btn-action" data-action="saveDesign" data-payload='${payload}'>
+                         ⚡ Harmonizar visual
+                       </button>`;
 
-      const botao = `<button class="btn-action" data-action="saveDesign" data-payload='${payload}'>⚡ Harmonizar visual</button>`;
-
-      const htmlFinal = `${p.frase}\n\n${ascii}\n\n<ul>${lista}</ul>\n\n${botao}`;
-      renderResponse(htmlFinal);
-      return true;
+        const htmlFinal = `${p.frase}\n\n${ascii}\n\n<ul>${lista}</ul>\n\n${botao}`;
+        renderResponse(htmlFinal);
+        return true;
+      }
     }
+    return false;
   }
-  return false;
-}
+
+  // … resto do código …
+
+  // Remova completamente esta segunda declaração abaixo:
+  // function detectarPulsoSimbolico(inputTexto) { … }
     let training='', chunks=[], chunkIndex=0;
     let trainingHistory='', conversation=[];
     let isEnabled=false, isStudying=false, isHistory=false;
@@ -599,33 +614,7 @@ function detectarPulsoSimbolico(inputTexto) {
         renderResponse('Desculpe, não consegui obter resposta. Tente novamente.');
       }
     }
-function detectarPulsoSimbolico(inputTexto) {
-  const texto = inputTexto.toLowerCase();
-  for (const p of pulsos) {
-    if (p.ativadores.some(a => texto.includes(a))) {
 
-      const ascii = p.ascii ? `<pre class="ascii-art">${p.ascii}</pre>` : '';
-      const lista = p.resposta.map(r => `<li>${r}</li>`).join('');
-
-      const payload = JSON.stringify({
-        action: "saveDesign",
-        commands: [{
-          action: "style",
-          selector: p.design.selector,
-          property: p.design.property,
-          value: p.design.value
-        }]
-      });
-
-      const botao = `<button class="btn-action" data-action="saveDesign" data-payload='${payload}'>⚡ Harmonizar visual</button>`;
-
-      const htmlFinal = `${p.frase}\n\n${ascii}\n\n<ul>${lista}</ul>\n\n${botao}`;
-      renderResponse(htmlFinal);
-      return true;
-    }
-  }
-  return false;
-}
     function bindUI(){
       $('#historyBtn').addEventListener('click',()=>{
         isHistory = !isHistory;
