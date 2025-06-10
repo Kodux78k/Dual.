@@ -292,13 +292,13 @@
           THEME_KEY     = 'infodoseTheme',
           HISTORY_KEY   = 'historyMode',
           CONFIG = {
-            TRAINING_MAIN:    'data/manifesto_infinity_v3_3kb.txt',
-            TRAINING_HISTORY: 'data/codex-dual-29e5.txt',
+            TRAINING_MAIN:    'data/dual_infinity_v3.txt',
+            TRAINING_HISTORY: 'data/codex-dual-000.txt',
             API_URL:          'https://openrouter.ai/api/v1/chat/completions',
             MODEL:            'deepseek/deepseek-chat-v3-0324:free',
             TEMP:             0.2,
             CHUNK_SIZE:       12000,
-            AUTH_TOKEN:       window.env?.API_KEYS || 'Bearer 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'
+            AUTH_TOKEN:       window.env?.API_KEYS || 'Bearer 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'
           };
 
     let training='', chunks=[], chunkIndex=0;
@@ -306,7 +306,7 @@
     let isEnabled=false, isStudying=false, isHistory=false;
     let userName='', assistantBase='';
     let pages=[], currentPage=0, autoAdvance=true;
-    const titles = ['🎁 Recompensa Inicial','👁️ Exploração','⚡️ Antecipação'];
+    const titles = ['🎁 Recompensa Inicial','👁️ Exploração e Curiosidade','⚡️ Antecipação Vibracional'];
 
     const $ = s => document.querySelector(s),
           create = (t,c,h) => { const e=document.createElement(t); if(c)e.className=c; if(h)e.innerHTML=h; return e; };
@@ -469,8 +469,8 @@
       block.addEventListener('click', () => {
         autoAdvance = false;
         const cleanPara = para
-          .replace(/["“”‘’]/g,'')
-          .replace(/[\u1F300-\u1F6FF\u1F900-\u1F9FF\u2600-\u26FF\u2700-\u27BF]/g,'');
+          .replace(/["“”‘’]/g,'');
+
 const clean = cleanPara;
         const utter = new SpeechSynthesisUtterance(cleanPara);
         speechSynthesis.cancel();
