@@ -1,0 +1,64 @@
+{
+  "ids": [
+    "buttonContainer",
+    "themeToggle",
+    "particles-js",
+    "logoContainer",
+    "logoObj",
+    "assistantName",
+    "response",
+    "userInput",
+    "sendBtn",
+    "voiceBtn",
+    "loginBox",
+    "loginForm",
+    "userName",
+    "assistantInput",
+    "btn-toggle-design"
+  ],
+  "classes": [
+    "design-off",
+    "svg-container",
+    "response-container",
+    "input-container",
+    "login-container",
+    "light",
+    "medium",
+    "vibe"
+  ],
+  "cssVariables": [
+    "--bg",
+    "--text",
+    "--fast",
+    "--med",
+    "--slow"
+  ],
+  "tokens": {
+    "palette": {
+      "primary": "#00d8d8",
+      "secondary": "#d800d8",
+      "accent": "#ffcc00"
+    },
+    "fontSizes": {
+      "sm": "0.8rem",
+      "md": "1rem",
+      "lg": "1.2rem"
+    }
+  },
+  "components": {
+    "button": {
+      "svgUrl": "https://example.com/icon.svg",
+      "defaultClasses": [
+        "btn",
+        "btn-primary"
+      ]
+    }
+  },
+  "assets": {
+    "clickSound": "/sounds/click.mp3",
+    "notificationSvg": "/icons/notify.svg"
+  },
+  "endpoints": [
+    "/data/site-structure.json"
+  ]
+}
