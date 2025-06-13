@@ -1,15 +1,37 @@
+const CACHE_NAME = 'dualchat-v2-final';
+const FILES_TO_CACHE = [
+  './',
+  './index.html',
+  './splash.html',
+  './dual-chat-0-94-fix-78-1.html',
+  './dual-chat-0-94-fix-78-2.html',
+  './manifest.json',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png',
+  './data/Superfetch.json',
+  './data/site-structure.json'
+];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open('metapulso-14').then(cache => {
-      return cache.addAll(['/', '/index.html', '/manifest.json']);
-    })
+self.addEventListener('install', evt => {
+  evt.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
+  self.skipWaiting();
 });
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => {
-      return response || fetch(e.request);
-    })
+
+self.addEventListener('activate', evt => {
+  evt.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(response => response || fetch(evt.request))
   );
 });
