@@ -3,10 +3,10 @@ const CACHE_NAME = 'dualchat-cache-v1';
 const FILES_TO_CACHE = [
   './',
   './dual-chat-0-94-15-fix-72-2.html',
-  './manifest.json'
-  './index.html'
-  './splash.html'
-  './data/Superfetch.json'
+  './manifest.json',
+  './index.html',
+  './splash.html',
+  './data/Superfetch.json',
   './data/site-structure.json'
 
 
