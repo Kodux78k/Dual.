@@ -2,8 +2,14 @@
 const CACHE_NAME = 'dualchat-cache-v1';
 const FILES_TO_CACHE = [
   './',
-  './dual-chat-v14-braba-final.html',
+  './dual-chat-0-94-15-fix-72-2.html',
   './manifest.json'
+  './index.html'
+  './splash.html'
+  './data/Superfetch.json'
+  './data/site-structure.json'
+
+
 ];
 
 self.addEventListener('install', (evt) => {
