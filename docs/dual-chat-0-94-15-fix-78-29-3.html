@@ -319,10 +319,15 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const saved = localStorage.getItem('infodoseTheme')||'dark';
-    applyThemeSelector(saved);
-  });
+  
+document.addEventListener('DOMContentLoaded', ()=>{
+  const selector = document.getElementById('themeSelector');
+  const saved = localStorage.getItem('infodoseTheme') || 'dark';
+  if (selector) selector.value = saved;
+  applyThemeSelector(saved);
+  selector?.addEventListener('change', e => applyThemeSelector(e.target.value));
+});
+
 </script>
 </head>
 <body>
@@ -650,12 +655,11 @@ z-index:10;transition:opacity 1s ease;">🕯️ Apagar Vela</button>
       }
     }
     window.handleAICommand = handleAICommand;
-      particlesJS('particles-js',{
+      
         particles:{ number:{value:40}, color:{value:['#0ff','#f0f']},
           shape:{type:'circle'}, opacity:{value:0.4}, size:{value:2.4},
           move:{enable:true,speed:1.5}
-        }, retina_detect:true
-      });
+        }, 
       try {
         if (!trainingLoaded) { training = await fetch(CONFIG.TRAINING_MAIN).then(r=>r.text()); trainingLoaded = true; }
         for(let i=0;i<training.length;i+=CONFIG.CHUNK_SIZE) chunks.push(training.slice(i,i+CONFIG.CHUNK_SIZE));
@@ -1481,6 +1485,70 @@ setTimeout(() => {
     });
   }
 }, 500);
+</script>
+
+<script>
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 40 },
+        color: { value: ['#0ff','#f0f'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4 },
+        size: { value: 2.4 },
+        move: { enable: true, speed: 1.5 }
+      },
+      retina_detect: true
+    });
+  });
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const bootText = document.getElementById("bootText");
+  const txt = "🧬 Iniciando... Pulso simbiótico detectado. Presença reconhecida.";
+  let i = 0;
+  function typeWriter() {
+    if (i < txt.length) {
+      bootText.textContent += txt.charAt(i);
+      i++;
+      setTimeout(typeWriter, 42); // animação leve
+    }
+  }
+  if (bootText) {
+    bootText.textContent = "";
+    typeWriter();
+  }
+});
+</script>
+
+
+<script>
+function updateParticlesByEmotion() {
+  const emotion = document.body.className.match(/emotion-(\w+)/);
+  let color = ['#0ff','#f0f'];
+  if (emotion) {
+    switch(emotion[1]) {
+      case 'happy': color = ['#ffff66','#ffcc00']; break;
+      case 'sad': color = ['#3366cc','#666699']; break;
+      case 'confused': color = ['#999999','#cccccc']; break;
+      case 'focus': color = ['#00ffff','#33cccc']; break;
+      case 'angry': color = ['#ff3300','#ff0000']; break;
+    }
+  }
+  if (window.pJSDom && pJSDom[0]) {
+    const p = pJSDom[0].pJS.particles;
+    p.color.value = color;
+    p.line_linked.color = color[0];
+    pJSDom[0].pJS.fn.particlesRefresh();
+  }
+}
+
+// Observar mutação de classe do body (emoções)
+const observer = new MutationObserver(() => updateParticlesByEmotion());
+observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 </script>
 
 </body></html>

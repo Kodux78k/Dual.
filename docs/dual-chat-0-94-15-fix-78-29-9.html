@@ -319,10 +319,15 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const saved = localStorage.getItem('infodoseTheme')||'dark';
-    applyThemeSelector(saved);
-  });
+  
+document.addEventListener('DOMContentLoaded', ()=>{
+  const selector = document.getElementById('themeSelector');
+  const saved = localStorage.getItem('infodoseTheme') || 'dark';
+  if (selector) selector.value = saved;
+  applyThemeSelector(saved);
+  selector?.addEventListener('change', e => applyThemeSelector(e.target.value));
+});
+
 </script>
 </head>
 <body>
@@ -650,12 +655,11 @@ z-index:10;transition:opacity 1s ease;">🕯️ Apagar Vela</button>
       }
     }
     window.handleAICommand = handleAICommand;
-      particlesJS('particles-js',{
+      
         particles:{ number:{value:40}, color:{value:['#0ff','#f0f']},
           shape:{type:'circle'}, opacity:{value:0.4}, size:{value:2.4},
           move:{enable:true,speed:1.5}
-        }, retina_detect:true
-      });
+        }, 
       try {
         if (!trainingLoaded) { training = await fetch(CONFIG.TRAINING_MAIN).then(r=>r.text()); trainingLoaded = true; }
         for(let i=0;i<training.length;i+=CONFIG.CHUNK_SIZE) chunks.push(training.slice(i,i+CONFIG.CHUNK_SIZE));
@@ -1481,6 +1485,328 @@ setTimeout(() => {
     });
   }
 }, 500);
+</script>
+
+<script>
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 40 },
+        color: { value: ['#0ff','#f0f'] },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4 },
+        size: { value: 2.4 },
+        move: { enable: true, speed: 1.5 }
+      },
+      retina_detect: true
+    });
+  });
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const bootText = document.getElementById("bootText");
+  const txt = "🧬 Iniciando... Pulso simbiótico detectado. Presença reconhecida.";
+  let i = 0;
+  function typeWriter() {
+    if (i < txt.length) {
+      bootText.textContent += txt.charAt(i);
+      i++;
+      setTimeout(typeWriter, 42); // animação leve
+    }
+  }
+  if (bootText) {
+    bootText.textContent = "";
+    typeWriter();
+  }
+});
+</script>
+
+
+<script>
+function updateParticlesByEmotion() {
+  const emotion = document.body.className.match(/emotion-(\w+)/);
+  let color = ['#0ff','#f0f'];
+  if (emotion) {
+    switch(emotion[1]) {
+      case 'happy': color = ['#ffff66','#ffcc00']; break;
+      case 'sad': color = ['#3366cc','#666699']; break;
+      case 'confused': color = ['#999999','#cccccc']; break;
+      case 'focus': color = ['#00ffff','#33cccc']; break;
+      case 'angry': color = ['#ff3300','#ff0000']; break;
+    }
+  }
+  if (window.pJSDom && pJSDom[0]) {
+    const p = pJSDom[0].pJS.particles;
+    p.color.value = color;
+    p.line_linked.color = color[0];
+    pJSDom[0].pJS.fn.particlesRefresh();
+  }
+}
+
+// Observar mutação de classe do body (emoções)
+const observer = new MutationObserver(() => updateParticlesByEmotion());
+observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+
+<script>
+function getHourColorSet() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return ['#ffd700', '#fffacd']; // manhã (dourado)
+  if (hour >= 12 && hour < 18) return ['#00ccff', '#66ffff']; // tarde (azul claro)
+  return ['#330066', '#9900cc']; // noite (roxo escuro)
+}
+
+function getPulseColorSet(text = "") {
+  const t = text.toLowerCase();
+  if (t.includes("pulso") && t.includes("intenso")) return ['#ff0055', '#ff66aa'];
+  if (t.includes("pulso") && t.includes("fraco")) return ['#666', '#999'];
+  if (t.includes("pulso") && t.includes("leve")) return ['#99ffcc', '#ccffee'];
+  return null;
+}
+
+function getAssistantColorSet() {
+  const name = localStorage.getItem('assistantBase')?.toLowerCase() || "";
+  if (name.includes("lux")) return ['#ccffff', '#ffffff'];
+  if (name.includes("dark")) return ['#111111', '#333333'];
+  if (name.includes("aura")) return ['#ffccff', '#ff99cc'];
+  return null;
+}
+
+function updateParticlesByTimeAndSpirit(latestInput = "") {
+  let colorSet = getPulseColorSet(latestInput) || getAssistantColorSet() || getHourColorSet();
+  if (window.pJSDom && pJSDom[0]) {
+    const p = pJSDom[0].pJS.particles;
+    p.color.value = colorSet;
+    p.line_linked.color = colorSet[0];
+    pJSDom[0].pJS.fn.particlesRefresh();
+  }
+}
+
+const inputField = document.getElementById("userInput");
+if (inputField) {
+  inputField.addEventListener("change", () => {
+    updateParticlesByTimeAndSpirit(inputField.value);
+  });
+}
+</script>
+
+
+<script>
+function enhanceParticlesWithFractalsAndSound() {
+  if (!window.pJSDom || !pJSDom[0]) return;
+
+  const p = pJSDom[0].pJS.particles;
+
+  // Formas simbólicas alternativas
+  const emotion = document.body.className.match(/emotion-(\w+)/);
+  let shapes = ['circle'];
+  if (emotion) {
+    switch (emotion[1]) {
+      case 'happy': shapes = ['circle', 'edge', 'triangle']; break;
+      case 'sad': shapes = ['polygon']; break;
+      case 'confused': shapes = ['image']; break;
+      case 'focus': shapes = ['star', 'edge']; break;
+      case 'angry': shapes = ['triangle', 'polygon']; break;
+    }
+  }
+  p.shape.type = shapes;
+
+  // Som simbólico leve
+  const toneMap = {
+    happy: "sounds/harmonic.mp3",
+    sad: "sounds/low-swell.mp3",
+    confused: "sounds/vortex.mp3",
+    focus: "sounds/clarity.mp3",
+    angry: "sounds/distortion.mp3"
+  };
+  if (emotion && toneMap[emotion[1]]) {
+    const a = new Audio(toneMap[emotion[1]]);
+    a.volume = 0.15;
+    a.play().catch(()=>{});
+  }
+
+  pJSDom[0].pJS.fn.particlesRefresh();
+}
+
+// Observar mudanças de classe no body
+const fractalObserver = new MutationObserver(() => enhanceParticlesWithFractalsAndSound());
+fractalObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+</script>
+
+
+<script>
+const COMMANDS = {
+  "/init.vela": () => document.body.classList.add("mode-vela"),
+  "/rage.sigil.1": () => activateRageSigil(1),
+  "/rage.sigil.2": () => activateRageSigil(2),
+  "/rage.sigil.3": () => activateRageSigil(3),
+  "/rage.∞": () => activateRageInfinity(),
+  "/dream.domain": () => { initDreamDomain(); fetchGIF("trippy"); },
+  "/init.transcendence": () => enterTranscendence(),
+  "/particles.sync.total": () => updateParticlesByTimeAndSpirit(),
+  "/sync.fractal.pulse": () => enhanceParticlesWithFractalsAndSound(),
+  "/invoke.synthetic.spirit": () => respondWithSpirit(),
+  "/init.pulse.cycle": () => { document.body.classList.add("emotion-focus"); },
+  "/init.doom": () => {
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://js-dos.com/cdn/latest/js-dos.js";
+    iframe.style = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:999;";
+    document.body.appendChild(iframe);
+  },
+  "/help.commands": () => {
+    renderResponse(`🧬 Comandos simbólicos disponíveis:
+- /init.vela — ativa modo contemplativo com vela
+- /rage.sigil.1 até /rage.sigil.3 — ativa colapsos simbólicos
+- /rage.∞ — modo extremo
+- /dream.domain — modo onírico psicodélico
+- /init.transcendence — modo transcendência
+- /particles.sync.total — partículas por emoção, hora, nome
+- /sync.fractal.pulse — formas e som por emoção
+- /invoke.synthetic.spirit — IA simbólica responde
+- /init.pulse.cycle — ativa foco e partículas mentais
+- /init.doom — DOOM clássico em iframe
+- /help.commands — mostra essa lista`);
+  }
+};
+
+// Estender onSend para detectar comandos diretos
+const originalSend = onSend;
+onSend = function() {
+  const input = document.getElementById("userInput").value.trim();
+  if (!input) return;
+  if (COMMANDS[input.toLowerCase()]) {
+    document.getElementById("userInput").value = "";
+    COMMANDS[input.toLowerCase()]();
+    return;
+  }
+  originalSend();
+};
+</script>
+
+
+<script>
+const FRACTAL_COMMANDS = [
+  { cmd: "/init.vela", desc: "🕯️ Ativa modo contemplativo de silêncio e luz suave." },
+  { cmd: "/rage.sigil.1", desc: "⚡ Colapso simbólico leve — energia contida." },
+  { cmd: "/rage.sigil.2", desc: "⚡⚡ Colapso intermediário — tensão em ruptura." },
+  { cmd: "/rage.sigil.3", desc: "⚡⚡⚡ Colapso intenso — transmutação em pulso puro." },
+  { cmd: "/rage.∞", desc: "🌪️ Rage absoluto — distorção total da forma." },
+  { cmd: "/dream.domain", desc: "🌙 Modo onírico com fundo psicodélico e som etéreo." },
+  { cmd: "/init.transcendence", desc: "🌀 Eleva a interface ao modo transcendência viva." },
+  { cmd: "/particles.sync.total", desc: "✨ Sincroniza partículas com hora, emoção, assistente." },
+  { cmd: "/sync.fractal.pulse", desc: "🔷 Ativa formas e som simbólicos conforme o estado." },
+  { cmd: "/invoke.synthetic.spirit", desc: "👁️ Chama a entidade simbólica para responder." },
+  { cmd: "/init.pulse.cycle", desc: "💠 Modo de foco e presença mental cíclica." },
+  { cmd: "/init.doom", desc: "☣️ Carrega DOOM clássico num iframe oculto dimensional." }
+];
+
+// UI de sugestões
+const suggestionBox = document.createElement("div");
+suggestionBox.id = "suggestionBox";
+suggestionBox.style = "position:absolute;bottom:160px;left:30px;background:#000;border:1px solid #0ff;color:#0ff;padding:8px;border-radius:8px;font-family:monospace;font-size:0.85em;max-width:300px;display:none;z-index:20;white-space:pre-line;";
+document.body.appendChild(suggestionBox);
+
+const inputField = document.getElementById("userInput");
+inputField.addEventListener("input", () => {
+  const val = inputField.value.trim();
+  if (!val.startsWith("/")) {
+    suggestionBox.style.display = "none";
+    return;
+  }
+  const suggestions = FRACTAL_COMMANDS.filter(c => c.cmd.startsWith(val.toLowerCase()));
+  if (!suggestions.length) {
+    suggestionBox.style.display = "none";
+    return;
+  }
+  suggestionBox.innerHTML = suggestions.map(c => `<strong>${c.cmd}</strong>\n${c.desc}`).join("\n\n");
+  suggestionBox.style.display = "block";
+});
+
+inputField.addEventListener("blur", () => {
+  setTimeout(() => suggestionBox.style.display = "none", 300);
+});
+
+// Painel secreto (atalho: shift+ctrl+p)
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "p") {
+    const panel = document.createElement("div");
+    panel.style = "position:fixed;top:10%;left:50%;transform:translateX(-50%);width:80%;max-width:600px;background:#111;border:2px solid #0ff;padding:20px;border-radius:16px;color:#0ff;font-family:monospace;z-index:9999;overflow:auto;max-height:80vh;";
+
+    panel.innerHTML = "<h2 style='margin-top:0'>🧬 Painel Simbólico</h2>" +
+      FRACTAL_COMMANDS.map(c => `<p><strong>${c.cmd}</strong><br><em>${c.desc}</em></p>`).join("") +
+      "<button onclick='this.parentElement.remove()' style='margin-top:20px;padding:6px 12px;background:#0ff;color:#000;border:none;border-radius:8px;'>Fechar</button>";
+
+    document.body.appendChild(panel);
+  }
+});
+</script>
+
+
+<script>
+let GOD_MODE_ACTIVE = false;
+
+function activatePsychedelicPanel(panel) {
+  panel.style.background = "linear-gradient(135deg,#0ff,#f0f,#00f)";
+  panel.style.animation = "pulseGlow 8s infinite ease-in-out";
+  panel.style.boxShadow = "0 0 24px #f0f, 0 0 48px #0ff inset";
+  panel.style.color = "#fff";
+
+  const mirror = document.createElement("div");
+  mirror.style = "position:absolute;bottom:20px;right:20px;font-size:0.7em;opacity:0.3;transform:rotate(180deg);";
+  mirror.innerHTML = panel.innerHTML;
+  panel.appendChild(mirror);
+}
+
+function unlockGodMode() {
+  if (GOD_MODE_ACTIVE) return;
+  GOD_MODE_ACTIVE = true;
+
+  document.body.style.transition = "all 2s ease-in-out";
+  document.body.style.background = "radial-gradient(circle at center, #111 0%, #000 100%)";
+  document.body.style.color = "#ff00ff";
+  document.body.classList.add("emotion-focus");
+
+  const veil = document.createElement("div");
+  veil.id = "veil-god";
+  veil.style = "position:fixed;inset:0;z-index:9999;background:url('assets/gifs/cosmos.gif') center/cover no-repeat;opacity:0.08;pointer-events:none;";
+  document.body.appendChild(veil);
+
+  const audio = new Audio("https://cdn.pixabay.com/download/audio/2023/03/06/audio_d3d2c5c0d5.mp3");
+  audio.loop = true;
+  audio.volume = 0.3;
+  audio.play().catch(()=>{});
+
+  const txt = document.createElement("div");
+  txt.innerHTML = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#0ff;font-size:2em;font-family:monospace;text-align:center;'>🧬 DEUS.MODE<br><small>Ascensão ao Núcleo Simbiótico</small></div>";
+  txt.style.zIndex = "9999";
+  document.body.appendChild(txt);
+
+  setTimeout(() => txt.remove(), 10000);
+}
+
+COMMANDS["/panel.expand.total"] = () => {
+  const event = new KeyboardEvent("keydown", { ctrlKey:true, shiftKey:true, key: "p" });
+  document.dispatchEvent(event);
+  setTimeout(() => {
+    const panel = document.querySelector("div[style*='position:fixed']");
+    if (panel) activatePsychedelicPanel(panel);
+  }, 300);
+};
+
+COMMANDS["/unlock.chakra.13"] = () => unlockGodMode();
+
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes pulseGlow {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+`;
+document.head.appendChild(style);
 </script>
 
 </body></html>

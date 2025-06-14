@@ -650,12 +650,12 @@ z-index:10;transition:opacity 1s ease;">🕯️ Apagar Vela</button>
       }
     }
     window.handleAICommand = handleAICommand;
-      particlesJS('particles-js',{
+      requestIdleCallback(() => { particlesJS('particles-js',{
         particles:{ number:{value:40}, color:{value:['#0ff','#f0f']},
           shape:{type:'circle'}, opacity:{value:0.4}, size:{value:2.4},
           move:{enable:true,speed:1.5}
         }, retina_detect:true
-      });
+      }); });
       try {
         if (!trainingLoaded) { training = await fetch(CONFIG.TRAINING_MAIN).then(r=>r.text()); trainingLoaded = true; }
         for(let i=0;i<training.length;i+=CONFIG.CHUNK_SIZE) chunks.push(training.slice(i,i+CONFIG.CHUNK_SIZE));
