@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'dualchat-cache-v3';
+const CACHE_NAME = 'dualchat-cache-v4';
 const FILES_TO_CACHE = [
   './',
   './dual-chat-0-94-15-fix-78-75.html',
