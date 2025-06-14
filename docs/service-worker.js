@@ -1,10 +1,10 @@
-const CACHE_NAME = 'dualchat-v6-final';
+const CACHE_NAME = 'dualchat-v7-final';
 const FILES_TO_CACHE = [
   './',
   './index.html',
   './splash.html',
   './dual-chat-0-94-fix-64.html',
-  './dual-chat-0-94-fix-78-28.html',
+  './dual-chat-0-94-fix-78-75.html',
   './manifest.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
